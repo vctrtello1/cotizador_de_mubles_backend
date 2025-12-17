@@ -23,6 +23,19 @@ return new class extends Migration
             $table->foreignId('mano_de_obra_id')->constrained();
             $table->timestamps();
         });
+
+        DB::table('componentes')->insert([
+            [
+                'nombre' => 'Silla Lucianica',
+                'descripcion' => 'Silla Lucianica de Roble con acabados de alta calidad',
+                'codigo' => 'COMP_SILLA_LUCIANICA',
+                'materiales' => '1,2|',
+                'herrajes' => '1|',
+                'accesorios' => 'Mantel antideslizante|',
+                'acabado_id' => 1,
+                'mano_de_obra_id' => 1,
+            ],
+        ]);
     }
 
     /**

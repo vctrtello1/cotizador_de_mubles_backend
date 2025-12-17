@@ -19,6 +19,17 @@ return new class extends Migration
             $table->string('modulos');
             $table->timestamps();
         });
+
+        DB::table('modulos')->insert([
+            [
+                'nombre' => 'Comedor Lucianico',
+                'descripcion' => 'Comedor de Roble con acabados de alta calidad',
+                'codigo' => 'COM_LUCIANICO',
+                'modulos' => '1|2|',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]
+        ]); 
     }
 
     /**

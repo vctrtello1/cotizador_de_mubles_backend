@@ -18,6 +18,16 @@ return new class extends Migration
             $table ->string('descripcion')->nullable();
             $table ->decimal('costo', 10, 2);
         });
+
+        DB::table('acabados')->insert([
+            [
+                'nombre' => 'Acabado Premium de Roble',
+                'descripcion' => 'Acabado de alta calidad con protección extra',
+                'costo' => 150.00,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+        ]);
     }
 
     /**

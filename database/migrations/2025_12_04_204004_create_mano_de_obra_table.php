@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('mano_de_obras', function (Blueprint $table) {
+        Schema::create('mano_de_obra', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
             $table->string('descripcion')->nullable();
@@ -20,6 +20,18 @@ return new class extends Migration
             $table->decimal('costo_total', 10, 2);
             $table->timestamps();
         });
+
+        DB::table('mano_de_obra')->insert([
+            [
+                'nombre' => 'Mano de Obra Estándar',
+                'descripcion' => 'Mano de obra para ensamblaje y acabado estándar',
+                'costo_hora' => 25.00,
+                'tiempo' => 4.00,
+                'costo_total' => 100.00,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+        ]);
     }
 
     /**
@@ -27,6 +39,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('mano_de_obras');
+        Schema::dropIfExists('mano_de_obra');
     }
 };

@@ -15,10 +15,23 @@ return new class extends Migration
             $table->id();
             $table->string('nombre');
             $table->string('descripcion')->nullable();
+            $table->float('medida', 10, 2);
+            $table->string('unidad_medida');
             $table->string('codigo')->unique();
             $table->decimal('costo_unitario', 10, 2);
             $table->timestamps();
         });
+
+        DB::table('herrajes')->insert([
+            [
+                'nombre' => 'Tornillo Estándar de 2.5 cm',
+                'descripcion' => 'Tornillo de alta resistencia para muebles',
+                'codigo' => 'TOR_ESTANDAR',
+                'costo_unitario' => 15.00,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+        ]);
     }
 
     /**
