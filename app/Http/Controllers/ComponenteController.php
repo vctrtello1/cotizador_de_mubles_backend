@@ -39,6 +39,7 @@ class ComponenteController extends Controller
     public function show(Componente $componente)
     {
         //
+        return $componente -> toResource();
     }
 
     /**

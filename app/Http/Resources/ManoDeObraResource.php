@@ -14,6 +14,13 @@ class ManoDeObraResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'nombre' => $this->nombre,
+            'descripcion' => $this->descripcion,
+            'costo_hora' => $this->costo_hora,
+            'tiempo' => $this->tiempo,
+            'coso_total' => $this->costo_total,
+        ];
     }
 }

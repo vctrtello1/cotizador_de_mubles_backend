@@ -55,6 +55,21 @@ return new class extends Migration
                 'mano_de_obra_id' => 2,
             ],
         ]);
+
+        DB::table('componentes')->insert([
+            [
+                'nombre' => 'Estante Moderno',
+                'descripcion' => 'Estante Moderno de MDF con acabados elegantes',
+                'codigo' => 'COMP_ESTANTE_MODERNO',
+                'materiales' => '5,6|',
+                'cantidad_por_material' => '5|2|',
+                'herrajes' => '3|',
+                'cantidad_por_herraje' => '6|1|',
+                'accesorios' => 'Soportes ajustables|',
+                'acabado_id' => 2,
+                'mano_de_obra_id' => 3,
+            ],
+        ]);
     }
 
     /**
