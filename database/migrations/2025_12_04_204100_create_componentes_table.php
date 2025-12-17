@@ -16,8 +16,8 @@ return new class extends Migration
             $table->string('nombre');
             $table->string('descripcion')->nullable();
             $table->string('codigo')->unique();
-            $table->foreignId('material_id')->constrained();
-            $table->foreignId('herraje_id')->constrained();
+            $table->string('materiales');
+            $table->string('herrajes');
             $table->foreignId('mano_de_obra_id')->constrained();
             $table->foreignId('pintura_id')->constrained();
             $table->timestamps();

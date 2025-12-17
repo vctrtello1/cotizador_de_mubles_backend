@@ -14,6 +14,9 @@ return new class extends Migration
         Schema::create('acabados', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table ->string('nombre');
+            $table ->string('descripcion')->nullable();
+            $table ->decimal('costo', 10, 2);
         });
     }
 
