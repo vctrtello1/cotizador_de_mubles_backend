@@ -18,6 +18,11 @@ class PinturaFactory extends Factory
     {
         return [
             //
+            'nombre' => $this->faker->word(),
+            'tipo' => $this->faker->randomElement(['óleo', 'acrílico', 'acuarela', 'tempera']),
+            'descripción' => $this->faker->paragraph(),
+            'costo_por_metro_cuadrado' => $this->faker->randomFloat(2, 10, 100),
+            'codigo' => $this->faker->word(),
         ];
     }
 }

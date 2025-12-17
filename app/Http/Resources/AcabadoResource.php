@@ -14,6 +14,14 @@ class AcabadoResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'nombre' => $this->nombre,
+            'cantidad' => $this->cantidad,
+            'codigo' => $this->codigo,
+            'precio_unitario' => $this->precio_unitario,
+            'unidad_medida' => $this->unidad_medida,
+            'tipo_de_acabado' => $this->tipo_de_acabado,
+        ];
     }
 }

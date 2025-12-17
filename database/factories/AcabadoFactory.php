@@ -18,6 +18,10 @@ class AcabadoFactory extends Factory
     {
         return [
             //
+            'nombre' => $this->faker->word(),
+            'descripcion' => $this->faker->sentence(),
+            'costo' => $this->faker->randomFloat(2, 10, 100),
+            'codigo' => $this->faker->unique()->bothify('???-#####'),
         ];
     }
 }

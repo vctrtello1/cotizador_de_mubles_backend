@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('nombre');
             $table->string('descripcion')->nullable();
             $table->string('codigo')->unique();
-            $table-> foreignId('componente_id')->constrained();
+            $table->string('modulos');
             $table->timestamps();
         });
     }
