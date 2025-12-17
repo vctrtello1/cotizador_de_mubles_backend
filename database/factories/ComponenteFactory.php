@@ -25,7 +25,7 @@ class ComponenteFactory extends Factory
             'materiales' => $this->faker->word(),
             'herrajes' => $this->faker->word(),
             'mano_obra_id' => $this->faker->randomFloat(2, 5, 50),
-            'pintura' => $this->faker->word(),
+            'acabado_id' => $this->faker->randomFloat(2, 5, 50),
 
         ];
     }
@@ -39,12 +39,4 @@ class ComponenteFactory extends Factory
         });
     }
 
-    public function withPintura($pintura)
-    {
-        return $this->state(function (array $attributes) use ($pintura) {
-            return [
-                'pintura' => $pintura,
-            ];
-        });
-    }
 }

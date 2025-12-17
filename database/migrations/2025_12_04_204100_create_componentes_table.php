@@ -18,8 +18,9 @@ return new class extends Migration
             $table->string('codigo')->unique();
             $table->string('materiales');
             $table->string('herrajes');
+            $table->string('accesorios')->nullable();
+            $table->foreignId('acabado_id')->constrained();
             $table->foreignId('mano_de_obra_id')->constrained();
-            $table->foreignId('pintura_id')->constrained();
             $table->timestamps();
         });
     }
