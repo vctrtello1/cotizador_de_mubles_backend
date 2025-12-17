@@ -25,6 +25,8 @@ return new class extends Migration
             $table->timestamps();
         });
 
+        // Silla Lucianica Materials
+
         DB::table('materiales')->insert([
             [
                 'nombre' => 'Pata de silla Lucianica',
@@ -84,6 +86,39 @@ return new class extends Migration
                 'alto' => 2.7,
                 'ancho' => 42,
                 'largo' => 42,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+        ]);
+
+        // Mesa Lucianica Materials
+        DB::table('materiales')->insert([
+            [
+                'nombre' => 'Pata de mesa Lucianica',
+                'descripcion' => 'Patas de mesa de madera de roble maciza con acabado natural',
+                'codigo' => 'PAT-MES-001',
+                'precio_unitario' => 25.50,
+                'unidad_medida' => 'cm',
+                'tipo_de_material' => 'Madera de roble',
+                'alto' => 75,
+                'ancho' => 5,
+                'largo' => 5,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+        ]);
+
+        DB::table('materiales')->insert([
+            [
+                'nombre' => 'Tabla de mesa Lucianica',
+                'descripcion' => 'Tabla de mesa de madera de roble maciza con acabado natural',
+                'codigo' => 'TAB-MES-001',
+                'precio_unitario' => 800,
+                'unidad_medida' => 'cm',
+                'tipo_de_material' => 'Madera de roble',
+                'alto' => 4,
+                'ancho' => 120,
+                'largo' => 80,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

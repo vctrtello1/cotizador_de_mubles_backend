@@ -19,11 +19,23 @@ return new class extends Migration
             $table ->decimal('costo', 10, 2);
         });
 
+        // Acabados Silla Lucianica
         DB::table('acabados')->insert([
             [
                 'nombre' => 'Acabado Premium de Roble',
                 'descripcion' => 'Acabado de alta calidad con protección extra',
                 'costo' => 150.00,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+        ]);
+
+        // Acabados Mesa Lucianica
+        DB::table('acabados')->insert([
+            [
+                'nombre' => 'Acabado Estándar de Roble',
+                'descripcion' => 'Acabado estándar con protección básica',
+                'costo' => 100.00,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

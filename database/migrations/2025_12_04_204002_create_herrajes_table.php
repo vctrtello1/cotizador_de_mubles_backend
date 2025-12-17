@@ -27,6 +27,8 @@ return new class extends Migration
                 'nombre' => 'Tornillo Estándar de 2.5 cm',
                 'descripcion' => 'Tornillo de alta resistencia para muebles',
                 'codigo' => 'TOR_ESTANDAR',
+                'medida' => 2.5,
+                'unidad_medida' => 'cm',
                 'costo_unitario' => 15.00,
                 'created_at' => now(),
                 'updated_at' => now(),

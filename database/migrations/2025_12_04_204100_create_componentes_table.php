@@ -36,6 +36,19 @@ return new class extends Migration
                 'mano_de_obra_id' => 1,
             ],
         ]);
+
+        DB::table('componentes')->insert([
+            [
+                'nombre' => 'Mesa Lucianica',
+                'descripcion' => 'Mesa Lucianica de Roble con acabados de alta calidad',
+                'codigo' => 'COMP_MESA_LUCIANICA',
+                'materiales' => '3,4|',
+                'herrajes' => '2|',
+                'accesorios' => 'Protector de esquinas|',
+                'acabado_id' => 1,
+                'mano_de_obra_id' => 2,
+            ],
+        ]);
     }
 
     /**
