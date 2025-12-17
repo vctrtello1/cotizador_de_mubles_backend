@@ -47,6 +47,19 @@ return new class extends Migration
                 'updated_at' => now(),
             ],
         ]); 
+
+        // Mano de obra Estante Moderno
+        DB::table('mano_de_obras')->insert([
+            [
+                'nombre' => 'Mano de Obra Especializada',
+                'descripcion' => 'Mano de obra para ensamblaje y acabado especializado',
+                'costo_hora' => 30.00,
+                'tiempo' => 5.00,
+                'costo_total' => 150.00,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+        ]);
     }
 
     /**
