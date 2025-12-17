@@ -47,7 +47,7 @@ return new class extends Migration
                 'descripcion' => 'Mesa Lucianica de Roble con acabados de alta calidad',
                 'codigo' => 'COMP_MESA_LUCIANICA',
                 'materiales' => '3,4|',
-                'cantidad_por_material' => '1.5,2|',
+                'cantidad_por_material' => '8|1|',
                 'herrajes' => '2|',
                 'cantidad_por_herraje' => '8|1|',
                 'accesorios' => 'Protector de esquinas|',
