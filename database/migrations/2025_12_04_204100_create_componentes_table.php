@@ -17,7 +17,9 @@ return new class extends Migration
             $table->string('descripcion')->nullable();
             $table->string('codigo')->unique();
             $table->string('materiales');
+            $table->string('cantidad_por_material');
             $table->string('herrajes');
+            $table->string('cantidad_por_herraje');
             $table->string('accesorios')->nullable();
             $table->foreignId('acabado_id')->constrained();
             $table->foreignId('mano_de_obra_id')->constrained();
@@ -30,7 +32,9 @@ return new class extends Migration
                 'descripcion' => 'Silla Lucianica de Roble con acabados de alta calidad',
                 'codigo' => 'COMP_SILLA_LUCIANICA',
                 'materiales' => '1,2|',
+                'cantidad_por_material' => '2,3|',
                 'herrajes' => '1|',
+                'cantidad_por_herraje' => '4|1|',
                 'accesorios' => 'Mantel antideslizante|',
                 'acabado_id' => 1,
                 'mano_de_obra_id' => 1,
@@ -43,7 +47,9 @@ return new class extends Migration
                 'descripcion' => 'Mesa Lucianica de Roble con acabados de alta calidad',
                 'codigo' => 'COMP_MESA_LUCIANICA',
                 'materiales' => '3,4|',
+                'cantidad_por_material' => '1.5,2|',
                 'herrajes' => '2|',
+                'cantidad_por_herraje' => '8|1|',
                 'accesorios' => 'Protector de esquinas|',
                 'acabado_id' => 1,
                 'mano_de_obra_id' => 2,
