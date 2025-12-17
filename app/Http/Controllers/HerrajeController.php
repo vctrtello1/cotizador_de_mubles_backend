@@ -13,7 +13,7 @@ class HerrajeController extends Controller
      */
     public function index()
     {
-        //
+        return Herraje::all();
     }
 
     /**
@@ -38,6 +38,8 @@ class HerrajeController extends Controller
     public function show(Herraje $herraje)
     {
         //
+        return Herraje::all();
+
     }
 
     /**

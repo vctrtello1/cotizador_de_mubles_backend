@@ -14,6 +14,7 @@ class ManoDeObraController extends Controller
     public function index()
     {
         //
+        return ManoDeObra::all();
     }
 
     /**

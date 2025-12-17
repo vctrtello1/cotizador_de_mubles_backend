@@ -14,6 +14,7 @@ class ComponenteController extends Controller
     public function index()
     {
         //
+        return Componente::all();
     }
 
     /**

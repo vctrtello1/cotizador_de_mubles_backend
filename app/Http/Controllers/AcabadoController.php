@@ -14,6 +14,7 @@ class AcabadoController extends Controller
     public function index()
     {
         //
+        return Acabado::all();
     }
 
     /**
