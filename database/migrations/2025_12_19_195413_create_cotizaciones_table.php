@@ -49,8 +49,13 @@ return new class extends Migration
                 'total' => 4500.00,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ],
-        ]);
+            ],            [
+                'cliente_id' => 3,
+                'fecha' => '2025-12-20',
+                'total' => 3000.00,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],        ]);
     }
 
     /**

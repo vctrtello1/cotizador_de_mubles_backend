@@ -56,6 +56,26 @@ return new class extends Migration
                 'notas' => 'Notas del cliente Luis Gomez',
                 'created_at' => now(),
                 'updated_at' => now(),
+            ],
+            [
+                'nombre' => 'Maria Rodriguez',
+                'email' => 'maria.rodriguez@example.com',
+                'telefono' => '5544332211',
+                'direccion' => 'Boulevard Central 101',
+                'empresa' => 'Diseños Maria',
+                'notas' => 'Cliente frecuente',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'nombre' => 'Carlos Lopez',
+                'email' => 'carlos.lopez@example.com',
+                'telefono' => '6677889900',
+                'direccion' => 'Callejon del Beso 22',
+                'empresa' => 'Constructora Lopez',
+                'notas' => 'Proyecto grande en puerta',
+                'created_at' => now(),
+                'updated_at' => now(),
             ]
         ]);
 

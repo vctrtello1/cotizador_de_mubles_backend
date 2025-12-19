@@ -32,6 +32,24 @@ return new class extends Migration
             'created_at' => now(),
             'updated_at' => now(),
         ],
+        [
+            'cliente_id' => 3,
+            'cotizacion_id' => 3,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ],
+        [
+            'cliente_id' => 1,
+            'cotizacion_id' => 4,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ],
+        [
+            'cliente_id' => 3,
+            'cotizacion_id' => 5,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ],
     ]);
     }
 
