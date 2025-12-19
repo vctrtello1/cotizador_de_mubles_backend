@@ -11,7 +11,7 @@ class StoreHerrajeRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,12 +22,12 @@ class StoreHerrajeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
             'nombre' => ['required', 'string', 'max:255'],
             'descripcion' => ['nullable', 'string'],
             'codigo' => ['nullable', 'string'],
             'costo_unitario' => ['required', 'numeric', 'min:0'],
             'unidad_medida' => ['required', 'string'],
+            'medida' => ['required', 'numeric', 'min:0'],
         ];
     }
 }

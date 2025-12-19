@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreHerrajeRequest;
 use App\Http\Requests\UpdateHerrajeRequest;
+use App\Http\Resources\HerrajeResource;
 use App\Models\Herraje;
 
 class HerrajeController extends Controller
@@ -13,16 +14,9 @@ class HerrajeController extends Controller
      */
     public function index()
     {
-        return Herraje::all();
+        return HerrajeResource::collection(Herraje::all());
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -30,6 +24,8 @@ class HerrajeController extends Controller
     public function store(StoreHerrajeRequest $request)
     {
         //
+        $herraje = Herraje::create($request->validated());
+        return new HerrajeResource($herraje);
     }
 
     /**
@@ -38,16 +34,8 @@ class HerrajeController extends Controller
     public function show(Herraje $herraje)
     {
         //
-        return Herraje::all();
+        return new HerrajeResource($herraje);
 
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Herraje $herraje)
-    {
-        //
     }
 
     /**
@@ -56,6 +44,8 @@ class HerrajeController extends Controller
     public function update(UpdateHerrajeRequest $request, Herraje $herraje)
     {
         //
+        $herraje->update($request->validated());
+        return new HerrajeResource($herraje);
     }
 
     /**
@@ -64,5 +54,7 @@ class HerrajeController extends Controller
     public function destroy(Herraje $herraje)
     {
         //
+        $herraje->delete();
+        return response()->noContent();
     }
 }

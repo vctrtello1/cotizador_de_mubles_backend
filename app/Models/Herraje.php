@@ -9,4 +9,13 @@ class Herraje extends Model
 {
     /** @use HasFactory<\Database\Factories\HerrajeFactory> */
     use HasFactory;
+
+    protected $fillable = [
+        'nombre',
+        'descripcion',
+        'medida',
+        'unidad_medida',
+        'codigo',
+        'costo_unitario',
+    ];
 }
