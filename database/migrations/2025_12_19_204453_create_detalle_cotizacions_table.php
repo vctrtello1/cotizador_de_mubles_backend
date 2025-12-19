@@ -20,6 +20,28 @@ return new class extends Migration
             $table->decimal('subtotal', 10, 2);
             $table->timestamps();
         });
+
+
+        DB::table('detalle_cotizacions')->insert([
+            [
+                'cotizacion_id' => 1,
+                'descripcion' => 'Silla Lucianica',
+                'cantidad' => 4,
+                'precio_unitario' => 150.00,
+                'subtotal' => 600.00,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'cotizacion_id' => 1,
+                'descripcion' => 'Mesa Lucianica',
+                'cantidad' => 1,
+                'precio_unitario' => 900.00,
+                'subtotal' => 900.00,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+        ]);
     }
 
     /**
