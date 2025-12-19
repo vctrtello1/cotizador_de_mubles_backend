@@ -23,6 +23,10 @@ class StoreComponenteRequest extends FormRequest
     {
         return [
             //
+            'nombre' => 'required|string|max:255',
+            'descripcion' => 'nullable|string',
+            'codigo' => 'required|string|max:255|unique:componentes,codigo',
+            
         ];
     }
 }

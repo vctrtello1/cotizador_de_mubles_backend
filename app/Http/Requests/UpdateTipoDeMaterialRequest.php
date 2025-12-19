@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreHerrajeRequest extends FormRequest
+class UpdateTipoDeMaterialRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,11 +23,6 @@ class StoreHerrajeRequest extends FormRequest
     {
         return [
             //
-            'nombre' => ['required', 'string', 'max:255'],
-            'descripcion' => ['nullable', 'string'],
-            'codigo' => ['nullable', 'string'],
-            'costo_unitario' => ['required', 'numeric', 'min:0'],
-            'unidad_medida' => ['required', 'string'],
         ];
     }
 }

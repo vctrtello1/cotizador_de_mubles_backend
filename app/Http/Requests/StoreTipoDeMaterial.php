@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class Tipo_de_material extends FormRequest
+class StoreTipoDeMaterialRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

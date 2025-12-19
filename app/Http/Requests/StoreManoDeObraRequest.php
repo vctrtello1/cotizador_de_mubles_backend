@@ -23,6 +23,11 @@ class StoreManoDeObraRequest extends FormRequest
     {
         return [
             //
+            'nombre' => ['required', 'string', 'max:255'],
+            'descripcion' => ['nullable', 'string'],
+            'costo_hora' => ['required', 'numeric', 'min:0'],
+            'tiempo' => ['required', 'numeric', 'min:0'],
+            'costo_total' => ['required', 'numeric', 'min:0'],
         ];
     }
 }

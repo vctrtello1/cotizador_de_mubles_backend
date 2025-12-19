@@ -16,8 +16,6 @@ return new class extends Migration
             $table->string('nombre');
             $table->string('descripcion')->nullable();
             $table->string('codigo')->unique();
-            $table->string('componentes');
-            $table->string('cantidad_por_componente');
             $table->timestamps();
         });
 
@@ -26,8 +24,6 @@ return new class extends Migration
                 'nombre' => 'Comedor Lucianico',
                 'descripcion' => 'Comedor de Roble con acabados de alta calidad',
                 'codigo' => 'COM_LUCIANICO',
-                'componentes' => '1|2|',
-                'cantidad_por_componente' => '4|1|1|2|',
                 'created_at' => now(),
                 'updated_at' => now(),
             ]

@@ -23,6 +23,11 @@ class StoreAcabadoRequest extends FormRequest
     {
         return [
             //
+            // Define validation rules for 'acabado' fields here
+            'nombre' => ['required', 'string', 'max:255'],
+            'descripcion' => ['nullable', 'string'],
+            'costo' => ['nullable', 'numeric', 'min:0'],
+
         ];
     }
 }

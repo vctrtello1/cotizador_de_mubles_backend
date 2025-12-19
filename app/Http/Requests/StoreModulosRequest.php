@@ -23,6 +23,9 @@ class StoreModulosRequest extends FormRequest
     {
         return [
             //
+            'nombre' => ['required', 'string', 'max:255'],
+            'descripcion' => ['nullable', 'string'],
+            'codigo' => ['nullable', 'string'],
         ];
     }
 }
