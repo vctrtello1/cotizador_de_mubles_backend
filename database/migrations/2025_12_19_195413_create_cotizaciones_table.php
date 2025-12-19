@@ -34,6 +34,22 @@ return new class extends Migration
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
+            [
+                'cliente_id' => 3,
+                'fecha' => '2025-12-17',
+                'total' => 3500.00,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
+            [
+                'cliente_id' => 1,
+                'fecha' => '2025-12-16',
+                'total' => 4500.00,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
     }
 

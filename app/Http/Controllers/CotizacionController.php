@@ -12,7 +12,7 @@ class CotizacionController extends Controller
 {
     public function index()
     {
-        return CotizacionResource::collection(Cotizacion::all());
+        return CotizacionResource::collection(Cotizacion::with('detalles')->get());
     }
 
     public function store(StoreCotizacionRequest $request)
