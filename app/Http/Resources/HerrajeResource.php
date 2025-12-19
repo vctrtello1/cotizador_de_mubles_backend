@@ -17,11 +17,11 @@ class HerrajeResource extends JsonResource
         return [
             'id' => $this->id,
             'nombre' => $this->nombre,
-            'cantidad' => $this->cantidad,
+            'descripcion' => $this->descripcion,
             'codigo' => $this->codigo,
-            'precio_unitario' => $this->precio_unitario,
+            'medida' => $this->medida,
             'unidad_medida' => $this->unidad_medida,
-            'tipo_de_herraje' => $this->tipo_de_herraje,
+            'costo_unitario' => $this->costo_unitario,
         ];
     }
 }

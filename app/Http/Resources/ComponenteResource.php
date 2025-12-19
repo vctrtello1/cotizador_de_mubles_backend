@@ -18,10 +18,9 @@ class ComponenteResource extends JsonResource
             'id' => $this->id,
             'nombre' => $this->nombre,
             'descripcion' => $this->descripcion,
-            'materiales' => $this->materiales,
-            'herrajes' => $this->herrajes,
-            'mano_de_obra_id' => ManoDeObraResource::collection($this->whenLoaded('mano_de_obra')),
-            'acabado_id' => $this->acabado_id,
+            'codigo' => $this->codigo,
+            'acabado_id' => new AcabadoResource($this->whenLoaded('acabado')),
+            'mano_de_obra_id' => new ManoDeObraResource($this->whenLoaded('mano_de_obra')),
         ];
     }
 }

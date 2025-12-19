@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('nombre');
             $table->string('descripcion')->nullable();
             $table->string('codigo')->unique();
-            $table->string('accesorios')->nullable();
             $table->foreignId('acabado_id')->constrained();
             $table->foreignId('mano_de_obra_id')->constrained();
             $table->timestamps();
@@ -27,7 +26,6 @@ return new class extends Migration
                 'nombre' => 'Silla Lucianica',
                 'descripcion' => 'Silla Lucianica de Roble con acabados de alta calidad',
                 'codigo' => 'COMP_SILLA_LUCIANICA',
-                'accesorios' => 'Mantel antideslizante|',
                 'acabado_id' => 1,
                 'mano_de_obra_id' => 1,
             ],
@@ -38,7 +36,6 @@ return new class extends Migration
                 'nombre' => 'Mesa Lucianica',
                 'descripcion' => 'Mesa Lucianica de Roble con acabados de alta calidad',
                 'codigo' => 'COMP_MESA_LUCIANICA',
-                'accesorios' => 'Protector de esquinas|',
                 'acabado_id' => 1,
                 'mano_de_obra_id' => 2,
             ],
@@ -49,7 +46,6 @@ return new class extends Migration
                 'nombre' => 'Estante Moderno',
                 'descripcion' => 'Estante Moderno de MDF con acabados elegantes',
                 'codigo' => 'COMP_ESTANTE_MODERNO',
-                'accesorios' => 'Soportes ajustables|',
                 'acabado_id' => 2,
                 'mano_de_obra_id' => 3,
             ],

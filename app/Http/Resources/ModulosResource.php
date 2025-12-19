@@ -19,8 +19,6 @@ class ModulosResource extends JsonResource
             'nombre' => $this->nombre,
             'descripcion' => $this->descripcion,
             'codigo' => $this->codigo,
-            'componentes' => $this->componentes,
-            'cantidad_por_componente' => $this->cantidad_por_componente,
         ];
     }
 }
