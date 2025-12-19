@@ -17,8 +17,10 @@ class MaterialesPorComponenteResource extends JsonResource
         return [
             'id' => $this->id,
             'componente_id' => $this->componente_id,
-            'material_id' => new MaterialResource($this->whenLoaded('material')),
+            'material_id' => $this->material_id,
             'cantidad' => $this->cantidad,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ];
     }
 }

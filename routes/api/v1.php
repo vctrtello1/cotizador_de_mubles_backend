@@ -3,6 +3,7 @@
 use App\Http\Controllers\AcabadoController;
 use App\Http\Controllers\AccesoriosPorComponenteController;
 use App\Http\Controllers\CantidadPorMaterialController;
+use App\Http\Controllers\MaterialesPorComponenteController;
 use App\Http\Controllers\ComponenteController;
 use App\Http\Controllers\HerrajeController;
 use App\Http\Controllers\ManoDeObraController;
@@ -30,3 +31,6 @@ Route::apiResource('cantidad-por-materiales', CantidadPorMaterialController::cla
 
 Route::apiResource('accesorios-por-componente', AccesoriosPorComponenteController::class)
     ->parameters(['accesorios-por-componente' => 'accesoriosPorComponente']);
+
+Route::apiResource('materiales-por-componente', MaterialesPorComponenteController::class)
+    ->parameters(['materiales-por-componente' => 'materialesPorComponente']);
