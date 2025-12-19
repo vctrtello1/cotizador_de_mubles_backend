@@ -11,6 +11,7 @@ class DetalleCotizacion extends Model
 
     protected $fillable = [
         'cotizacion_id',
+        'modulo_id',
         'descripcion',
         'cantidad',
         'precio_unitario',
@@ -20,5 +21,10 @@ class DetalleCotizacion extends Model
     public function cotizacion()
     {
         return $this->belongsTo(Cotizacion::class);
+    }
+
+    public function modulo()
+    {
+        return $this->belongsTo(Modulos::class, 'modulo_id');
     }
 }

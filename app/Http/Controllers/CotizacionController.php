@@ -36,7 +36,7 @@ class CotizacionController extends Controller
 
     public function show(Cotizacion $cotizacion)
     {
-        $cotizacion->load('detalles');
+        $cotizacion->load(['detalles.modulo', 'cliente']);
         return new CotizacionResource($cotizacion);
     }
 

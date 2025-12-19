@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CotizacionResource extends JsonResource
+class DetalleCotizacionResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,11 +16,13 @@ class CotizacionResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'cliente_id' => $this->cliente_id,
-            'cliente' => new ClienteResource($this->whenLoaded('cliente')),
-            'fecha' => $this->fecha,
-            'total' => $this->getRawOriginal('total'),
-            'detalles' => DetalleCotizacionResource::collection($this->whenLoaded('detalles')),
+            'cotizacion_id' => $this->cotizacion_id,
+            'modulo_id' => $this->modulo_id,
+            'modulo' => new ModulosResource($this->whenLoaded('modulo')),
+            'descripcion' => $this->descripcion,
+            'cantidad' => $this->cantidad,
+            'precio_unitario' => $this->precio_unitario,
+            'subtotal' => $this->subtotal,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

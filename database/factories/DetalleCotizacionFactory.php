@@ -18,6 +18,7 @@ class DetalleCotizacionFactory extends Factory
     {
         return [
             'cotizacion_id' => \App\Models\Cotizacion::factory(),
+            'modulo_id' => \App\Models\Modulos::inRandomOrder()->first()->id ?? \App\Models\Modulos::factory(),
             'descripcion' => $this->faker->sentence(),
             'cantidad' => $this->faker->numberBetween(1, 10),
             'precio_unitario' => $this->faker->randomFloat(2, 10, 100),

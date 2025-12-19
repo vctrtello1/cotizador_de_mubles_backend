@@ -26,6 +26,7 @@ class StoreCotizacionRequest extends FormRequest
             'fecha' => 'required|date',
             'total' => 'required|numeric|min:0',
             'detalles' => 'nullable|array',
+            'detalles.*.modulo_id' => 'nullable|exists:modulos,id',
             'detalles.*.descripcion' => 'required_with:detalles|string',
             'detalles.*.cantidad' => 'required_with:detalles|integer|min:1',
             'detalles.*.precio_unitario' => 'required_with:detalles|numeric|min:0',
