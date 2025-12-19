@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateTipoDeMaterialRequest extends FormRequest
+class StoreTipoDeMaterialRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,7 +22,7 @@ class UpdateTipoDeMaterialRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nombre' => ['sometimes', 'required', 'string', 'max:255'],
+            'nombre' => ['required', 'string', 'max:255'],
             'descripcion' => ['nullable', 'string'],
             'codigo' => ['nullable', 'string', 'max:255'],
         ];

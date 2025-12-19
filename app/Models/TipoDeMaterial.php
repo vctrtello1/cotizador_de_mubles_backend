@@ -16,4 +16,9 @@ class TipoDeMaterial extends Model
         'descripcion',
         'codigo',
     ];
+
+    public function materiales()
+    {
+        return $this->hasMany(Material::class, 'tipo_de_material_id');
+    }
 }

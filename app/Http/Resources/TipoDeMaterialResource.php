@@ -14,6 +14,12 @@ class TipoDeMaterialResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'nombre' => $this->nombre,
+            'descripcion' => $this->descripcion,
+            'codigo' => $this->codigo,
+            'materiales' => MaterialResource::collection($this->whenLoaded('materiales')),
+        ];
     }
 }
