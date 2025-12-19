@@ -28,4 +28,9 @@ class Componente extends Model
     {
         return $this->belongsTo(ManoDeObra::class);
     }
+
+    public function accesorios_por_componente()
+    {
+        return $this->hasMany(AccesoriosPorComponente::class);
+    }
 }

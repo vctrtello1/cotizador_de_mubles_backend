@@ -78,8 +78,9 @@ class ComponenteTest extends TestCase
             'nombre' => 'Componente Test',
             'descripcion' => 'Descripcion del componente test',
             'codigo' => 'CMP-12345',
-            'accesorios' => 'Accesorio1, Accesorio2',
         ]);
+        $response->assertJsonFragment(['accesorio' => 'Accesorio1']);
+        $response->assertJsonFragment(['accesorio' => 'Accesorio2']);
 
         $this->assertDatabaseHas('componentes', [
             'nombre' => 'Componente Test',
@@ -108,8 +109,9 @@ class ComponenteTest extends TestCase
             'nombre' => 'Componente Actualizado',
             'descripcion' => 'Descripcion actualizada',
             'codigo' => 'CMP-54321',
-            'accesorios' => 'Accesorio3, Accesorio4',
         ]);
+        $response->assertJsonFragment(['accesorio' => 'Accesorio3']);
+        $response->assertJsonFragment(['accesorio' => 'Accesorio4']);
 
         $this->assertDatabaseHas('componentes', [
             'id' => $componente->id,

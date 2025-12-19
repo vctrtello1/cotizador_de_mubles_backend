@@ -14,7 +14,7 @@ class ComponenteController extends Controller
     public function index()
     {
         //
-        return Componente::with(['acabado', 'mano_de_obra'])->get()->toResourceCollection();
+        return Componente::with(['acabado', 'mano_de_obra', 'accesorios_por_componente'])->get()->toResourceCollection();
     }
 
 
@@ -25,7 +25,17 @@ class ComponenteController extends Controller
     {
         //
         $componente = Componente::create($request->validated());
-        return $componente -> toResource();
+
+        if ($request->has('accesorios')) {
+            $accesorios = explode(',', $request->accesorios);
+            foreach ($accesorios as $accesorio) {
+                $componente->accesorios_por_componente()->create([
+                    'accesorio' => trim($accesorio),
+                ]);
+            }
+        }
+
+        return $componente->load(['acabado', 'mano_de_obra', 'accesorios_por_componente'])->toResource();
     }
 
     /**
@@ -34,7 +44,7 @@ class ComponenteController extends Controller
     public function show(Componente $componente)
     {
         //
-        return $componente->load(['acabado', 'mano_de_obra'])->toResource();
+        return $componente->load(['acabado', 'mano_de_obra', 'accesorios_por_componente'])->toResource();
     }
 
     /**
@@ -44,7 +54,18 @@ class ComponenteController extends Controller
     {
         //
         $componente->update($request->validated());
-        return $componente -> toResource();
+
+        if ($request->has('accesorios')) {
+            $componente->accesorios_por_componente()->delete();
+            $accesorios = explode(',', $request->accesorios);
+            foreach ($accesorios as $accesorio) {
+                $componente->accesorios_por_componente()->create([
+                    'accesorio' => trim($accesorio),
+                ]);
+            }
+        }
+
+        return $componente->load(['acabado', 'mano_de_obra', 'accesorios_por_componente'])->toResource();
     }
 
     /**
