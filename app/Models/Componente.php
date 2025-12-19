@@ -47,4 +47,20 @@ class Componente extends Model
                     ->withPivot('cantidad')
                     ->withTimestamps();
     }
+
+    public function getCostoTotalAttribute()
+    {
+        $costoMateriales = $this->materiales->sum(function ($material) {
+            return $material->precio_unitario * $material->pivot->cantidad;
+        });
+
+        $costoHerrajes = $this->herrajes->sum(function ($herraje) {
+            return $herraje->costo_unitario * $herraje->pivot->cantidad;
+        });
+
+        $costoManoDeObra = $this->mano_de_obra ? $this->mano_de_obra->costo_total : 0;
+        $costoAcabado = $this->acabado ? $this->acabado->costo : 0;
+
+        return $costoMateriales + $costoHerrajes + $costoManoDeObra + $costoAcabado;
+    }
 }
