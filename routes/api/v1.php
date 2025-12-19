@@ -5,6 +5,7 @@ use App\Http\Controllers\AccesoriosPorComponenteController;
 use App\Http\Controllers\CantidadPorHerrajeController;
 use App\Http\Controllers\CantidadPorMaterialController;
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\CotizacionController;
 use App\Http\Controllers\MaterialesPorComponenteController;
 use App\Http\Controllers\ComponenteController;
 use App\Http\Controllers\HerrajeController;
@@ -28,6 +29,9 @@ Route::apiResources([
     'modulos'       => ModulosController::class,
     'clientes'      => ClienteController::class,
 ]);
+
+Route::apiResource('cotizaciones', CotizacionController::class)
+    ->parameters(['cotizaciones' => 'cotizacion']);
 
 Route::apiResource('cantidad-por-materiales', CantidadPorMaterialController::class)
     ->parameters(['cantidad-por-materiales' => 'cantidadPorMaterial']);
