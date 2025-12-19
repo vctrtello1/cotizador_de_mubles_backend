@@ -14,16 +14,9 @@ class ComponenteController extends Controller
     public function index()
     {
         //
-        return Componente::all();
+        return Componente::with(['acabado', 'mano_de_obra'])->get()->toResourceCollection();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -31,6 +24,8 @@ class ComponenteController extends Controller
     public function store(StoreComponenteRequest $request)
     {
         //
+        $componente = Componente::create($request->validated());
+        return $componente -> toResource();
     }
 
     /**
@@ -39,15 +34,7 @@ class ComponenteController extends Controller
     public function show(Componente $componente)
     {
         //
-        return $componente -> toResource();
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Componente $componente)
-    {
-        //
+        return $componente->load(['acabado', 'mano_de_obra'])->toResource();
     }
 
     /**
@@ -56,6 +43,8 @@ class ComponenteController extends Controller
     public function update(UpdateComponenteRequest $request, Componente $componente)
     {
         //
+        $componente->update($request->validated());
+        return $componente -> toResource();
     }
 
     /**
@@ -64,5 +53,7 @@ class ComponenteController extends Controller
     public function destroy(Componente $componente)
     {
         //
+        $componente->delete();
+        return response()->noContent();
     }
 }

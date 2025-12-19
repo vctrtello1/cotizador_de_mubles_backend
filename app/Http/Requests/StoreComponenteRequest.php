@@ -11,7 +11,7 @@ class StoreComponenteRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -26,7 +26,9 @@ class StoreComponenteRequest extends FormRequest
             'nombre' => 'required|string|max:255',
             'descripcion' => 'nullable|string',
             'codigo' => 'required|string|max:255|unique:componentes,codigo',
-            
+            'accesorios' => 'nullable|string',
+            'acabado_id' => 'required|exists:acabados,id',
+            'mano_de_obra_id' => 'required|exists:mano_de_obras,id',
         ];
     }
 }
