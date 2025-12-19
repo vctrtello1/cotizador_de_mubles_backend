@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreManoDeObraRequest;
 use App\Http\Requests\UpdateManoDeObraRequest;
+use App\Http\Resources\ManoDeObraResource;
 use App\Models\ManoDeObra;
 
 class ManoDeObraController extends Controller
@@ -13,16 +14,7 @@ class ManoDeObraController extends Controller
      */
     public function index()
     {
-        //
-        return ManoDeObra::all();
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        return ManoDeObraResource::collection(ManoDeObra::all());
     }
 
     /**
@@ -30,7 +22,8 @@ class ManoDeObraController extends Controller
      */
     public function store(StoreManoDeObraRequest $request)
     {
-        //
+        $manoDeObra = ManoDeObra::create($request->validated());
+        return new ManoDeObraResource($manoDeObra);
     }
 
     /**
@@ -38,15 +31,10 @@ class ManoDeObraController extends Controller
      */
     public function show(ManoDeObra $manoDeObra)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(ManoDeObra $manoDeObra)
-    {
-        //
+        if (request()->query('include') === 'componentes') {
+            $manoDeObra->load('componentes');
+        }
+        return new ManoDeObraResource($manoDeObra);
     }
 
     /**
@@ -54,7 +42,8 @@ class ManoDeObraController extends Controller
      */
     public function update(UpdateManoDeObraRequest $request, ManoDeObra $manoDeObra)
     {
-        //
+        $manoDeObra->update($request->validated());
+        return new ManoDeObraResource($manoDeObra);
     }
 
     /**
@@ -62,6 +51,7 @@ class ManoDeObraController extends Controller
      */
     public function destroy(ManoDeObra $manoDeObra)
     {
-        //
+        $manoDeObra->delete();
+        return response()->noContent();
     }
 }

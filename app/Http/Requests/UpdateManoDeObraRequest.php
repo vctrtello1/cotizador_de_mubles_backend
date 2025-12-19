@@ -11,7 +11,7 @@ class UpdateManoDeObraRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,11 @@ class UpdateManoDeObraRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'nombre' => ['sometimes', 'required', 'string', 'max:255'],
+            'descripcion' => ['nullable', 'string'],
+            'costo_hora' => ['sometimes', 'required', 'numeric', 'min:0'],
+            'tiempo' => ['sometimes', 'required', 'numeric', 'min:0'],
+            'costo_total' => ['sometimes', 'required', 'numeric', 'min:0'],
         ];
     }
 }

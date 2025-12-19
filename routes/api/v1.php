@@ -12,6 +12,6 @@ use Illuminate\Support\Facades\Route;
 Route::apiResource('materiales', MaterialController::class)->parameters(['materiales' => 'material']);
 Route::apiResource('herrajes', HerrajeController::class);
 Route::apiResource('acabados', AcabadoController::class);
-Route::apiResource('mano-de-obra', ManoDeObraController::class);
+Route::apiResource('mano-de-obras', ManoDeObraController::class);
 Route::apiResource('componentes', ComponenteController::class);
 Route::apiResource('modulos', ModulosController::class);
