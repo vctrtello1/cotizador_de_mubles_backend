@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AcabadoController;
+use App\Http\Controllers\CantidadPorMaterialController;
 use App\Http\Controllers\ComponenteController;
 use App\Http\Controllers\HerrajeController;
 use App\Http\Controllers\ManoDeObraController;
@@ -22,3 +23,6 @@ Route::apiResources([
     'componentes'   => ComponenteController::class,
     'modulos'       => ModulosController::class,
 ]);
+
+Route::apiResource('cantidad-por-materiales', CantidadPorMaterialController::class)
+    ->parameters(['cantidad-por-materiales' => 'cantidadPorMaterial']);
