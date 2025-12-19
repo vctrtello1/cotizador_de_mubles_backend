@@ -14,7 +14,7 @@ class ComponenteController extends Controller
     public function index()
     {
         //
-        return Componente::with(['acabado', 'mano_de_obra', 'accesorios_por_componente'])->get()->toResourceCollection();
+        return Componente::with(['acabado', 'mano_de_obra', 'accesorios_por_componente', 'materiales', 'herrajes'])->get()->toResourceCollection();
     }
 
 
@@ -35,7 +35,23 @@ class ComponenteController extends Controller
             }
         }
 
-        return $componente->load(['acabado', 'mano_de_obra', 'accesorios_por_componente'])->toResource();
+        if ($request->has('materiales')) {
+            $materiales = [];
+            foreach ($request->materiales as $material) {
+                $materiales[$material['id']] = ['cantidad' => $material['cantidad']];
+            }
+            $componente->materiales()->sync($materiales);
+        }
+
+        if ($request->has('herrajes')) {
+            $herrajes = [];
+            foreach ($request->herrajes as $herraje) {
+                $herrajes[$herraje['id']] = ['cantidad' => $herraje['cantidad']];
+            }
+            $componente->herrajes()->sync($herrajes);
+        }
+
+        return $componente->load(['acabado', 'mano_de_obra', 'accesorios_por_componente', 'materiales', 'herrajes'])->toResource();
     }
 
     /**
@@ -44,7 +60,7 @@ class ComponenteController extends Controller
     public function show(Componente $componente)
     {
         //
-        return $componente->load(['acabado', 'mano_de_obra', 'accesorios_por_componente'])->toResource();
+        return $componente->load(['acabado', 'mano_de_obra', 'accesorios_por_componente', 'materiales', 'herrajes'])->toResource();
     }
 
     /**
@@ -65,7 +81,23 @@ class ComponenteController extends Controller
             }
         }
 
-        return $componente->load(['acabado', 'mano_de_obra', 'accesorios_por_componente'])->toResource();
+        if ($request->has('materiales')) {
+            $materiales = [];
+            foreach ($request->materiales as $material) {
+                $materiales[$material['id']] = ['cantidad' => $material['cantidad']];
+            }
+            $componente->materiales()->sync($materiales);
+        }
+
+        if ($request->has('herrajes')) {
+            $herrajes = [];
+            foreach ($request->herrajes as $herraje) {
+                $herrajes[$herraje['id']] = ['cantidad' => $herraje['cantidad']];
+            }
+            $componente->herrajes()->sync($herrajes);
+        }
+
+        return $componente->load(['acabado', 'mano_de_obra', 'accesorios_por_componente', 'materiales', 'herrajes'])->toResource();
     }
 
     /**

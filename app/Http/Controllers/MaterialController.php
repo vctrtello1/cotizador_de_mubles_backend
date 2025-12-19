@@ -15,7 +15,7 @@ class MaterialController extends Controller
     public function index()
     {
         //
-        return MaterialResource::collection(Material::all());
+        return MaterialResource::collection(Material::with('tipo_de_material')->get());
     }
 
 
@@ -26,6 +26,7 @@ class MaterialController extends Controller
     {
         //
         $material = Material::create($request->validated());
+        $material->load('tipo_de_material');
         return new MaterialResource($material);
     }
 
@@ -35,6 +36,7 @@ class MaterialController extends Controller
     public function show(Material $material)
     {
         //
+        $material->load('tipo_de_material');
         return new MaterialResource($material);
     }
 
@@ -45,6 +47,7 @@ class MaterialController extends Controller
     {
         //
         $material->update($request->validated());
+        $material->load('tipo_de_material');
         return new MaterialResource($material);
     }
 

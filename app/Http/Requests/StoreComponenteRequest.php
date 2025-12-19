@@ -28,7 +28,11 @@ class StoreComponenteRequest extends FormRequest
             'codigo' => 'required|string|max:255|unique:componentes,codigo',
             'accesorios' => 'nullable|string',
             'acabado_id' => 'required|exists:acabados,id',
-            'mano_de_obra_id' => 'required|exists:mano_de_obras,id',
-        ];
+            'mano_de_obra_id' => 'required|exists:mano_de_obras,id',            'materiales' => 'nullable|array',
+            'materiales.*.id' => 'required|exists:materiales,id',
+            'materiales.*.cantidad' => 'required|integer|min:1',
+            'herrajes' => 'nullable|array',
+            'herrajes.*.id' => 'required|exists:herrajes,id',
+            'herrajes.*.cantidad' => 'required|integer|min:1',        ];
     }
 }

@@ -23,4 +23,9 @@ class Material extends Model
         'ancho',
         'largo',
     ];
+
+    public function tipo_de_material()
+    {
+        return $this->belongsTo(TipoDeMaterial::class, 'tipo_de_material_id');
+    }
 }

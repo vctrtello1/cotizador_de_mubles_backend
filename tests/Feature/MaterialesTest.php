@@ -32,6 +32,12 @@ class MaterialesTest extends TestCase
                     'descripcion',
                     'codigo',
                     'precio_unitario',
+                    'tipo_de_material' => [
+                        'id',
+                        'nombre',
+                        'descripcion',
+                        'codigo',
+                    ],
                 ],
             ],
         ]);
@@ -52,6 +58,12 @@ class MaterialesTest extends TestCase
                 'descripcion',
                 'codigo',
                 'precio_unitario',
+                'tipo_de_material' => [
+                    'id',
+                    'nombre',
+                    'descripcion',
+                    'codigo',
+                ],
             ],
         ]);
     }

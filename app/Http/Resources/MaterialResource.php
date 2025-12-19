@@ -22,6 +22,7 @@ class MaterialResource extends JsonResource
             'precio_unitario' => $this->precio_unitario,
             'unidad_medida' => $this->unidad_medida,
             'tipo_de_material_id' => $this->tipo_de_material_id,
+            'tipo_de_material' => $this->whenLoaded('tipo_de_material'),
             'alto' => $this->alto,
             'ancho' => $this->ancho,
             'largo' => $this->largo,

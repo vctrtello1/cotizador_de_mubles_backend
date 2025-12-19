@@ -20,10 +20,10 @@ class HerrajeFactory extends Factory
             //
             'nombre' => $this->faker->word(),
             'descripcion' => $this->faker->sentence(),
-            'cantidad' => $this->faker->numberBetween(1, 100),
-            'precio_unitario' => $this->faker->randomFloat(2, 1, 1000),
+            'medida' => $this->faker->randomFloat(2, 1, 100),
+            'unidad_medida' => $this->faker->randomElement(['cm', 'mm', 'in']),
+            'costo_unitario' => $this->faker->randomFloat(2, 1, 1000),
             'codigo' => $this->faker->unique()->bothify('???-#####'),
-            'tipo_de_herraje' => $this->faker->word(),
         ];
     }
 }

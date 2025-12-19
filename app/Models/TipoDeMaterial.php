@@ -1,0 +1,19 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class TipoDeMaterial extends Model
+{
+    use HasFactory;
+
+    protected $table = 'table_tipo_de_material';
+
+    protected $fillable = [
+        'nombre',
+        'descripcion',
+        'codigo',
+    ];
+}

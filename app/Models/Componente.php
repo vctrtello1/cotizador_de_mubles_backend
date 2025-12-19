@@ -33,4 +33,18 @@ class Componente extends Model
     {
         return $this->hasMany(AccesoriosPorComponente::class);
     }
+
+    public function materiales()
+    {
+        return $this->belongsToMany(Material::class, 'materiales_por_componente')
+                    ->withPivot('cantidad')
+                    ->withTimestamps();
+    }
+
+    public function herrajes()
+    {
+        return $this->belongsToMany(Herraje::class, 'cantidad_por_herraje')
+                    ->withPivot('cantidad')
+                    ->withTimestamps();
+    }
 }
