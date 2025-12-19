@@ -18,6 +18,8 @@ class AccesoriosPorComponenteResource extends JsonResource
             'id' => $this->id,
             'componente_id' => $this->componente_id,
             'accesorio' => $this->accesorio,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ];
     }   
 }
