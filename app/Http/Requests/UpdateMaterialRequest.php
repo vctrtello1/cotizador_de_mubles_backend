@@ -11,7 +11,7 @@ class UpdateMaterialRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,15 @@ class UpdateMaterialRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'nombre' => ['required', 'string', 'max:255'],
+            'descripcion' => ['nullable', 'string'],
+            'codigo' => ['nullable', 'string'],
+            'precio_unitario' => ['required', 'numeric', 'min:0'],
+            'unidad_medida' => ['required', 'string'],
+            'tipo_de_material_id' => ['required', 'integer', 'exists:table_tipo_de_material,id'],
+            'alto' => ['required', 'numeric', 'min:0'],
+            'ancho' => ['required', 'numeric', 'min:0'],
+            'largo' => ['required', 'numeric', 'min:0'],
         ];
     }
 }

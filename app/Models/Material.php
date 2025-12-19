@@ -11,4 +11,16 @@ class Material extends Model
     use HasFactory;
 
     protected $table = 'materiales';
+
+    protected $fillable = [
+        'nombre',
+        'descripcion',
+        'codigo',
+        'precio_unitario',
+        'unidad_medida',
+        'tipo_de_material_id',
+        'alto',
+        'ancho',
+        'largo',
+    ];
 }

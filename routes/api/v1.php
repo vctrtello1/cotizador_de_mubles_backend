@@ -9,7 +9,7 @@ use App\Http\Controllers\ModulosController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::apiResource('materiales', MaterialController::class);
+Route::apiResource('materiales', MaterialController::class)->parameters(['materiales' => 'material']);
 Route::apiResource('herrajes', HerrajeController::class);
 Route::apiResource('acabados', AcabadoController::class);
 Route::apiResource('mano-de-obra', ManoDeObraController::class);

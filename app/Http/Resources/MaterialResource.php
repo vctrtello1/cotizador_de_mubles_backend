@@ -17,11 +17,11 @@ class MaterialResource extends JsonResource
         return [
             'id' => $this->id,
             'nombre' => $this->nombre,
-            'cantidad' => $this->cantidad,
+            'descripcion' => $this->descripcion,
             'codigo' => $this->codigo,
             'precio_unitario' => $this->precio_unitario,
             'unidad_medida' => $this->unidad_medida,
-            'tipo_de_material' => $this->tipo_de_material,
+            'tipo_de_material_id' => $this->tipo_de_material_id,
             'alto' => $this->alto,
             'ancho' => $this->ancho,
             'largo' => $this->largo,
