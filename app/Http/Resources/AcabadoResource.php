@@ -19,6 +19,7 @@ class AcabadoResource extends JsonResource
             'nombre' => $this->nombre,
             'descripcion' => $this->descripcion,
             'costo'=> $this->costo,
+            'componentes' => ComponenteResource::collection($this->whenLoaded('componentes')),
         ];
     }
 }

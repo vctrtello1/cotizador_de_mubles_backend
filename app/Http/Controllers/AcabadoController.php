@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreAcabadoRequest;
 use App\Http\Requests\UpdateAcabadoRequest;
+use App\Http\Resources\AcabadoResource;
 use App\Models\Acabado;
 
 class AcabadoController extends Controller
@@ -14,16 +15,10 @@ class AcabadoController extends Controller
     public function index()
     {
         //
-        return Acabado::all();
+        return AcabadoResource::collection(Acabado::all());
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+    
 
     /**
      * Store a newly created resource in storage.
@@ -31,6 +26,8 @@ class AcabadoController extends Controller
     public function store(StoreAcabadoRequest $request)
     {
         //
+        $acabado = Acabado::create($request->validated());
+        return new AcabadoResource($acabado);
     }
 
     /**
@@ -38,15 +35,10 @@ class AcabadoController extends Controller
      */
     public function show(Acabado $acabado)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Acabado $acabado)
-    {
-        //
+        if (request()->query('include') === 'componentes') {
+            $acabado->load('componentes');
+        }
+        return new AcabadoResource($acabado);
     }
 
     /**
@@ -55,6 +47,8 @@ class AcabadoController extends Controller
     public function update(UpdateAcabadoRequest $request, Acabado $acabado)
     {
         //
+        $acabado->update($request->validated());
+        return new AcabadoResource($acabado);
     }
 
     /**
@@ -63,5 +57,7 @@ class AcabadoController extends Controller
     public function destroy(Acabado $acabado)
     {
         //
+        $acabado->delete();
+        return response()->noContent();
     }
 }

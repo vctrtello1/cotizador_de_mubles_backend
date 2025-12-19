@@ -11,7 +11,7 @@ class StoreAcabadoRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -26,7 +26,7 @@ class StoreAcabadoRequest extends FormRequest
             // Define validation rules for 'acabado' fields here
             'nombre' => ['required', 'string', 'max:255'],
             'descripcion' => ['nullable', 'string'],
-            'costo' => ['nullable', 'numeric', 'min:0'],
+            'costo' => ['required', 'numeric', 'min:0'],
 
         ];
     }
