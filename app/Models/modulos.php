@@ -8,8 +8,21 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 #[UseResource(ModulosResource::class)]
-class modulos extends Model
+class Modulos extends Model
 {
     /** @use HasFactory<\Database\Factories\ModulosFactory> */
     use HasFactory;
+
+    protected $fillable = [
+        'nombre',
+        'descripcion',
+        'codigo',
+    ];
+
+    public function componentes()
+    {
+        return $this->belongsToMany(componente::class, 'cantidad_por_componente', 'modulo_id', 'componente_id')
+                    ->withPivot('cantidad')
+                    ->withTimestamps();
+    }
 }

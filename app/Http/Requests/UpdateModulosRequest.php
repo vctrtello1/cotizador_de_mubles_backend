@@ -11,7 +11,7 @@ class UpdateModulosRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,6 +23,9 @@ class UpdateModulosRequest extends FormRequest
     {
         return [
             //
+            'nombre' => ['required', 'string', 'max:255'],
+            'descripcion' => ['nullable', 'string'],
+            'codigo' => ['required', 'string'],
         ];
     }
 }

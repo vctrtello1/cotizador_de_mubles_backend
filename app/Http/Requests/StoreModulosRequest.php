@@ -11,7 +11,7 @@ class StoreModulosRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -25,7 +25,7 @@ class StoreModulosRequest extends FormRequest
             //
             'nombre' => ['required', 'string', 'max:255'],
             'descripcion' => ['nullable', 'string'],
-            'codigo' => ['nullable', 'string'],
+            'codigo' => ['required', 'string'],
         ];
     }
 }

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreModulosRequest;
 use App\Http\Requests\UpdateModulosRequest;
-use App\Models\modulos;
+use App\Models\Modulos;
 
 class ModulosController extends Controller
 {
@@ -13,7 +13,7 @@ class ModulosController extends Controller
      */
     public function index()
     {
-        return modulos::all();
+        return Modulos::with('componentes')->get()->toResourceCollection();
     }
 
     /**
@@ -21,7 +21,8 @@ class ModulosController extends Controller
      */
     public function store(StoreModulosRequest $request)
     {
-        //
+        $modulo = Modulos::create($request->validated());
+        return $modulo->toResource();
     }
 
     /**
@@ -38,6 +39,8 @@ class ModulosController extends Controller
     public function update(UpdateModulosRequest $request, modulos $modulo)
     {
         //
+        $modulo->update($request->validated());
+        return $modulo->toResource();
     }
 
     /**
@@ -46,5 +49,7 @@ class ModulosController extends Controller
     public function destroy(modulos $modulo)
     {
         //
+        $modulo->delete();
+        return response()->noContent();
     }
 }

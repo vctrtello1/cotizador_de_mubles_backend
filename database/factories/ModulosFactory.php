@@ -20,7 +20,6 @@ class ModulosFactory extends Factory
             //
             'nombre' => $this->faker->word(),
             'descripcion' => $this->faker->sentence(),
-            'costo' => $this->faker->randomFloat(2, 50, 500),
             'codigo' => $this->faker->unique()->bothify('???-#####'),
             
         ];
