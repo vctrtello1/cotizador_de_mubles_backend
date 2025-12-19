@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AcabadoController;
 use App\Http\Controllers\AccesoriosPorComponenteController;
+use App\Http\Controllers\CantidadPorHerrajeController;
 use App\Http\Controllers\CantidadPorMaterialController;
 use App\Http\Controllers\MaterialesPorComponenteController;
 use App\Http\Controllers\ComponenteController;
@@ -28,6 +29,9 @@ Route::apiResources([
 
 Route::apiResource('cantidad-por-materiales', CantidadPorMaterialController::class)
     ->parameters(['cantidad-por-materiales' => 'cantidadPorMaterial']);
+
+Route::apiResource('cantidad-por-herrajes', CantidadPorHerrajeController::class)
+    ->parameters(['cantidad-por-herrajes' => 'cantidadPorHerraje']);
 
 Route::apiResource('accesorios-por-componente', AccesoriosPorComponenteController::class)
     ->parameters(['accesorios-por-componente' => 'accesoriosPorComponente']);
