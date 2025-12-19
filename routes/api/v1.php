@@ -21,6 +21,8 @@ Route::apiResource('materiales', MaterialController::class)
 Route::apiResource('tipo-de-materiales', TipoDeMaterialController::class)
     ->parameters(['tipo-de-materiales' => 'tipoDeMaterial']);
 
+Route::get('clientes/{cliente}/cotizaciones', [ClienteController::class, 'cotizaciones']);
+
 Route::apiResources([
     'herrajes'      => HerrajeController::class,
     'acabados'      => AcabadoController::class,

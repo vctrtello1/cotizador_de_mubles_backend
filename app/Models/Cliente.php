@@ -17,4 +17,9 @@ class Cliente extends Model
         'empresa',
         'notas',
     ];
+
+    public function cotizaciones()
+    {
+        return $this->hasMany(Cotizacion::class);
+    }
 }
