@@ -38,7 +38,7 @@ class ComponenteResource extends JsonResource
                         'id' => $herraje->id,
                         'nombre' => $herraje->nombre,
                         'codigo' => $herraje->codigo,
-                        'precio_unitario' => $herraje->precio_unitario,
+                        'precio_unitario' => $herraje->costo_unitario,
                         'unidad_medida' => $herraje->unidad_medida,
                         'cantidad' => $herraje->pivot->cantidad,
                     ];
