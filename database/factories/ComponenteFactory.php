@@ -20,13 +20,10 @@ class ComponenteFactory extends Factory
             //
             'nombre' => $this->faker->word(),
             'descripcion' => $this->faker->sentence(),
-            'costo' => $this->faker->randomFloat(2, 20, 200),
             'codigo' => $this->faker->unique()->bothify('???-#####'),
-            'materiales' => $this->faker->word(),
-            'herrajes' => $this->faker->word(),
-            'mano_obra_id' => $this->faker->randomFloat(2, 5, 50),
-            'acabado_id' => $this->faker->randomFloat(2, 5, 50),
-
+            'accesorios' => $this->faker->word(),
+            'acabado_id' => \App\Models\Acabado::factory(),
+            'mano_de_obra_id' => \App\Models\ManoDeObra::factory(),
         ];
     }
 

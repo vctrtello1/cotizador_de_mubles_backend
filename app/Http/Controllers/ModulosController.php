@@ -30,7 +30,7 @@ class ModulosController extends Controller
      */
     public function show(modulos $modulo)
     {
-        return $modulo-> toResource();
+        return $modulo->load('componentes')->toResource();
     }
 
     /**

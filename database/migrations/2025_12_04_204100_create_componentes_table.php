@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('nombre');
             $table->string('descripcion')->nullable();
             $table->string('codigo')->unique();
+            $table->string('accesorios')->nullable();
             $table->foreignId('acabado_id')->constrained();
             $table->foreignId('mano_de_obra_id')->constrained();
             $table->timestamps();

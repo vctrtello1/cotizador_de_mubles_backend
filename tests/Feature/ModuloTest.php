@@ -32,6 +32,7 @@ class ModuloTest extends TestCase
                     'nombre',
                     'descripcion',
                     'codigo',
+                    'componentes',
                 ],
             ],
         ]);
@@ -51,7 +52,24 @@ class ModuloTest extends TestCase
                 'nombre',
                 'descripcion',
                 'codigo',
+                'componentes',
             ],
+        ]);
+    }
+
+    public function test_modulo_with_componentes_and_quantities(): void
+    {
+        $modulo = \App\Models\modulos::factory()->create();
+        $componente = \App\Models\componente::factory()->create();
+        
+        $modulo->componentes()->attach($componente->id, ['cantidad' => 5]);
+
+        $response = $this->getJson("/api/v1/modulos/{$modulo->id}");
+
+        $response->assertStatus(200);
+        $response->assertJsonFragment([
+            'id' => $componente->id,
+            'cantidad' => 5,
         ]);
     }
 

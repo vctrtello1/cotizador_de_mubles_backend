@@ -19,6 +19,7 @@ class ModulosResource extends JsonResource
             'nombre' => $this->nombre,
             'descripcion' => $this->descripcion,
             'codigo' => $this->codigo,
+            'componentes' => ComponenteResource::collection($this->whenLoaded('componentes')),
         ];
     }
 }

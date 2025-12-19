@@ -20,9 +20,9 @@ class ManoDeObraFactory extends Factory
             //
             'nombre' => $this->faker->word(),
             'descripcion' => $this->faker->sentence(),
-            'horas_trabajadas' => $this->faker->numberBetween(1, 100),
-            'costo_por_hora' => $this->faker->randomFloat(2, 10, 100),
-            'codigo' => $this->faker->unique()->bothify('???-#####'),
+            'costo_hora' => $this->faker->randomFloat(2, 10, 100),
+            'tiempo' => $this->faker->randomFloat(2, 1, 10),
+            'costo_total' => $this->faker->randomFloat(2, 10, 1000),
         ];
     }
 }

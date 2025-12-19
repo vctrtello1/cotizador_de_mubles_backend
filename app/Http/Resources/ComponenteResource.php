@@ -19,6 +19,9 @@ class ComponenteResource extends JsonResource
             'nombre' => $this->nombre,
             'descripcion' => $this->descripcion,
             'codigo' => $this->codigo,
+            'cantidad' => $this->whenPivotLoaded('cantidad_por_componente', function () {
+                return $this->pivot->cantidad;
+            }),
             'acabado_id' => new AcabadoResource($this->whenLoaded('acabado')),
             'mano_de_obra_id' => new ManoDeObraResource($this->whenLoaded('mano_de_obra')),
         ];
