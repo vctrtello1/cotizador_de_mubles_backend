@@ -46,6 +46,29 @@ class CotizacionController extends Controller
         return new CotizacionResource($cotizacion);
     }
 
+    public function modulosPorCotizacion()
+    {
+        $modulosPorCotizacion = Cotizacion::with('detalles.modulo')
+            ->get()
+            ->mapWithKeys(function ($cotizacion) {
+                return [$cotizacion->id => $cotizacion->detalles->map(function ($detalle) {
+                    return $detalle->modulo;
+                })->unique('id')->values()];
+            });
+
+        return response()->json($modulosPorCotizacion);
+    }
+
+    public function modulosPorCotizacionId(Cotizacion $cotizacion)
+    {
+        $cotizacion->load('detalles.modulo');
+        $modulos = $cotizacion->detalles->map(function ($detalle) {
+            return $detalle->modulo;
+        })->unique('id')->values();
+
+        return response()->json($modulos);
+    }
+
     public function destroy(Cotizacion $cotizacion)
     {
         $cotizacion->delete();

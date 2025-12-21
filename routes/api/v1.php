@@ -32,6 +32,9 @@ Route::apiResources([
     'clientes'      => ClienteController::class,
 ]);
 
+Route::get('cotizaciones/modulos', [CotizacionController::class, 'modulosPorCotizacion']);
+Route::get('cotizaciones/modulos/{cotizacion}', [CotizacionController::class, 'modulosPorCotizacionId']);
+
 Route::apiResource('cotizaciones', CotizacionController::class)
     ->parameters(['cotizaciones' => 'cotizacion']);
 
