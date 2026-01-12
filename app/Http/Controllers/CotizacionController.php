@@ -31,20 +31,38 @@ class CotizacionController extends Controller
             $cotizacion->detalles()->createMany($detalles);
             
             // También guardar la relación con módulos para acceso estructurado
+            $modulosCantidadArray = $data['modulos_cantidad'] ?? [];
+            
+            // Convertir array de objetos a un mapa donde cada modulo_id mapea a un array de cantidades
+            $modulosCantidad = [];
+            foreach ($modulosCantidadArray as $item) {
+                if (is_array($item) && isset($item['modulo_id'], $item['cantidad'])) {
+                    if (!isset($modulosCantidad[$item['modulo_id']])) {
+                        $modulosCantidad[$item['modulo_id']] = [];
+                    }
+                    $modulosCantidad[$item['modulo_id']][] = $item['cantidad'];
+                }
+            }
+            
             $detallesPorModulo = collect($data['detalles'])->groupBy('modulo_id');
             
             foreach ($detallesPorModulo as $moduloId => $detallesDelModulo) {
                 if ($moduloId) {
-                    // Adjuntar el módulo a la cotización (relación many-to-many)
-                    $cotizacion->modulosPorCotizacion()->attach($moduloId, [
-                        'cantidad' => 1  // Cantidad de módulos
-                    ]);
+                    if (isset($modulosCantidad[$moduloId])) {
+                        // Múltiples instancias del mismo módulo con diferentes cantidades
+                        foreach ($modulosCantidad[$moduloId] as $cantidad) {
+                            $cotizacion->modulosPorCotizacion()->attach($moduloId, [
+                                'cantidad' => $cantidad
+                            ]);
+                        }
+                    } else {
+                        // Fallback a cantidad 1 si no hay cantidad especificada
+                        $cotizacion->modulosPorCotizacion()->attach($moduloId, [
+                            'cantidad' => 1
+                        ]);
+                    }
                 }
             }
-            
-            // Recalcular el total basado en los detalles
-            $total = $cotizacion->detalles()->sum(DB::raw("cantidad * precio_unitario"));
-            $cotizacion->update(["total" => $total]);
         }
 
         $cotizacion->load(['detalles', 'cliente', 'modulosPorCotizacion.componentes']);
