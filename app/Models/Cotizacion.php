@@ -40,6 +40,27 @@ class Cotizacion extends Model
 
     public function getTotalAttribute($value)
     {
+        // If modules are loaded, calculate from modules and components
+        if ($this->relationLoaded('modulosPorCotizacion')) {
+            $total = 0;
+            foreach ($this->modulosPorCotizacion as $modulo) {
+                if ($modulo->relationLoaded('componentes')) {
+                    foreach ($modulo->componentes as $componente) {
+                        // Calculate component price
+                        $precioComponente = 0;
+                        if ($componente->relationLoaded('acabado') && $componente->acabado) {
+                            $precioComponente += $componente->acabado->costo;
+                        }
+                        if ($componente->relationLoaded('mano_de_obra') && $componente->mano_de_obra) {
+                            $precioComponente += $componente->mano_de_obra->costo_total;
+                        }
+                        $total += $precioComponente * $componente->pivot->cantidad;
+                    }
+                }
+            }
+            return $total > 0 ? $total : $value;
+        }
+
         // If details are loaded, calculate from details
         if ($this->relationLoaded('detalles')) {
             if ($this->detalles->isNotEmpty()) {
