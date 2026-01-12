@@ -58,21 +58,48 @@ class Cotizacion extends Model
                     }
                 }
             }
-            return $total > 0 ? $total : $value;
+            if ($total > 0) {
+                return $total;
+            }
         }
 
         // If details are loaded, calculate from details
         if ($this->relationLoaded('detalles')) {
             if ($this->detalles->isNotEmpty()) {
-                return $this->detalles->sum(function ($detalle) {
+                $total = $this->detalles->sum(function ($detalle) {
                     return $detalle->cantidad * $detalle->precio_unitario;
                 });
+                if ($total > 0) {
+                    return $total;
+                }
             }
-            return $value;
         }
 
         // Fallback: Calculate from DB if not loaded
         $calculated = $this->detalles()->sum(DB::raw('cantidad * precio_unitario'));
         return $calculated > 0 ? $calculated : $value;
+    }
+
+    public function calculateTotal()
+    {
+        // Load required relations if not already loaded
+        if (!$this->relationLoaded('modulosPorCotizacion')) {
+            $this->load('modulosPorCotizacion.componentes.acabado', 'modulosPorCotizacion.componentes.mano_de_obra');
+        }
+
+        $total = 0;
+        foreach ($this->modulosPorCotizacion as $modulo) {
+            foreach ($modulo->componentes as $componente) {
+                $precioComponente = 0;
+                if ($componente->acabado) {
+                    $precioComponente += $componente->acabado->costo;
+                }
+                if ($componente->mano_de_obra) {
+                    $precioComponente += $componente->mano_de_obra->costo_total;
+                }
+                $total += $precioComponente * $componente->pivot->cantidad;
+            }
+        }
+        return $total;
     }
 }

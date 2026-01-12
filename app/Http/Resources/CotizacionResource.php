@@ -19,7 +19,7 @@ class CotizacionResource extends JsonResource
             'cliente_id' => $this->cliente_id,
             'cliente' => new ClienteResource($this->whenLoaded('cliente')),
             'fecha' => $this->fecha,
-            'total' => number_format($this->total, 2),
+            'total' => number_format($this->calculateTotal(), 2),
             'modulos' => $this->whenLoaded('modulosPorCotizacion', function () {
                 return $this->modulosPorCotizacion->map(function ($modulo) {
                     $componentes = [];
