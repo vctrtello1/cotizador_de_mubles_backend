@@ -73,19 +73,6 @@ class CotizacionResource extends JsonResource
                     })
                     ->values();
             }),
-            'detalles' => $this->whenLoaded('detalles', function () {
-                return $this->detalles->map(function ($detalle) {
-                    return [
-                        'id' => $detalle->id,
-                        'descripcion' => $detalle->descripcion,
-                        'cantidad' => $detalle->cantidad,
-                        'precio_unitario' => $detalle->precio_unitario,
-                        'subtotal' => $detalle->subtotal,
-                        'created_at' => $detalle->created_at,
-                        'updated_at' => $detalle->updated_at,
-                    ];
-                })->values();
-            }),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
