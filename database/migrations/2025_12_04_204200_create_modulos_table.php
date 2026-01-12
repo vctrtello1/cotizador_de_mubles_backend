@@ -26,7 +26,28 @@ return new class extends Migration
                 'codigo' => 'COM_LUCIANICO',
                 'created_at' => now(),
                 'updated_at' => now(),
-            ]
+            ],
+            [
+                'nombre' => 'Centro de Entretenimiento Purru',
+                'descripcion' => 'Comedor de Roble con acabados de alta calidad',
+                'codigo' => 'CENT_ENT_PURRU',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'nombre' => 'Comedor Moderno',
+                'descripcion' => 'Comedor con diseño moderno y elegante',
+                'codigo' => 'COM_MODERNO',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'nombre' => 'Comedor Rústico',
+                'descripcion' => 'Comedor con estilo rústico y acogedor',
+                'codigo' => 'COM_RUSTICO',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]); 
     }
 

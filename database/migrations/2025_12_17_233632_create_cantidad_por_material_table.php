@@ -65,6 +65,25 @@ return new class extends Migration
                 'cantidad' => 1,
                 'componente_id' => 2,
             ],
+
+            // Mesa de centro Purru
+            [
+                'material_id' => 6,
+                'cantidad' => 4,
+                'componente_id' => 4,
+            ],
+            [
+                'material_id' => 7,
+                'cantidad' => 1,
+                'componente_id' => 4,
+            ],
+
+            // Repisa Purru
+            [
+                'material_id' => 3,
+                'cantidad' => 1,
+                'componente_id' => 3,
+            ]
         ]);
     }
 

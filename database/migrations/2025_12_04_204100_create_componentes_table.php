@@ -30,9 +30,6 @@ return new class extends Migration
                 'acabado_id' => 1,
                 'mano_de_obra_id' => 1,
             ],
-        ]);
-
-        DB::table('componentes')->insert([
             [
                 'nombre' => 'Mesa Lucianica',
                 'descripcion' => 'Mesa Lucianica de Roble con acabados de alta calidad',
@@ -40,14 +37,21 @@ return new class extends Migration
                 'acabado_id' => 1,
                 'mano_de_obra_id' => 2,
             ],
-        ]);
-
-        DB::table('componentes')->insert([
             [
                 'nombre' => 'Estante Moderno',
                 'descripcion' => 'Estante Moderno de MDF con acabados elegantes',
                 'codigo' => 'COMP_ESTANTE_MODERNO',
                 'acabado_id' => 2,
+                'mano_de_obra_id' => 3,
+            ],
+
+
+            // Mesa de centro materiales
+            [
+                'nombre' => 'Mesa de Centro Purru',
+                'descripcion' => 'Mesa de centro minimalista con estructura metálica y superficie de vidrio templado',
+                'codigo' => 'COMP_MESA_CENTRO_MINIMALISTA',
+                'acabado_id' => 3,
                 'mano_de_obra_id' => 3,
             ],
         ]);

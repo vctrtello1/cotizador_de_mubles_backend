@@ -26,7 +26,6 @@ return new class extends Migration
         });
 
         // Silla Lucianica Materials
-
         DB::table('materiales')->insert([
             [
                 'nombre' => 'Pata de silla Lucianica',
@@ -34,55 +33,46 @@ return new class extends Migration
                 'codigo' => 'PAT-LUC-001',
                 'precio_unitario' => 15.75,
                 'unidad_medida' => 'cm',
-                'tipo_de_material_id' => 1, // Madera de roble
+                'tipo_de_material_id' => 1,
                 'alto' => 47,
                 'ancho' => 2.7,
                 'largo' => 2.7,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-        ]);
-
-        DB::table('materiales')->insert([
             [
                 'nombre' => 'Base de silla Lucianica',
                 'descripcion' => 'Base de silla de madera de roble maciza con acabado natural',
                 'codigo' => 'TAB-LUC-001',
                 'precio_unitario' => 500,
                 'unidad_medida' => 'cm',
-                'tipo_de_material_id' => 1, // Madera de roble
+                'tipo_de_material_id' => 1,
                 'alto' => 2.7,
                 'ancho' => 42,
                 'largo' => 42,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-        ]);
-
-        DB::table('materiales')->insert([
             [
                 'nombre' => 'Respaldo de silla Lucianica',
                 'descripcion' => 'Respaldo de silla de madera de roble maciza con acabado natural',
                 'codigo' => 'BCK-LUC-001',
                 'precio_unitario' => 200,
                 'unidad_medida' => 'cm',
-                'tipo_de_material_id' => 1, // Madera de roble
+                'tipo_de_material_id' => 1,
                 'alto' => 42,
                 'ancho' => 42,
                 'largo' => 2.7,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-        ]);
-
-        DB::table('materiales')->insert([
             [
                 'nombre' => 'Asiento de silla Lucianica',
                 'descripcion' => 'Asiento de silla algodon de 500 hilos con espuma de alta densidad',
                 'codigo' => 'SEA-LUC-001',
                 'precio_unitario' => 250,
                 'unidad_medida' => 'cm',
-                'tipo_de_material_id' => 5, // Algodón orgánico
+                'tipo_de_material_id' => 5,
                 'alto' => 2.7,
                 'ancho' => 42,
                 'largo' => 42,
@@ -99,29 +89,94 @@ return new class extends Migration
                 'codigo' => 'PAT-MES-001',
                 'precio_unitario' => 25.50,
                 'unidad_medida' => 'cm',
-                'tipo_de_material_id' => 1, // Madera de roble
+                'tipo_de_material_id' => 1,
                 'alto' => 75,
                 'ancho' => 5,
                 'largo' => 5,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-        ]);
-
-        DB::table('materiales')->insert([
             [
                 'nombre' => 'Tabla de mesa Lucianica',
                 'descripcion' => 'Tabla de mesa de madera de roble maciza con acabado natural',
                 'codigo' => 'TAB-MES-001',
                 'precio_unitario' => 800,
                 'unidad_medida' => 'cm',
-                'tipo_de_material_id' => 1, // Madera de roble
+                'tipo_de_material_id' => 1,
                 'alto' => 4,
                 'ancho' => 120,
                 'largo' => 80,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+        ]);
+
+
+        // Centro de entretenimiento Purru Materials
+
+
+        // mesa 
+        DB::table('materiales')->insert([
+            [
+                'nombre' => 'Estructura de centro de entretenimiento Purru',
+                'descripcion' => 'Estructura de centro de entretenimiento de madera de pino con acabado barnizado',
+                'codigo' => 'EST-PUR-001',
+                'precio_unitario' => 1200,
+                'unidad_medida' => 'cm',
+                'tipo_de_material_id' => 2,
+                'alto' => 60,
+                'ancho' => 150,
+                'largo' => 40,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'nombre' => 'Pata de centro de entretenimiento Purru',
+                'descripcion' => 'Pata de centro de entretenimiento de madera de pino con acabado barnizado',
+                'codigo' => 'PAT-PUR-001',
+                'precio_unitario' => 300,
+                'unidad_medida' => 'cm',
+                'tipo_de_material_id' => 2,
+                'alto' => 50,
+                'ancho' => 2,
+                'largo' => 2,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
+            // vidrio
+            [
+                'nombre' => 'Vidrio de centro de entretenimiento Purru',
+                'descripcion' => 'Vidrio templado para centro de entretenimiento',
+                'codigo' => 'GLA-PUR-001',
+                'precio_unitario' => 400,
+                'unidad_medida' => 'cm',
+                'tipo_de_material_id' => 3,
+                'alto' => 55,
+                'ancho' => 45,
+                'largo' => 1,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
+
+            // repisa 
+
+            [
+                'nombre' => 'Repisa de centro de entretenimiento Purru',
+                'descripcion' => 'Repisa de centro de entretenimiento de madera de pino con acabado barnizado',
+                'codigo' => 'SHE-PUR-001',
+                'precio_unitario' => 250,
+                'unidad_medida' => 'cm',
+                'tipo_de_material_id' => 2,
+                'alto' => 2,
+                'ancho' => 140,
+                'largo' => 35,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
+
         ]);
     }
 

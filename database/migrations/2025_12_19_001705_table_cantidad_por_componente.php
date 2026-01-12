@@ -45,6 +45,23 @@ return new class extends Migration
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
+
+            // centro de entretenimiento purru
+            [
+                'modulo_id' => 2,
+                'componente_id' => 4,
+                'cantidad' => 4,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'modulo_id' => 2,
+                'componente_id' => 1,
+                'cantidad' => 2,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
     }
 

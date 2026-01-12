@@ -40,6 +40,17 @@ return new class extends Migration
                 'updated_at' => now(),
             ],
         ]);
+
+        // Acabados Mesa Centro Purru
+        DB::table('acabados')->insert([
+            [
+                'nombre' => 'Acabado Minimalista',
+                'descripcion' => 'Acabado moderno para diseño minimalista',
+                'costo' => 120.00,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+        ]);
     }
 
     /**
