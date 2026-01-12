@@ -6,7 +6,6 @@ use App\Models\Cotizacion;
 use App\Http\Resources\CotizacionResource;
 use App\Http\Requests\StoreCotizacionRequest;
 use App\Http\Requests\UpdateCotizacionRequest;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 class CotizacionController extends Controller
@@ -29,25 +28,9 @@ class CotizacionController extends Controller
                 return $detalle;
             });
             $cotizacion->detalles()->createMany($detalles);
-            
-            // También guardar la relación con módulos para acceso estructurado
-            $detallesPorModulo = collect($data['detalles'])->groupBy('modulo_id');
-            
-            foreach ($detallesPorModulo as $moduloId => $detallesDelModulo) {
-                if ($moduloId) {
-                    // Adjuntar el módulo a la cotización (relación many-to-many)
-                    $cotizacion->modulosPorCotizacion()->attach($moduloId, [
-                        'cantidad' => 1  // Cantidad de módulos
-                    ]);
-                }
-            }
-            
-            // Recalcular el total basado en los detalles
-            $total = $cotizacion->detalles()->sum(DB::raw("cantidad * precio_unitario"));
-            $cotizacion->update(["total" => $total]);
         }
 
-        $cotizacion->load(['detalles', 'cliente', 'modulosPorCotizacion.componentes']);
+        $cotizacion->load('detalles');
         return new CotizacionResource($cotizacion);
     }
 
