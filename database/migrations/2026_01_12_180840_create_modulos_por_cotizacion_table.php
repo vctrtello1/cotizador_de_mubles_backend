@@ -21,6 +21,7 @@ return new class extends Migration
 
 
         DB::table('modulos_por_cotizacion')->insert([
+            // Cotizacion 1
             [
                 'cotizacion_id' => 1,
                 'modulo_id' => 1,
@@ -28,8 +29,34 @@ return new class extends Migration
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+                        [
+                'cotizacion_id' => 1,
+                'modulo_id' => 2,
+                'cantidad' => 1,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
+            // Cotizacion 2
+                        [
+                'cotizacion_id' => 2,
+                'modulo_id' => 1,
+                'cantidad' => 1,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
             [
                 'cotizacion_id' => 2,
+                'modulo_id' => 2,
+                'cantidad' => 1,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
+
+            // Cotizacion 3
+            [
+                'cotizacion_id' => 3,
                 'modulo_id' => 2,
                 'cantidad' => 1,
                 'created_at' => now(),

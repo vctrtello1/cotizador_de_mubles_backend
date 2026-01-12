@@ -28,6 +28,16 @@ class Cotizacion extends Model
         return $this->hasMany(DetalleCotizacion::class);
     }
 
+    public function modulosPorCotizacion()
+    {
+        return $this->belongsToMany(
+            Modulos::class,
+            'modulos_por_cotizacion',
+            'cotizacion_id',
+            'modulo_id'
+        )->withPivot('cantidad')->withTimestamps();
+    }
+
     public function getTotalAttribute($value)
     {
         // If details are loaded, calculate from details

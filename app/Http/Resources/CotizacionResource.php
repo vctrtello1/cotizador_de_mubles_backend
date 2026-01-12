@@ -20,25 +20,14 @@ class CotizacionResource extends JsonResource
             'cliente' => new ClienteResource($this->whenLoaded('cliente')),
             'fecha' => $this->fecha,
             'total' => $this->getRawOriginal('total'),
-            'modulos' => $this->whenLoaded('detalles', function () {
-                return $this->detalles->groupBy('modulo_id')->map(function ($detalles) {
-                    $modulo = $detalles->first()->modulo;
+            'modulos' => $this->whenLoaded('modulosPorCotizacion', function () {
+                return $this->modulosPorCotizacion->map(function ($modulo) {
                     return [
                         'id' => $modulo->id,
                         'nombre' => $modulo->nombre,
                         'descripcion' => $modulo->descripcion,
                         'codigo' => $modulo->codigo,
-                        'detalles' => $detalles->map(function ($detalle) {
-                            return [
-                                'id' => $detalle->id,
-                                'descripcion' => $detalle->descripcion,
-                                'cantidad' => $detalle->cantidad,
-                                'precio_unitario' => $detalle->precio_unitario,
-                                'subtotal' => $detalle->subtotal,
-                                'created_at' => $detalle->created_at,
-                                'updated_at' => $detalle->updated_at,
-                            ];
-                        })->values()
+                        'cantidad' => $modulo->pivot->cantidad,
                     ];
                 })->values();
             }),

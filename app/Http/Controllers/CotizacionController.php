@@ -12,7 +12,7 @@ class CotizacionController extends Controller
 {
     public function index()
     {
-        return CotizacionResource::collection(Cotizacion::with(['cliente', 'detalles.modulo'])->get());
+        return CotizacionResource::collection(Cotizacion::with(['cliente', 'modulosPorCotizacion'])->get());
     }
 
     public function store(StoreCotizacionRequest $request)
@@ -36,7 +36,7 @@ class CotizacionController extends Controller
 
     public function show(Cotizacion $cotizacion)
     {
-        $cotizacion->load(['detalles.modulo', 'cliente']);
+        $cotizacion->load(['modulosPorCotizacion', 'cliente']);
         return new CotizacionResource($cotizacion);
     }
 
