@@ -16,7 +16,15 @@ class HorasDeManoDeObraPorComponenteController extends Controller
     public function store(HorasDeManoDeObraPorComponenteRequest $request)
     {
         $validated = $request->validated();
-        $horas = HorasDeManoDeObraPorComponente::create($validated);
+        $horas = HorasDeManoDeObraPorComponente::updateOrCreate(
+            [
+                'componente_id' => $validated['componente_id'],
+                'mano_de_obra_id' => $validated['mano_de_obra_id'],
+            ],
+            [
+                'horas' => $validated['horas'],
+            ]
+        );
 
         return response()->json($horas, 201);
     }

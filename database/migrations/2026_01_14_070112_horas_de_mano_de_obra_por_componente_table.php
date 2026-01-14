@@ -30,21 +30,7 @@ return new class extends Migration
                 'horas' => 2,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ],
-            [
-                'componente_id' => 1,
-                'mano_de_obra_id' => 2,
-                'horas' => 1,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'componente_id' => 2,
-                'mano_de_obra_id' => 1,
-                'horas' => 3,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
+            ]
         ]);
     }
 
