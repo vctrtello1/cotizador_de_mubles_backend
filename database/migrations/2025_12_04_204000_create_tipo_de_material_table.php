@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('table_tipo_de_material', function (Blueprint $table) {
+        Schema::create('tipo_de_material', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
             $table->text('descripcion')->nullable();
@@ -20,7 +20,7 @@ return new class extends Migration
         });
 
         // Insert initial data into table_tipo_de_material
-        DB::table('table_tipo_de_material')->insert([
+        DB::table('tipo_de_material')->insert([
             [
                 'nombre' => 'Madera de roble',
                 'descripcion' => 'Madera dura y resistente, ideal para muebles de alta calidad.',
@@ -64,6 +64,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('table_tipo_de_material');
+        Schema::dropIfExists('tipo_de_material');
     }
 };
