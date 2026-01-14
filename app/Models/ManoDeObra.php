@@ -13,8 +13,6 @@ class ManoDeObra extends Model
         'nombre',
         'descripcion',
         'costo_hora',
-        'tiempo',
-        'costo_total',
     ];
 
     public function componentes()

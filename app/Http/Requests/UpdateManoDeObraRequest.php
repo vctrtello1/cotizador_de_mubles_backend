@@ -25,8 +25,6 @@ class UpdateManoDeObraRequest extends FormRequest
             'nombre' => ['sometimes', 'required', 'string', 'max:255'],
             'descripcion' => ['nullable', 'string'],
             'costo_hora' => ['sometimes', 'required', 'numeric', 'min:0'],
-            'tiempo' => ['sometimes', 'required', 'numeric', 'min:0'],
-            'costo_total' => ['sometimes', 'required', 'numeric', 'min:0'],
         ];
     }
 }

@@ -187,7 +187,7 @@ class ComponenteTest extends TestCase
         $material = \App\Models\Material::factory()->create(['precio_unitario' => 10]);
         $herraje = \App\Models\Herraje::factory()->create(['costo_unitario' => 5]);
         $acabado = \App\Models\Acabado::factory()->create(['costo' => 20]);
-        $manoDeObra = \App\Models\ManoDeObra::factory()->create(['costo_total' => 30]);
+        $manoDeObra = \App\Models\ManoDeObra::factory()->create(['costo_hora' => 30]);
 
         $componente = \App\Models\Componente::factory()->create([
             'acabado_id' => $acabado->id,
@@ -197,11 +197,11 @@ class ComponenteTest extends TestCase
         $componente->materiales()->attach($material->id, ['cantidad' => 2]); // 10 * 2 = 20
         $componente->herrajes()->attach($herraje->id, ['cantidad' => 3]); // 5 * 3 = 15
 
-        // Total Cost = 20 (Material) + 15 (Herraje) + 20 (Acabado) + 30 (ManoDeObra) = 85
+        // Total Cost = 20 (Material) + 15 (Herraje) + 20 (Acabado) + 0 (ManoDeObra) = 55
 
         $response = $this->getJson("/api/v1/componentes/{$componente->id}");
 
         $response->assertStatus(200);
-        $response->assertJsonFragment(['costo_total' => 85]);
+        $response->assertJsonFragment(['costo_total' => 55]);
     }
 }

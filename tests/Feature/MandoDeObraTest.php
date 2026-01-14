@@ -90,8 +90,6 @@ class MandoDeObraTest extends TestCase
             'nombre' => 'Mano de Obra Test',
             'descripcion' => 'Descripcion de Mano de Obra Test',
             'costo_hora' => 50.0,
-            'tiempo' => 2.0,
-            'costo_total' => 100.0,
         ];
 
         $response = $this->postJson('/api/v1/mano-de-obras', $manoDeObraData);

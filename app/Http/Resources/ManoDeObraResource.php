@@ -19,8 +19,6 @@ class ManoDeObraResource extends JsonResource
             'nombre' => $this->nombre,
             'descripcion' => $this->descripcion,
             'costo_hora' => $this->costo_hora,
-            'tiempo' => $this->tiempo,
-            'costo_total' => $this->costo_total,
             'componentes' => ComponenteResource::collection($this->whenLoaded('componentes')),
         ];
     }
