@@ -6,6 +6,7 @@ use App\Http\Requests\StoreManoDeObraRequest;
 use App\Http\Requests\UpdateManoDeObraRequest;
 use App\Http\Resources\ManoDeObraResource;
 use App\Models\ManoDeObra;
+use App\Models\HorasDeManoDeObraPorComponente;
 
 class ManoDeObraController extends Controller
 {
@@ -43,6 +44,26 @@ class ManoDeObraController extends Controller
     public function update(UpdateManoDeObraRequest $request, ManoDeObra $manoDeObra)
     {
         $manoDeObra->update($request->validated());
+        
+        // Verificar si hay componentes que usan esta mano de obra
+        $componentes = $manoDeObra->componentes;
+        
+        foreach ($componentes as $componente) {
+            // Verificar si existe un registro en horas_de_mano_de_obra_por_componente
+            $horasRegistro = HorasDeManoDeObraPorComponente::where('componente_id', $componente->id)
+                ->where('mano_de_obra_id', $manoDeObra->id)
+                ->first();
+            
+            // Si no existe, crear uno con valor de 1 hora
+            if (!$horasRegistro) {
+                HorasDeManoDeObraPorComponente::create([
+                    'componente_id' => $componente->id,
+                    'mano_de_obra_id' => $manoDeObra->id,
+                    'horas' => 1,
+                ]);
+            }
+        }
+        
         return new ManoDeObraResource($manoDeObra);
     }
 
