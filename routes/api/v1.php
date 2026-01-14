@@ -13,6 +13,7 @@ use App\Http\Controllers\ManoDeObraController;
 use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\ModulosController;
 use App\Http\Controllers\TipoDeMaterialController;
+use App\Http\Controllers\HorasDeManoDeObraPorComponenteController;
 use Illuminate\Support\Facades\Route;
 
 Route::apiResource('materiales', MaterialController::class)
@@ -48,6 +49,9 @@ use App\Http\Controllers\CantidadPorComponenteController;
 
 Route::apiResource('cantidad-por-componentes', CantidadPorComponenteController::class)
     ->parameters(['cantidad-por-componentes' => 'cantidadPorComponente']);
+
+Route::apiResource('horas-de-mano-de-obra-por-componentes', HorasDeManoDeObraPorComponenteController::class)
+    ->parameters(['horas-de-mano-de-obra-por-componentes' => 'horasDeManoDeObraPorComponente']);
 
 Route::apiResource('accesorios-por-componente', AccesoriosPorComponenteController::class)
     ->parameters(['accesorios-por-componente' => 'accesoriosPorComponente']);

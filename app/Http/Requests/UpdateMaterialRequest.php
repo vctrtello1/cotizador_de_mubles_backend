@@ -27,7 +27,7 @@ class UpdateMaterialRequest extends FormRequest
             'codigo' => ['nullable', 'string'],
             'precio_unitario' => ['required', 'numeric', 'min:0'],
             'unidad_medida' => ['required', 'string'],
-            'tipo_de_material_id' => ['required', 'integer', 'exists:table_tipo_de_material,id'],
+            'tipo_de_material_id' => ['required', 'integer', 'exists:tipo_de_material,id'],
             'alto' => ['required', 'numeric', 'min:0'],
             'ancho' => ['required', 'numeric', 'min:0'],
             'largo' => ['required', 'numeric', 'min:0'],

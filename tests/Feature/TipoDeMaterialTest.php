@@ -103,7 +103,7 @@ class TipoDeMaterialTest extends TestCase
             ],
         ]);
 
-        $this->assertDatabaseHas('table_tipo_de_material', $tipoDeMaterialData);
+        $this->assertDatabaseHas('tipo_de_material', $tipoDeMaterialData);
     }
 
 
@@ -149,7 +149,7 @@ class TipoDeMaterialTest extends TestCase
             ],
         ]);
 
-        $this->assertDatabaseHas('table_tipo_de_material', array_merge(['id' => $tipoDeMaterial->id], $updateData));
+        $this->assertDatabaseHas('tipo_de_material', array_merge(['id' => $tipoDeMaterial->id], $updateData));
     }   
     public function test_tipo_de_material_delete(): void
     {
@@ -159,6 +159,6 @@ class TipoDeMaterialTest extends TestCase
         $response = $this->deleteJson("/api/v1/tipo-de-materiales/{$tipoDeMaterial->id}");
 
         $response->assertStatus(204);
-        $this->assertDatabaseMissing('table_tipo_de_material', ['id' => $tipoDeMaterial->id]);
+        $this->assertDatabaseMissing('tipo_de_material', ['id' => $tipoDeMaterial->id]);
     }
 }

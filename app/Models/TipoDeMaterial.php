@@ -9,7 +9,7 @@ class TipoDeMaterial extends Model
 {
     use HasFactory;
 
-    protected $table = 'table_tipo_de_material';
+    protected $table = 'tipo_de_material';
 
     protected $fillable = [
         'nombre',

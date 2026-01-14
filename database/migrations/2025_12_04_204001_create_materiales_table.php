@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('codigo')->unique();
             $table->float('precio_unitario');
             $table->string('unidad_medida');
-            $table->foreignId('tipo_de_material_id')->constrained('table_tipo_de_material');
+            $table->foreignId('tipo_de_material_id')->constrained('tipo_de_material');
             $table->float('alto');
             $table->float('ancho');
             $table->float('largo');
