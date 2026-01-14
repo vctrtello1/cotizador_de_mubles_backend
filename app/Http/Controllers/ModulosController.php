@@ -21,8 +21,22 @@ class ModulosController extends Controller
      */
     public function store(StoreModulosRequest $request)
     {
-        $modulo = Modulos::create($request->validated());
-        return $modulo->toResource();
+        $validated = $request->validated();
+        $componentes = $validated['componentes'] ?? [];
+        unset($validated['componentes']);
+
+        $modulo = Modulos::create($validated);
+
+        // Sincronizar componentes
+        if (!empty($componentes)) {
+            $syncData = [];
+            foreach ($componentes as $componente) {
+                $syncData[$componente['id']] = ['cantidad' => $componente['cantidad']];
+            }
+            $modulo->componentes()->sync($syncData);
+        }
+
+        return $modulo->load('componentes')->toResource();
     }
 
     /**
@@ -38,9 +52,25 @@ class ModulosController extends Controller
      */
     public function update(UpdateModulosRequest $request, modulos $modulo)
     {
-        //
-        $modulo->update($request->validated());
-        return $modulo->toResource();
+        $validated = $request->validated();
+        $componentes = $validated['componentes'] ?? [];
+        unset($validated['componentes']);
+
+        $modulo->update($validated);
+
+        // Sincronizar componentes
+        if (!empty($componentes)) {
+            $syncData = [];
+            foreach ($componentes as $componente) {
+                $syncData[$componente['id']] = ['cantidad' => $componente['cantidad']];
+            }
+            $modulo->componentes()->sync($syncData);
+        } else {
+            // Si no hay componentes, limpiar la relación
+            $modulo->componentes()->detach();
+        }
+
+        return $modulo->load('componentes')->toResource();
     }
 
     /**

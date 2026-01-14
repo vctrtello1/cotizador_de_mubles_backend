@@ -22,10 +22,12 @@ class StoreModulosRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
             'nombre' => ['required', 'string', 'max:255'],
             'descripcion' => ['nullable', 'string'],
             'codigo' => ['required', 'string'],
+            'componentes' => ['nullable', 'array'],
+            'componentes.*.id' => ['required', 'integer', 'exists:componentes,id'],
+            'componentes.*.cantidad' => ['required', 'integer', 'min:1'],
         ];
     }
 }
