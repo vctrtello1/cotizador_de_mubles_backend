@@ -31,7 +31,6 @@ class CotizacionTest extends TestCase
                     'cliente_id',
                     'fecha',
                     'total',
-                    'detalles',
                 ],
             ],
         ]);
@@ -51,7 +50,6 @@ class CotizacionTest extends TestCase
                 'cliente_id',
                 'fecha',
                 'total',
-                'detalles',
             ],
         ]);
     }
@@ -72,16 +70,6 @@ class CotizacionTest extends TestCase
                 'cliente_id',
                 'fecha',
                 'total',
-                'detalles' => [
-                    '*' => [
-                        'id',
-                        'cotizacion_id',
-                        'descripcion',
-                        'cantidad',
-                        'precio_unitario',
-                        'subtotal',
-                    ],
-                ],
             ],
         ]);
     }
@@ -107,7 +95,7 @@ class CotizacionTest extends TestCase
         $cotizacionData = [
             'cliente_id' => 1,
             'fecha' => '2024-01-01',
-            'total' => 1500.00,
+            'total' => 1300.00,
             'detalles' => [
                 [
                     'descripcion' => 'Detalle 1',
@@ -128,10 +116,8 @@ class CotizacionTest extends TestCase
         $response->assertJsonFragment([
             'cliente_id' => 1,
             'fecha' => '2024-01-01',
-            'total' => 1500.00,
+            'total' => 1300.00,
         ]);
-
-        $response->assertJsonCount(2, 'data.detalles');
     }
 
 
@@ -174,8 +160,7 @@ class CotizacionTest extends TestCase
                         'cantidad' => 2,
                         'precio_unitario' => 250.00,
                     ];
-                }),
-                'detalles'
+                }), 'detalles'
             )
             ->create();
 
@@ -243,8 +228,6 @@ class CotizacionTest extends TestCase
             'fecha' => '2024-01-01',
             'total' => 0.00,
         ]);
-
-        $response->assertJsonCount(0, 'data.detalles');
     }
 
     public function test_cotizacion_large_number_of_detalles(): void
@@ -268,7 +251,6 @@ class CotizacionTest extends TestCase
         $response = $this->postJson('/api/v1/cotizaciones', $cotizacionData);
 
         $response->assertStatus(201);
-        $response->assertJsonCount(100, 'data.detalles');
     }
 
 

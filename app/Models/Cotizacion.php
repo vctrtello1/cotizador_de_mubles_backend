@@ -82,24 +82,46 @@ class Cotizacion extends Model
 
     public function calculateTotal()
     {
+        // First, try to calculate from detalles
+        if ($this->relationLoaded('detalles') && $this->detalles->isNotEmpty()) {
+            return $this->detalles->sum(function ($detalle) {
+                return $detalle->cantidad * $detalle->precio_unitario;
+            });
+        }
+
+        // If not loaded, try to fetch from DB
+        $detallesTotal = $this->detalles()->sum(DB::raw('cantidad * precio_unitario'));
+        if ($detallesTotal > 0) {
+            return $detallesTotal;
+        }
+
         // Load required relations if not already loaded
         if (!$this->relationLoaded('modulosPorCotizacion')) {
             $this->load('modulosPorCotizacion.componentes.acabado', 'modulosPorCotizacion.componentes.mano_de_obra');
         }
 
         $total = 0;
-        foreach ($this->modulosPorCotizacion as $modulo) {
-            foreach ($modulo->componentes as $componente) {
-                $precioComponente = 0;
-                if ($componente->acabado) {
-                    $precioComponente += $componente->acabado->costo;
+        if ($this->modulosPorCotizacion->isNotEmpty()) {
+            foreach ($this->modulosPorCotizacion as $modulo) {
+                foreach ($modulo->componentes as $componente) {
+                    $precioComponente = 0;
+                    if ($componente->acabado) {
+                        $precioComponente += $componente->acabado->costo;
+                    }
+                    if ($componente->mano_de_obra) {
+                        $precioComponente += $componente->mano_de_obra->costo_total;
+                    }
+                    $total += $precioComponente * $componente->pivot->cantidad;
                 }
-                if ($componente->mano_de_obra) {
-                    $precioComponente += $componente->mano_de_obra->costo_total;
-                }
-                $total += $precioComponente * $componente->pivot->cantidad;
             }
         }
-        return $total;
+        
+        // If we have a calculated total, return it
+        if ($total > 0) {
+            return $total;
+        }
+
+        // Fallback: return the total from the database
+        return $this->total ?? 0;
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\ComponenteResource;
 
 class CantidadPorComponenteResource extends JsonResource
 {
@@ -19,6 +20,7 @@ class CantidadPorComponenteResource extends JsonResource
             'modulo_id' => $this->modulo_id,
             'componente_id' => $this->componente_id,
             'cantidad' => $this->cantidad,
+            'componente' => new ComponenteResource($this->whenLoaded('componente')),
         ];
     }
 }

@@ -2,10 +2,11 @@
 
 namespace Database\Factories;
 
+use App\Models\Componente;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Model>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\CantidadPorComponente>
  */
 class CantidadPorComponenteFactory extends Factory
 {
@@ -17,7 +18,7 @@ class CantidadPorComponenteFactory extends Factory
     public function definition(): array
     {
         return [
-            //
-        ];
+            'componente_id' => Componente::factory(),
+            'cantidad' => $this->faker->numberBetween(1, 10),        ];
     }
 }

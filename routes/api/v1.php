@@ -44,6 +44,11 @@ Route::apiResource('cantidad-por-materiales', CantidadPorMaterialController::cla
 Route::apiResource('cantidad-por-herrajes', CantidadPorHerrajeController::class)
     ->parameters(['cantidad-por-herrajes' => 'cantidadPorHerraje']);
 
+use App\Http\Controllers\CantidadPorComponenteController;
+
+Route::apiResource('cantidad-por-componentes', CantidadPorComponenteController::class)
+    ->parameters(['cantidad-por-componentes' => 'cantidadPorComponente']);
+
 Route::apiResource('accesorios-por-componente', AccesoriosPorComponenteController::class)
     ->parameters(['accesorios-por-componente' => 'accesoriosPorComponente']);
 
