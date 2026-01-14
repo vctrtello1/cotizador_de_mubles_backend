@@ -234,4 +234,80 @@ class MaterialesPorComponenteTest extends TestCase
 
         $this->assertEquals($sortedCantidades, $cantidades);
     }
+
+    public function test_materiales_por_componente_minimum_quantity(): void
+    {
+        $componente = \App\Models\Componente::factory()->create();
+        $material = \App\Models\Material::factory()->create();
+        
+        $data = [
+            'componente_id' => $componente->id,
+            'material_id' => $material->id,
+            'cantidad' => 1, // Minimum allowed
+        ];
+
+        $response = $this->postJson('/api/v1/materiales-por-componente', $data);
+
+        $response->assertStatus(201);
+        $response->assertJsonFragment(['cantidad' => 1]);
+    }
+
+    public function test_materiales_por_componente_zero_quantity_fails(): void
+    {
+        $componente = \App\Models\Componente::factory()->create();
+        $material = \App\Models\Material::factory()->create();
+        
+        $data = [
+            'componente_id' => $componente->id,
+            'material_id' => $material->id,
+            'cantidad' => 0, // Below minimum
+        ];
+
+        $response = $this->postJson('/api/v1/materiales-por-componente', $data);
+
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors(['cantidad']);
+    }
+
+    public function test_materiales_por_componente_duplicate_fails(): void
+    {
+        $componente = \App\Models\Componente::factory()->create();
+        $material = \App\Models\Material::factory()->create();
+
+        // Create the first entry
+        \App\Models\MaterialesPorComponente::factory()->create([
+            'componente_id' => $componente->id,
+            'material_id' => $material->id,
+            'cantidad' => 10,
+        ]);
+
+        // Attempt to create a duplicate
+        $data = [
+            'componente_id' => $componente->id,
+            'material_id' => $material->id,
+            'cantidad' => 20,
+        ];
+
+        $response = $this->postJson('/api/v1/materiales-por-componente', $data);
+
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors(['material_id']);
+    }
+
+    public function test_materiales_por_componente_update_quantity(): void
+    {
+        $materialesPorComponente = \App\Models\MaterialesPorComponente::factory()->create(['cantidad' => 10]);
+
+        $updateData = [
+            'cantidad' => 25,
+        ];
+
+        $response = $this->putJson("/api/v1/materiales-por-componente/{$materialesPorComponente->id}", $updateData);
+
+        $response->assertStatus(200);
+        $this->assertDatabaseHas('materiales_por_componente', [
+            'id' => $materialesPorComponente->id,
+            'cantidad' => 25,
+        ]);
+    }
 }

@@ -232,4 +232,51 @@ class CantidadPorHerrajeTest extends TestCase
         $response->assertStatus(200);
         $response->assertJsonCount(3, 'data');
     }
+
+    public function test_cantidad_por_herraje_minimum_quantity(): void
+    {
+        $herraje = \App\Models\Herraje::factory()->create();
+        $componente = \App\Models\Componente::factory()->create();
+        
+        $data = [
+            'herraje_id' => $herraje->id,
+            'componente_id' => $componente->id,
+            'cantidad' => 1, // Minimum allowed
+        ];
+
+        $response = $this->postJson('/api/v1/cantidad-por-herrajes', $data);
+
+        $response->assertStatus(201);
+    }
+
+    public function test_cantidad_por_herraje_zero_quantity_fails(): void
+    {
+        $herraje = \App\Models\Herraje::factory()->create();
+        $componente = \App\Models\Componente::factory()->create();
+        
+        $data = [
+            'herraje_id' => $herraje->id,
+            'componente_id' => $componente->id,
+            'cantidad' => 0, // Below minimum
+        ];
+
+        $response = $this->postJson('/api/v1/cantidad-por-herrajes', $data);
+
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors(['cantidad']);
+    }
+
+    public function test_cantidad_por_herraje_update_minimum_quantity(): void
+    {
+        $cantidadPorHerraje = \App\Models\CantidadPorHerraje::factory()->create(['cantidad' => 10]);
+
+        $updateData = [
+            'cantidad' => 1, // Minimum allowed
+        ];
+
+        $response = $this->putJson("/api/v1/cantidad-por-herrajes/{$cantidadPorHerraje->id}", $updateData);
+
+        $response->assertStatus(200);
+        $response->assertJsonFragment(['cantidad' => 1]);
+    }
 }

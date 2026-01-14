@@ -94,4 +94,76 @@ class HorasDeManoDeObraPorComponenteTest extends TestCase
 
         $response->assertStatus(422);
     }
+
+    public function test_update_with_minimum_hours(): void
+    {
+        $horas = HorasDeManoDeObraPorComponente::factory()->create(['horas' => 5]);
+
+        $data = [
+            'horas' => 1, // Minimum allowed
+        ];
+
+        $response = $this->putJson("/api/v1/horas-de-mano-de-obra-por-componentes/{$horas->id}", $data);
+
+        $response->assertStatus(200);
+        $this->assertDatabaseHas('horas_de_mano_de_obra_por_componente', [
+            'id' => $horas->id,
+            'horas' => 1,
+        ]);
+    }
+
+    public function test_update_with_zero_hours_fails(): void
+    {
+        $horas = HorasDeManoDeObraPorComponente::factory()->create();
+
+        $data = [
+            'horas' => 0, // Below minimum
+        ];
+
+        $response = $this->putJson("/api/v1/horas-de-mano-de-obra-por-componentes/{$horas->id}", $data);
+
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors(['horas']);
+    }
+
+    public function test_update_with_negative_hours_fails(): void
+    {
+        $horas = HorasDeManoDeObraPorComponente::factory()->create();
+
+        $data = [
+            'horas' => -5, // Negative
+        ];
+
+        $response = $this->putJson("/api/v1/horas-de-mano-de-obra-por-componentes/{$horas->id}", $data);
+
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors(['horas']);
+    }
+
+    public function test_update_with_max_hours(): void
+    {
+        $horas = HorasDeManoDeObraPorComponente::factory()->create();
+
+        $data = [
+            'horas' => 24, // Maximum allowed
+        ];
+
+        $response = $this->putJson("/api/v1/horas-de-mano-de-obra-por-componentes/{$horas->id}", $data);
+
+        $response->assertStatus(200);
+    }
+
+    public function test_update_exceeds_max_hours_fails(): void
+    {
+        $horas = HorasDeManoDeObraPorComponente::factory()->create();
+
+        $data = [
+            'horas' => 25, // Exceeds maximum
+        ];
+
+        $response = $this->putJson("/api/v1/horas-de-mano-de-obra-por-componentes/{$horas->id}", $data);
+
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors(['horas']);
+    }
 }
