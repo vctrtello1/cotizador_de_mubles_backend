@@ -269,4 +269,58 @@ class CotizacionTest extends TestCase
             'fecha' => '2024-12-31',
         ]);
     }
+
+    public function test_cotizacion_sync_modulos(): void
+    {
+        $cotizacion = \App\Models\Cotizacion::factory()->create();
+        $modulo1 = \App\Models\Modulos::factory()->create();
+        $modulo2 = \App\Models\Modulos::factory()->create();
+
+        // Attach initial modules
+        $cotizacion->modulosPorCotizacion()->attach([
+            $modulo1->id => ['cantidad' => 1],
+            $modulo2->id => ['cantidad' => 2],
+        ]);
+
+        // Sync with only one module and different quantity
+        $syncData = [
+            'modulos' => [
+                ['id' => $modulo1->id, 'cantidad' => 3],
+            ]
+        ];
+
+        $response = $this->postJson("/api/v1/cotizaciones/{$cotizacion->id}/sync-modulos", $syncData);
+
+        $response->assertStatus(200);
+        
+        // Verify the sync worked
+        $this->assertDatabaseHas('modulos_por_cotizacion', [
+            'cotizacion_id' => $cotizacion->id,
+            'modulo_id' => $modulo1->id,
+            'cantidad' => 3,
+        ]);
+
+        // Verify modulo2 was removed
+        $this->assertDatabaseMissing('modulos_por_cotizacion', [
+            'cotizacion_id' => $cotizacion->id,
+            'modulo_id' => $modulo2->id,
+        ]);
+    }
+
+    public function test_cotizacion_sync_modulos_validation(): void
+    {
+        $cotizacion = \App\Models\Cotizacion::factory()->create();
+
+        // Test with invalid modulo ID
+        $syncData = [
+            'modulos' => [
+                ['id' => 99999, 'cantidad' => 1],
+            ]
+        ];
+
+        $response = $this->postJson("/api/v1/cotizaciones/{$cotizacion->id}/sync-modulos", $syncData);
+
+        $response->assertStatus(422); // Unprocessable Entity
+        $response->assertJsonValidationErrors(['modulos.0.id']);
+    }
 }

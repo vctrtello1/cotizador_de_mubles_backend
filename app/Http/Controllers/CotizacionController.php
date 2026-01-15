@@ -109,4 +109,24 @@ class CotizacionController extends Controller
         $cotizacion->delete();
         return response()->noContent();
     }
+
+    public function syncModulos(Request $request, Cotizacion $cotizacion)
+    {
+        $validated = $request->validate([
+            'modulos' => 'required|array',
+            'modulos.*.id' => 'required|integer|exists:modulos,id',
+            'modulos.*.cantidad' => 'sometimes|integer|min:1',
+        ]);
+
+        $modulos = collect($validated['modulos'])->mapWithKeys(function ($modulo) {
+            return [
+                $modulo['id'] => ['cantidad' => $modulo['cantidad'] ?? 1]
+            ];
+        });
+
+        $cotizacion->modulosPorCotizacion()->sync($modulos);
+        
+        $cotizacion->load(['modulosPorCotizacion.componentes.acabado', 'modulosPorCotizacion.componentes.mano_de_obra', 'cliente']);
+        return new CotizacionResource($cotizacion);
+    }
 }

@@ -35,6 +35,7 @@ Route::apiResources([
 
 Route::get('cotizaciones/modulos', [CotizacionController::class, 'modulosPorCotizacion']);
 Route::get('cotizaciones/modulos/{cotizacion}', [CotizacionController::class, 'modulosPorCotizacionId']);
+Route::post('cotizaciones/{cotizacion}/sync-modulos', [CotizacionController::class, 'syncModulos']);
 
 Route::apiResource('cotizaciones', CotizacionController::class)
     ->parameters(['cotizaciones' => 'cotizacion']);
