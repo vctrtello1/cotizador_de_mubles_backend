@@ -25,4 +25,11 @@ class Modulos extends Model
                     ->withPivot('cantidad')
                     ->withTimestamps();
     }
+
+    public function getCostoTotalAttribute()
+    {
+        return $this->componentes->sum(function ($componente) {
+            return $componente->costo_total * $componente->pivot->cantidad;
+        });
+    }
 }

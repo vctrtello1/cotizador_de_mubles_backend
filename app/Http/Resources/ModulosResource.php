@@ -20,6 +20,7 @@ class ModulosResource extends JsonResource
             'descripcion' => $this->descripcion,
             'codigo' => $this->codigo,
             'componentes' => ComponenteResource::collection($this->whenLoaded('componentes')),
+            'costo_total' => $this->costo_total,
         ];
     }
 }
