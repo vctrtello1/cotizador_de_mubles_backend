@@ -105,7 +105,11 @@ class ComponenteController extends Controller
      */
     public function destroy(Componente $componente)
     {
-        //
+        // Delete related records first to avoid foreign key constraint violations
+        $componente->accesorios_por_componente()->delete();
+        $componente->materiales()->detach();
+        $componente->herrajes()->detach();
+        
         $componente->delete();
         return response()->noContent();
     }
