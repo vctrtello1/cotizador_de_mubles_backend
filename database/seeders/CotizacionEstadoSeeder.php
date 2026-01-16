@@ -12,31 +12,17 @@ class CotizacionEstadoSeeder extends Seeder
      */
     public function run(): void
     {
-        // Asignar estados variados a las cotizaciones existentes
+        // Los estados ya están incluidos en la migración original
+        // Esta seeder solo actualiza estados si es necesario
+        
         $cotizaciones = \App\Models\Cotizacion::all();
 
         if ($cotizaciones->count() > 0) {
-            // Primera cotización: activa
-            $cotizaciones->first()->update(['estado' => 'activa']);
-
-            // Última cotización: completada
-            $cotizaciones->last()->update(['estado' => 'completada']);
-
-            // Cotizaciones intermedias: distribuir entre activa y cancelada
-            $cotizacionesIntermediasCount = $cotizaciones->count() - 2;
-            if ($cotizacionesIntermediasCount > 0) {
-                $intermedias = $cotizaciones->slice(1, $cotizacionesIntermediasCount);
-                $mitad = intval($cotizacionesIntermediasCount / 2);
-
-                // Primera mitad: activa
-                $intermedias->slice(0, $mitad)->each(function ($cotizacion) {
+            // Garantizar que todas las cotizaciones tengan un estado válido
+            foreach ($cotizaciones as $cotizacion) {
+                if (empty($cotizacion->estado) || !in_array($cotizacion->estado, ['activa', 'cancelada', 'completada'])) {
                     $cotizacion->update(['estado' => 'activa']);
-                });
-
-                // Segunda mitad: cancelada
-                $intermedias->slice($mitad)->each(function ($cotizacion) {
-                    $cotizacion->update(['estado' => 'cancelada']);
-                });
+                }
             }
         }
     }
