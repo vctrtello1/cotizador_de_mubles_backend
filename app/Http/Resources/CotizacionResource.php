@@ -20,6 +20,7 @@ class CotizacionResource extends JsonResource
             'cliente' => new ClienteResource($this->whenLoaded('cliente')),
             'fecha' => $this->fecha,
             'total' => (float) number_format($this->calculateTotal(), 2, '.', ''),
+            'estado' => $this->estado,
             'modulos' => $this->whenLoaded('modulosPorCotizacion', function () {
                 // Group modules by ID and sum quantities
                 return $this->modulosPorCotizacion

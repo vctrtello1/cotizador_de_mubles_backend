@@ -16,6 +16,11 @@ class Cotizacion extends Model
         'cliente_id',
         'fecha',
         'total',
+        'estado',
+    ];
+
+    protected $attributes = [
+        'estado' => 'activa',
     ];
 
     public function cliente()

@@ -20,6 +20,28 @@ class CotizacionFactory extends Factory
             'cliente_id' => \App\Models\Cliente::factory(),
             'fecha' => $this->faker->date(),
             'total' => $this->faker->randomFloat(2, 100, 10000),
+            'estado' => $this->faker->randomElement(['activa', 'cancelada', 'completada']),
         ];
+    }
+
+    public function activa(): self
+    {
+        return $this->state(fn (array $attributes) => [
+            'estado' => 'activa',
+        ]);
+    }
+
+    public function cancelada(): self
+    {
+        return $this->state(fn (array $attributes) => [
+            'estado' => 'cancelada',
+        ]);
+    }
+
+    public function completada(): self
+    {
+        return $this->state(fn (array $attributes) => [
+            'estado' => 'completada',
+        ]);
     }
 }

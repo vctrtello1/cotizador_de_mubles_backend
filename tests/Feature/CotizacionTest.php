@@ -31,6 +31,7 @@ class CotizacionTest extends TestCase
                     'cliente_id',
                     'fecha',
                     'total',
+                    'estado',
                 ],
             ],
         ]);
@@ -50,6 +51,7 @@ class CotizacionTest extends TestCase
                 'cliente_id',
                 'fecha',
                 'total',
+                'estado',
             ],
         ]);
     }
@@ -268,6 +270,147 @@ class CotizacionTest extends TestCase
         $response->assertJsonFragment([
             'fecha' => '2024-12-31',
         ]);
+    }
+
+    public function test_cotizacion_create_with_estado_activa(): void
+    {
+        $cotizacionData = [
+            'cliente_id' => 1,
+            'fecha' => '2024-01-01',
+            'total' => 1000.00,
+            'estado' => 'activa',
+        ];
+
+        $response = $this->postJson('/api/v1/cotizaciones', $cotizacionData);
+
+        $response->assertStatus(201);
+        $response->assertJsonFragment([
+            'estado' => 'activa',
+        ]);
+    }
+
+    public function test_cotizacion_create_with_estado_cancelada(): void
+    {
+        $cotizacionData = [
+            'cliente_id' => 1,
+            'fecha' => '2024-01-01',
+            'total' => 1000.00,
+            'estado' => 'cancelada',
+        ];
+
+        $response = $this->postJson('/api/v1/cotizaciones', $cotizacionData);
+
+        $response->assertStatus(201);
+        $response->assertJsonFragment([
+            'estado' => 'cancelada',
+        ]);
+    }
+
+    public function test_cotizacion_create_with_estado_completada(): void
+    {
+        $cotizacionData = [
+            'cliente_id' => 1,
+            'fecha' => '2024-01-01',
+            'total' => 1000.00,
+            'estado' => 'completada',
+        ];
+
+        $response = $this->postJson('/api/v1/cotizaciones', $cotizacionData);
+
+        $response->assertStatus(201);
+        $response->assertJsonFragment([
+            'estado' => 'completada',
+        ]);
+    }
+
+    public function test_cotizacion_create_default_estado_activa(): void
+    {
+        $cotizacionData = [
+            'cliente_id' => 1,
+            'fecha' => '2024-01-01',
+            'total' => 1000.00,
+        ];
+
+        $response = $this->postJson('/api/v1/cotizaciones', $cotizacionData);
+
+        $response->assertStatus(201);
+        $response->assertJsonFragment([
+            'estado' => 'activa',
+        ]);
+    }
+
+    public function test_cotizacion_update_estado(): void
+    {
+        $cotizacion = \App\Models\Cotizacion::factory()->activa()->create();
+
+        $updateData = [
+            'estado' => 'completada',
+        ];
+
+        $response = $this->putJson("/api/v1/cotizaciones/{$cotizacion->id}", $updateData);
+
+        $response->assertStatus(200);
+        $response->assertJsonFragment([
+            'estado' => 'completada',
+        ]);
+    }
+
+    public function test_cotizacion_invalid_estado(): void
+    {
+        $cotizacionData = [
+            'cliente_id' => 1,
+            'fecha' => '2024-01-01',
+            'total' => 1000.00,
+            'estado' => 'invalido',
+        ];
+
+        $response = $this->postJson('/api/v1/cotizaciones', $cotizacionData);
+
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors(['estado']);
+    }
+
+    public function test_cotizacion_factory_activa(): void
+    {
+        $cotizacion = \App\Models\Cotizacion::factory()->activa()->create();
+
+        $this->assertEquals('activa', $cotizacion->estado);
+        $this->assertDatabaseHas('cotizaciones', [
+            'id' => $cotizacion->id,
+            'estado' => 'activa',
+        ]);
+    }
+
+    public function test_cotizacion_factory_cancelada(): void
+    {
+        $cotizacion = \App\Models\Cotizacion::factory()->cancelada()->create();
+
+        $this->assertEquals('cancelada', $cotizacion->estado);
+        $this->assertDatabaseHas('cotizaciones', [
+            'id' => $cotizacion->id,
+            'estado' => 'cancelada',
+        ]);
+    }
+
+    public function test_cotizacion_factory_completada(): void
+    {
+        $cotizacion = \App\Models\Cotizacion::factory()->completada()->create();
+
+        $this->assertEquals('completada', $cotizacion->estado);
+        $this->assertDatabaseHas('cotizaciones', [
+            'id' => $cotizacion->id,
+            'estado' => 'completada',
+        ]);
+    }
+
+    public function test_cotizacion_show_includes_estado(): void
+    {
+        $cotizacion = \App\Models\Cotizacion::factory()->activa()->create();
+
+        $response = $this->getJson("/api/v1/cotizaciones/{$cotizacion->id}");
+
+        $response->assertStatus(200);
+        $response->assertJsonPath('data.estado', 'activa');
     }
 
     public function test_cotizacion_sync_modulos(): void
