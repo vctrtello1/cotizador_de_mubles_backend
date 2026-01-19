@@ -28,6 +28,20 @@ return new class extends Migration
 
         DB::table('clientes')->insert([
             [
+
+            'nombre' => 'Publico En General',
+                'email' => '',
+                'telefono' => '',
+                'direccion' => '',
+                'empresa' => '',
+                'notas' => 'Cliente por defecto',
+                'created_at' => now(),
+                'updated_at' => now(),
+            
+            ],
+                
+
+            [
                 'nombre' => 'victor Tello',
                 'email' => 'victor.tello@example.com',
                 'telefono' => '1234567890',

@@ -54,6 +54,9 @@ Route::post('cotizaciones/{cotizacion}/sync-modulos-relation', [ModulosPorCotiza
 Route::apiResource('modulos-por-cotizacion', ModulosPorCotizacionController::class)
     ->parameters(['modulos-por-cotizacion' => 'modulosPorCotizacion']);
 
+// Alternative route pattern that frontend expects
+Route::get('modulos-por-cotizacion/cotizacion/{cotizacion}', [ModulosPorCotizacionController::class, 'modulosPorCotizacionId']);
+
 Route::apiResource('cantidad-por-materiales', CantidadPorMaterialController::class)
     ->parameters(['cantidad-por-materiales' => 'cantidadPorMaterial']);
 
