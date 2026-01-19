@@ -46,7 +46,14 @@ Route::get('cotizaciones/{cotizacion}/componentes', [ComponentesPorCotizacionCon
 Route::post('cotizaciones/{cotizacion}/sync-componentes', [ComponentesPorCotizacionController::class, 'syncComponentes']);
 
 Route::apiResource('componentes-por-cotizacion', ComponentesPorCotizacionController::class)
-    ->parameters(['componentes-por-cotizacion' => 'componentesPorCotizacion']);
+    ->parameters(['componentes-por-cotizacion' => 'componentesPorCotizacion'])
+    ->except(['show']);
+
+// Custom show route using cotizacion_id
+Route::get('componentes-por-cotizacion/{cotizacion}', [ComponentesPorCotizacionController::class, 'show']);
+
+// Alternative route pattern that frontend expects
+Route::get('componentes-por-cotizacion/cotizacion/{cotizacion}', [ComponentesPorCotizacionController::class, 'componentesPorCotizacionId']);
 
 Route::get('cotizaciones/{cotizacion}/modulos-relation', [ModulosPorCotizacionController::class, 'modulosPorCotizacionId']);
 Route::post('cotizaciones/{cotizacion}/sync-modulos-relation', [ModulosPorCotizacionController::class, 'syncModulos']);

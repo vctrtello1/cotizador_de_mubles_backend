@@ -41,13 +41,11 @@ class ComponentesPorCotizacionController extends Controller
     }
 
     /**
-     * Display the specified component-quotation relationship.
+     * Display all components for a specific quotation (grouped and summed).
      */
-    public function show(ComponentesPorCotizacion $componentesPorCotizacion): JsonResponse
+    public function show(Cotizacion $cotizacion): JsonResponse
     {
-        return response()->json(
-            $componentesPorCotizacion->load(['cotizacion', 'componente'])
-        );
+        return $this->componentesPorCotizacionId($cotizacion);
     }
 
     /**
@@ -79,14 +77,67 @@ class ComponentesPorCotizacionController extends Controller
 
     /**
      * Get all components for a specific quotation.
+     * Returns components grouped by component_id with summed quantities from both direct assignments and modules.
      */
     public function componentesPorCotizacionId(Cotizacion $cotizacion): JsonResponse
     {
-        $componentes = ComponentesPorCotizacion::where('cotizacion_id', $cotizacion->id)
-            ->with(['componente.acabado', 'componente.mano_de_obra', 'componente.materiales', 'componente.herrajes'])
+        $componentesAgrupados = [];
+        
+        // Get direct component assignments
+        $directComponents = ComponentesPorCotizacion::where('cotizacion_id', $cotizacion->id)
+            ->with('componente')
             ->get();
 
-        return response()->json($componentes);
+        // Add direct assignments
+        foreach ($directComponents as $item) {
+            $componenteId = $item->componente_id;
+            
+            if (!isset($componentesAgrupados[$componenteId])) {
+                $componentesAgrupados[$componenteId] = [
+                    'componente' => [
+                        'id' => $item->componente->id,
+                        'nombre' => $item->componente->nombre,
+                        'descripcion' => $item->componente->descripcion,
+                        'codigo' => $item->componente->codigo,
+                    ],
+                    'cantidad' => 0
+                ];
+            }
+            
+            $componentesAgrupados[$componenteId]['cantidad'] += $item->cantidad;
+        }
+
+        // Get components from assigned modules
+        $cotizacion->load(['modulosPorCotizacionRecords.modulo.componentes']);
+
+        foreach ($cotizacion->modulosPorCotizacionRecords as $moduloPorCotizacion) {
+            if (!$moduloPorCotizacion->modulo) {
+                continue;
+            }
+            
+            foreach ($moduloPorCotizacion->modulo->componentes as $componente) {
+                $componenteId = $componente->id;
+                
+                // Calculate the total quantity (module quantity * component quantity)
+                $totalQuantity = $moduloPorCotizacion->cantidad * $componente->pivot->cantidad;
+                
+                if (!isset($componentesAgrupados[$componenteId])) {
+                    $componentesAgrupados[$componenteId] = [
+                        'componente' => [
+                            'id' => $componente->id,
+                            'nombre' => $componente->nombre,
+                            'descripcion' => $componente->descripcion,
+                            'codigo' => $componente->codigo,
+                        ],
+                        'cantidad' => 0
+                    ];
+                }
+                
+                $componentesAgrupados[$componenteId]['cantidad'] += $totalQuantity;
+            }
+        }
+
+        return response()->json(array_values($componentesAgrupados));
     }
 
     /**

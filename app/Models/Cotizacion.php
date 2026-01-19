@@ -43,6 +43,11 @@ class Cotizacion extends Model
         )->withPivot('cantidad')->withTimestamps();
     }
 
+    public function modulosPorCotizacionRecords()
+    {
+        return $this->hasMany(ModulosPorCotizacion::class, 'cotizacion_id');
+    }
+
     public function getTotalAttribute($value)
     {
         // If modules are loaded, calculate from modules and components
