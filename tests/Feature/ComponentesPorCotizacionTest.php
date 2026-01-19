@@ -105,28 +105,77 @@ class ComponentesPorCotizacionTest extends TestCase
     }
 
     /**
-     * Test show endpoint returns specific componente por cotizacion.
+     * Test show endpoint returns aggregated components for a cotizacion.
      */
-    public function test_show_returns_specific_componente_por_cotizacion(): void
+    public function test_show_returns_aggregated_components_for_cotizacion(): void
     {
-        $componentePorCotizacion = ComponentesPorCotizacion::factory()->create();
+        // Create a cotizacion
+        $cotizacion = Cotizacion::factory()->create();
+        
+        // Create components
+        $componente1 = Componente::factory()->create([
+            'nombre' => 'Component 1',
+            'descripcion' => 'Description 1',
+            'codigo' => 'CODE1',
+        ]);
+        
+        $componente2 = Componente::factory()->create([
+            'nombre' => 'Component 2',
+            'descripcion' => 'Description 2',
+            'codigo' => 'CODE2',
+        ]);
+        
+        // Add direct component assignments
+        ComponentesPorCotizacion::create([
+            'cotizacion_id' => $cotizacion->id,
+            'componente_id' => $componente1->id,
+            'cantidad' => 2,
+        ]);
+        
+        ComponentesPorCotizacion::create([
+            'cotizacion_id' => $cotizacion->id,
+            'componente_id' => $componente2->id,
+            'cantidad' => 3,
+        ]);
 
-        $response = $this->getJson("/api/v1/componentes-por-cotizacion/{$componentePorCotizacion->id}");
+        $response = $this->getJson("/api/v1/componentes-por-cotizacion/{$cotizacion->id}");
 
         $response->assertStatus(200);
+        $response->assertJsonCount(2);
         $response->assertJsonStructure([
-            'id',
-            'cotizacion_id',
-            'componente_id',
-            'cantidad',
-            'cotizacion',
-            'componente',
+            '*' => [
+                'componente' => [
+                    'id',
+                    'nombre',
+                    'descripcion',
+                    'codigo',
+                ],
+                'cantidad',
+            ],
         ]);
-        $response->assertJson([
-            'id' => $componentePorCotizacion->id,
-            'cantidad' => $componentePorCotizacion->cantidad,
+        
+        // Verify specific component data
+        $response->assertJsonFragment([
+            'componente' => [
+                'id' => $componente1->id,
+                'nombre' => 'Component 1',
+                'descripcion' => 'Description 1',
+                'codigo' => 'CODE1',
+            ],
+            'cantidad' => 2,
+        ]);
+        
+        $response->assertJsonFragment([
+            'componente' => [
+                'id' => $componente2->id,
+                'nombre' => 'Component 2',
+                'descripcion' => 'Description 2',
+                'codigo' => 'CODE2',
+            ],
+            'cantidad' => 3,
         ]);
     }
+
 
     /**
      * Test update endpoint updates existing componente por cotizacion.
@@ -211,14 +260,13 @@ class ComponentesPorCotizacionTest extends TestCase
         $response->assertJsonCount(3);
         $response->assertJsonStructure([
             '*' => [
-                'id',
-                'cotizacion_id',
-                'componente_id',
-                'cantidad',
                 'componente' => [
                     'id',
                     'nombre',
+                    'descripcion',
+                    'codigo',
                 ],
+                'cantidad',
             ],
         ]);
     }
