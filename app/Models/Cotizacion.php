@@ -33,46 +33,8 @@ class Cotizacion extends Model
         return $this->hasMany(DetalleCotizacion::class);
     }
 
-    public function modulosPorCotizacion()
-    {
-        return $this->belongsToMany(
-            Modulos::class,
-            'modulos_por_cotizacion',
-            'cotizacion_id',
-            'modulo_id'
-        )->withPivot('cantidad')->withTimestamps();
-    }
-
-    public function modulosPorCotizacionRecords()
-    {
-        return $this->hasMany(ModulosPorCotizacion::class, 'cotizacion_id');
-    }
-
     public function getTotalAttribute($value)
     {
-        // If modules are loaded, calculate from modules and components
-        if ($this->relationLoaded('modulosPorCotizacion')) {
-            $total = 0;
-            foreach ($this->modulosPorCotizacion as $modulo) {
-                if ($modulo->relationLoaded('componentes')) {
-                    foreach ($modulo->componentes as $componente) {
-                        // Calculate component price
-                        $precioComponente = 0;
-                        if ($componente->relationLoaded('acabado') && $componente->acabado) {
-                            $precioComponente += $componente->acabado->costo;
-                        }
-                        if ($componente->relationLoaded('mano_de_obra') && $componente->mano_de_obra) {
-                            $precioComponente += $componente->mano_de_obra->costo_total;
-                        }
-                        $total += $precioComponente * $componente->pivot->cantidad;
-                    }
-                }
-            }
-            if ($total > 0) {
-                return $total;
-            }
-        }
-
         // If details are loaded, calculate from details
         if ($this->relationLoaded('detalles')) {
             if ($this->detalles->isNotEmpty()) {
@@ -105,33 +67,9 @@ class Cotizacion extends Model
             return $detallesTotal;
         }
 
-        // Load required relations if not already loaded
-        if (!$this->relationLoaded('modulosPorCotizacion')) {
-            $this->load('modulosPorCotizacion.componentes.acabado', 'modulosPorCotizacion.componentes.mano_de_obra');
-        }
-
-        $total = 0;
-        if ($this->modulosPorCotizacion->isNotEmpty()) {
-            foreach ($this->modulosPorCotizacion as $modulo) {
-                foreach ($modulo->componentes as $componente) {
-                    $precioComponente = 0;
-                    if ($componente->acabado) {
-                        $precioComponente += $componente->acabado->costo;
-                    }
-                    if ($componente->mano_de_obra) {
-                        $precioComponente += $componente->mano_de_obra->costo_total;
-                    }
-                    $total += $precioComponente * $componente->pivot->cantidad;
-                }
-            }
-        }
-        
-        // If we have a calculated total, return it
-        if ($total > 0) {
-            return $total;
-        }
-
         // Fallback: return the total from the database
         return $this->total ?? 0;
     }
 }
+
+           

@@ -77,7 +77,7 @@ class ComponentesPorCotizacionController extends Controller
 
     /**
      * Get all components for a specific quotation.
-     * Returns components grouped by component_id with summed quantities from both direct assignments and modules.
+     * Returns components grouped by component_id with summed quantities.
      */
     public function componentesPorCotizacionId(Cotizacion $cotizacion): JsonResponse
     {
@@ -105,36 +105,6 @@ class ComponentesPorCotizacionController extends Controller
             }
             
             $componentesAgrupados[$componenteId]['cantidad'] += $item->cantidad;
-        }
-
-        // Get components from assigned modules
-        $cotizacion->load(['modulosPorCotizacionRecords.modulo.componentes']);
-
-        foreach ($cotizacion->modulosPorCotizacionRecords as $moduloPorCotizacion) {
-            if (!$moduloPorCotizacion->modulo) {
-                continue;
-            }
-            
-            foreach ($moduloPorCotizacion->modulo->componentes as $componente) {
-                $componenteId = $componente->id;
-                
-                // Calculate the total quantity (module quantity * component quantity)
-                $totalQuantity = $moduloPorCotizacion->cantidad * $componente->pivot->cantidad;
-                
-                if (!isset($componentesAgrupados[$componenteId])) {
-                    $componentesAgrupados[$componenteId] = [
-                        'componente' => [
-                            'id' => $componente->id,
-                            'nombre' => $componente->nombre,
-                            'descripcion' => $componente->descripcion,
-                            'codigo' => $componente->codigo,
-                        ],
-                        'cantidad' => 0
-                    ];
-                }
-                
-                $componentesAgrupados[$componenteId]['cantidad'] += $totalQuantity;
-            }
         }
 
         return response()->json(array_values($componentesAgrupados));

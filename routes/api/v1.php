@@ -13,7 +13,6 @@ use App\Http\Controllers\HerrajeController;
 use App\Http\Controllers\ManoDeObraController;
 use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\ModulosController;
-use App\Http\Controllers\ModulosPorCotizacionController;
 use App\Http\Controllers\TipoDeMaterialController;
 use App\Http\Controllers\HorasDeManoDeObraPorComponenteController;
 use Illuminate\Support\Facades\Route;
@@ -35,10 +34,6 @@ Route::apiResources([
     'clientes'      => ClienteController::class,
 ]);
 
-Route::get('cotizaciones/modulos', [CotizacionController::class, 'modulosPorCotizacion']);
-Route::get('cotizaciones/modulos/{cotizacion}', [CotizacionController::class, 'modulosPorCotizacionId']);
-Route::post('cotizaciones/{cotizacion}/sync-modulos', [CotizacionController::class, 'syncModulos']);
-
 Route::apiResource('cotizaciones', CotizacionController::class)
     ->parameters(['cotizaciones' => 'cotizacion']);
 
@@ -54,15 +49,6 @@ Route::get('componentes-por-cotizacion/{cotizacion}', [ComponentesPorCotizacionC
 
 // Alternative route pattern that frontend expects
 Route::get('componentes-por-cotizacion/cotizacion/{cotizacion}', [ComponentesPorCotizacionController::class, 'componentesPorCotizacionId']);
-
-Route::get('cotizaciones/{cotizacion}/modulos-relation', [ModulosPorCotizacionController::class, 'modulosPorCotizacionId']);
-Route::post('cotizaciones/{cotizacion}/sync-modulos-relation', [ModulosPorCotizacionController::class, 'syncModulos']);
-
-Route::apiResource('modulos-por-cotizacion', ModulosPorCotizacionController::class)
-    ->parameters(['modulos-por-cotizacion' => 'modulosPorCotizacion']);
-
-// Alternative route pattern that frontend expects
-Route::get('modulos-por-cotizacion/cotizacion/{cotizacion}', [ModulosPorCotizacionController::class, 'modulosPorCotizacionId']);
 
 Route::apiResource('cantidad-por-materiales', CantidadPorMaterialController::class)
     ->parameters(['cantidad-por-materiales' => 'cantidadPorMaterial']);
