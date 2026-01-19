@@ -8,6 +8,7 @@ use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\CotizacionController;
 use App\Http\Controllers\MaterialesPorComponenteController;
 use App\Http\Controllers\ComponenteController;
+use App\Http\Controllers\ComponentesPorCotizacionController;
 use App\Http\Controllers\HerrajeController;
 use App\Http\Controllers\ManoDeObraController;
 use App\Http\Controllers\MaterialController;
@@ -39,6 +40,12 @@ Route::post('cotizaciones/{cotizacion}/sync-modulos', [CotizacionController::cla
 
 Route::apiResource('cotizaciones', CotizacionController::class)
     ->parameters(['cotizaciones' => 'cotizacion']);
+
+Route::get('cotizaciones/{cotizacion}/componentes', [ComponentesPorCotizacionController::class, 'componentesPorCotizacionId']);
+Route::post('cotizaciones/{cotizacion}/sync-componentes', [ComponentesPorCotizacionController::class, 'syncComponentes']);
+
+Route::apiResource('componentes-por-cotizacion', ComponentesPorCotizacionController::class)
+    ->parameters(['componentes-por-cotizacion' => 'componentesPorCotizacion']);
 
 Route::apiResource('cantidad-por-materiales', CantidadPorMaterialController::class)
     ->parameters(['cantidad-por-materiales' => 'cantidadPorMaterial']);
