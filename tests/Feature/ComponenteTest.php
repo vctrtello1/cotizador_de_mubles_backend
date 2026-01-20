@@ -197,11 +197,11 @@ class ComponenteTest extends TestCase
         $componente->materiales()->attach($material->id, ['cantidad' => 2]); // 10 * 2 = 20
         $componente->herrajes()->attach($herraje->id, ['cantidad' => 3]); // 5 * 3 = 15
 
-        // Total Cost = 20 (Material) + 15 (Herraje) + 20 (Acabado) + 0 (ManoDeObra) = 55
+        // Total Cost = 20 (Material) + 15 (Herraje) + 20 (Acabado) + 30 (ManoDeObra: 1 hour * 30) = 85
 
         $response = $this->getJson("/api/v1/componentes/{$componente->id}");
 
         $response->assertStatus(200);
-        $response->assertJsonFragment(['costo_total' => 55]);
+        $response->assertJsonFragment(['costo_total' => 85]);
     }
 }
