@@ -57,7 +57,6 @@ class ComponentesPorCotizacionController extends Controller
         $validated = $request->validate([
             'cotizacion_id' => 'sometimes|integer|exists:cotizaciones,id',
             'componente_id' => 'sometimes|integer|exists:componentes,id',
-            'modulo_id' => 'nullable|integer|exists:modulos,id',
             'cantidad' => 'sometimes|integer|min:1',
         ]);
 
