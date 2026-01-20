@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('cotizacion_id')->constrained('cotizaciones');
             $table->foreignId('componente_id')->constrained('componentes');
+            $table->foreignId('modulo_id')->nullable()->constrained('modulos');
             $table->integer('cantidad');
             $table->timestamps();
 

@@ -14,6 +14,7 @@ class ComponentesPorCotizacion extends Model
     protected $fillable = [
         'cotizacion_id',
         'componente_id',
+        'modulo_id',
         'cantidad',
     ];
 
