@@ -20,7 +20,7 @@ class CotizacionFactory extends Factory
             'cliente_id' => \App\Models\Cliente::factory(),
             'fecha' => $this->faker->date(),
             'total' => $this->faker->randomFloat(2, 100, 10000),
-            'estado' => $this->faker->randomElement(['activa', 'cancelada', 'completada']),
+            'estado' => $this->faker->randomElement(['activa', 'pendiente', 'aprobada', 'rechazada', 'cancelada']),
         ];
     }
 
@@ -38,10 +38,10 @@ class CotizacionFactory extends Factory
         ]);
     }
 
-    public function completada(): self
+    public function aprobada(): self
     {
         return $this->state(fn (array $attributes) => [
-            'estado' => 'completada',
+            'estado' => 'aprobada',
         ]);
     }
 }

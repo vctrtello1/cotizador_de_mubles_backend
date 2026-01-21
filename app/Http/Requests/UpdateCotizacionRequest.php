@@ -25,7 +25,7 @@ class UpdateCotizacionRequest extends FormRequest
             'cliente_id' => 'sometimes|exists:clientes,id',
             'fecha' => 'sometimes|date',
             'total' => 'sometimes|numeric|min:0',
-            'estado' => 'sometimes|in:activa,cancelada,completada',
+            'estado' => 'sometimes|in:activa,pendiente,aprobada,rechazada,cancelada',
         ];
     }
 }

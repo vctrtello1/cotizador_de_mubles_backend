@@ -52,4 +52,18 @@ class CotizacionController extends Controller
         $cotizacion->delete();
         return response()->noContent();
     }
+
+    /**
+     * Update the estado (status) of a quotation.
+     */
+    public function updateEstado(Request $request, Cotizacion $cotizacion)
+    {
+        $validated = $request->validate([
+            'estado' => 'required|string|in:activa,pendiente,aprobada,rechazada,cancelada',
+        ]);
+
+        $cotizacion->update(['estado' => $validated['estado']]);
+        
+        return new CotizacionResource($cotizacion);
+    }
 }

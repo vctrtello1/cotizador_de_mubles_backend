@@ -37,6 +37,7 @@ Route::apiResources([
 Route::apiResource('cotizaciones', CotizacionController::class)
     ->parameters(['cotizaciones' => 'cotizacion']);
 
+Route::put('cotizaciones/{cotizacion}/estado', [CotizacionController::class, 'updateEstado']);
 Route::get('cotizaciones/{cotizacion}/componentes', [ComponentesPorCotizacionController::class, 'componentesPorCotizacionId']);
 Route::post('cotizaciones/{cotizacion}/sync-componentes', [ComponentesPorCotizacionController::class, 'syncComponentes']);
 
