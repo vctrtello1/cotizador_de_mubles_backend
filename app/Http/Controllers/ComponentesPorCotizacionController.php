@@ -85,9 +85,14 @@ class ComponentesPorCotizacionController extends Controller
     {
         $componentesAgrupados = [];
         
-        // Get direct component assignments
+        // Get direct component assignments with all necessary relationships for cost calculation
         $directComponents = ComponentesPorCotizacion::where('cotizacion_id', $cotizacion->id)
-            ->with('componente')
+            ->with([
+                'componente.materiales',
+                'componente.herrajes',
+                'componente.acabado',
+                'componente.mano_de_obra'
+            ])
             ->get();
 
         // Add direct assignments
@@ -101,12 +106,19 @@ class ComponentesPorCotizacionController extends Controller
                         'nombre' => $item->componente->nombre,
                         'descripcion' => $item->componente->descripcion,
                         'codigo' => $item->componente->codigo,
+                        'costo_total' => $item->componente->costo_total,
                     ],
-                    'cantidad' => 0
+                    'cantidad' => 0,
+                    'subtotal' => 0
                 ];
             }
             
             $componentesAgrupados[$componenteId]['cantidad'] += $item->cantidad;
+        }
+
+        // Calculate subtotals after aggregating quantities
+        foreach ($componentesAgrupados as &$componente) {
+            $componente['subtotal'] = $componente['componente']['costo_total'] * $componente['cantidad'];
         }
 
         return response()->json(array_values($componentesAgrupados));
