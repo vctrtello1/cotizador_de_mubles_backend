@@ -306,20 +306,20 @@ class CotizacionTest extends TestCase
         ]);
     }
 
-    public function test_cotizacion_create_with_estado_aprobada(): void
+    public function test_cotizacion_create_with_estado_completada(): void
     {
         $cotizacionData = [
             'cliente_id' => 1,
             'fecha' => '2024-01-01',
             'total' => 1000.00,
-            'estado' => 'aprobada',
+            'estado' => 'completada',
         ];
 
         $response = $this->postJson('/api/v1/cotizaciones', $cotizacionData);
 
         $response->assertStatus(201);
         $response->assertJsonFragment([
-            'estado' => 'aprobada',
+            'estado' => 'completada',
         ]);
     }
 
@@ -344,14 +344,14 @@ class CotizacionTest extends TestCase
         $cotizacion = \App\Models\Cotizacion::factory()->activa()->create();
 
         $updateData = [
-            'estado' => 'aprobada',
+            'estado' => 'completada',
         ];
 
         $response = $this->putJson("/api/v1/cotizaciones/{$cotizacion->id}", $updateData);
 
         $response->assertStatus(200);
         $response->assertJsonFragment([
-            'estado' => 'aprobada',
+            'estado' => 'completada',
         ]);
     }
 
@@ -392,14 +392,14 @@ class CotizacionTest extends TestCase
         ]);
     }
 
-    public function test_cotizacion_factory_aprobada(): void
+    public function test_cotizacion_factory_completada(): void
     {
-        $cotizacion = \App\Models\Cotizacion::factory()->aprobada()->create();
+        $cotizacion = \App\Models\Cotizacion::factory()->completada()->create();
 
-        $this->assertEquals('aprobada', $cotizacion->estado);
+        $this->assertEquals('completada', $cotizacion->estado);
         $this->assertDatabaseHas('cotizaciones', [
             'id' => $cotizacion->id,
-            'estado' => 'aprobada',
+            'estado' => 'completada',
         ]);
     }
 
@@ -445,19 +445,19 @@ class CotizacionTest extends TestCase
         ]);
     }
 
-    public function test_cotizacion_update_estado_to_aprobada(): void
+    public function test_cotizacion_update_estado_to_completada(): void
     {
         $cotizacion = \App\Models\Cotizacion::factory()->create(['estado' => 'pendiente']);
 
         $response = $this->putJson("/api/v1/cotizaciones/{$cotizacion->id}/estado", [
-            'estado' => 'aprobada',
+            'estado' => 'completada',
         ]);
 
         $response->assertStatus(200);
-        $response->assertJsonPath('data.estado', 'aprobada');
+        $response->assertJsonPath('data.estado', 'completada');
         $this->assertDatabaseHas('cotizaciones', [
             'id' => $cotizacion->id,
-            'estado' => 'aprobada',
+            'estado' => 'completada',
         ]);
     }
 

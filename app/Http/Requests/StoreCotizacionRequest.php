@@ -25,7 +25,7 @@ class StoreCotizacionRequest extends FormRequest
             'cliente_id' => 'required|exists:clientes,id',
             'fecha' => 'required|date',
             'total' => 'required|numeric|min:0',
-            'estado' => 'nullable|in:activa,pendiente,aprobada,rechazada,cancelada',
+            'estado' => 'nullable|in:activa,pendiente,completada,rechazada,cancelada',
             'detalles' => 'nullable|array',
             'detalles.*.modulo_id' => 'nullable|integer|exists:modulos,id',
             'detalles.*.descripcion' => 'nullable|string',

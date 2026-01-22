@@ -59,7 +59,7 @@ class CotizacionController extends Controller
     public function updateEstado(Request $request, Cotizacion $cotizacion)
     {
         $validated = $request->validate([
-            'estado' => 'required|string|in:activa,pendiente,aprobada,rechazada,cancelada',
+            'estado' => 'required|string|in:activa,pendiente,completada,rechazada,cancelada',
         ]);
 
         $cotizacion->update(['estado' => $validated['estado']]);

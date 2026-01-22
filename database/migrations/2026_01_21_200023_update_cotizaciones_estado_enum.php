@@ -18,9 +18,9 @@ return new class extends Migration
             $table->dropColumn('estado');
         });
 
-        // Then recreate it with the new enum values
+        // Then recreate it with the new enum values (usando 'completada' en lugar de 'aprobada')
         Schema::table('cotizaciones', function (Blueprint $table) {
-            $table->enum('estado', ['activa', 'pendiente', 'aprobada', 'rechazada', 'cancelada'])
+            $table->enum('estado', ['activa', 'pendiente', 'completada', 'rechazada', 'cancelada'])
                 ->default('activa')
                 ->after('total');
         });
