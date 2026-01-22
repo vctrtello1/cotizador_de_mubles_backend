@@ -49,6 +49,11 @@ class CotizacionController extends Controller
 
     public function destroy(Cotizacion $cotizacion)
     {
+        // Delete related componentes_por_cotizacion records first to avoid foreign key constraint violation
+        DB::table('componentes_por_cotizacion')
+            ->where('cotizacion_id', $cotizacion->id)
+            ->delete();
+        
         $cotizacion->delete();
         return response()->noContent();
     }

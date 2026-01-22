@@ -531,4 +531,52 @@ class CotizacionTest extends TestCase
 
         $response->assertStatus(404);
     }
+
+    public function test_cotizacion_delete_with_related_components(): void
+    {
+        // Create a cotización with related componentes_por_cotizacion
+        $cotizacion = \App\Models\Cotizacion::factory()->create();
+        $componente = \App\Models\Componente::factory()->create();
+        $modulo = \App\Models\modulos::factory()->create();
+        
+        // Create related componentes_por_cotizacion
+        \DB::table('componentes_por_cotizacion')->insert([
+            [
+                'cotizacion_id' => $cotizacion->id,
+                'componente_id' => $componente->id,
+                'modulo_id' => $modulo->id,
+                'cantidad' => 5,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'cotizacion_id' => $cotizacion->id,
+                'componente_id' => $componente->id,
+                'modulo_id' => $modulo->id,
+                'cantidad' => 3,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+        ]);
+
+        // Verify componentes_por_cotizacion exist before deletion
+        $this->assertDatabaseHas('componentes_por_cotizacion', [
+            'cotizacion_id' => $cotizacion->id,
+        ]);
+
+        // Delete the cotización
+        $response = $this->deleteJson("/api/v1/cotizaciones/{$cotizacion->id}");
+
+        $response->assertStatus(204);
+
+        // Verify cotización was deleted
+        $this->assertDatabaseMissing('cotizaciones', [
+            'id' => $cotizacion->id,
+        ]);
+
+        // Verify related componentes_por_cotizacion were also deleted (cascade)
+        $this->assertDatabaseMissing('componentes_por_cotizacion', [
+            'cotizacion_id' => $cotizacion->id,
+        ]);
+    }
 }
