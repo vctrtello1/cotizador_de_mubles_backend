@@ -19,7 +19,7 @@ class CotizacionResource extends JsonResource
             'cliente_id' => $this->cliente_id,
             'cliente' => new ClienteResource($this->whenLoaded('cliente')),
             'fecha' => $this->fecha,
-            'total' => (float) number_format($this->calculateTotal(), 2, '.', ''),
+            'total' => $this->total,
             'estado' => $this->estado,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,

@@ -33,25 +33,7 @@ class Cotizacion extends Model
         return $this->hasMany(DetalleCotizacion::class);
     }
 
-    public function getTotalAttribute($value)
-    {
-        // If details are loaded, calculate from details
-        if ($this->relationLoaded('detalles')) {
-            if ($this->detalles->isNotEmpty()) {
-                $total = $this->detalles->sum(function ($detalle) {
-                    return $detalle->cantidad * $detalle->precio_unitario;
-                });
-                if ($total > 0) {
-                    return $total;
-                }
-            }
-        }
-
-        // Fallback: Calculate from DB if not loaded
-        $calculated = $this->detalles()->sum(DB::raw('cantidad * precio_unitario'));
-        return $calculated > 0 ? $calculated : $value;
-    }
-
+    // Método para calcular el total (no accessor) 
     public function calculateTotal()
     {
         // First, try to calculate from detalles
