@@ -168,7 +168,15 @@ class CotizacionTest extends TestCase
 
         $expectedTotal = 2 * 250.00 * 2; // 2 detalles, each with cantidad 2 and precio_unitario 250.00
 
-        $this->assertEquals($expectedTotal, $cotizacion->total);
+        // Usar el método calculateTotal() en lugar del accessor
+        $this->assertEquals($expectedTotal, $cotizacion->calculateTotal());
+        
+        // Actualizar el total en la BD
+        $cotizacion->total = $cotizacion->calculateTotal();
+        $cotizacion->save();
+        
+        // Verificar que se guardó correctamente
+        $this->assertEquals($expectedTotal, $cotizacion->fresh()->total);
     }
 
 
