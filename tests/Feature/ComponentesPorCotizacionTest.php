@@ -149,31 +149,29 @@ class ComponentesPorCotizacionTest extends TestCase
                     'nombre',
                     'descripcion',
                     'codigo',
+                    'costo_total',
                 ],
                 'cantidad',
+                'subtotal',
             ],
         ]);
         
-        // Verify specific component data
-        $response->assertJsonFragment([
-            'componente' => [
-                'id' => $componente1->id,
-                'nombre' => 'Component 1',
-                'descripcion' => 'Description 1',
-                'codigo' => 'CODE1',
-            ],
-            'cantidad' => 2,
-        ]);
+        // Verify that both components are present with correct cantidad
+        $data = $response->json();
         
-        $response->assertJsonFragment([
-            'componente' => [
-                'id' => $componente2->id,
-                'nombre' => 'Component 2',
-                'descripcion' => 'Description 2',
-                'codigo' => 'CODE2',
-            ],
-            'cantidad' => 3,
-        ]);
+        $component1 = collect($data)->firstWhere('componente.id', $componente1->id);
+        $this->assertNotNull($component1);
+        $this->assertEquals(2, $component1['cantidad']);
+        $this->assertEquals('Component 1', $component1['componente']['nombre']);
+        $this->assertEquals('Description 1', $component1['componente']['descripcion']);
+        $this->assertEquals('CODE1', $component1['componente']['codigo']);
+        
+        $component2 = collect($data)->firstWhere('componente.id', $componente2->id);
+        $this->assertNotNull($component2);
+        $this->assertEquals(3, $component2['cantidad']);
+        $this->assertEquals('Component 2', $component2['componente']['nombre']);
+        $this->assertEquals('Description 2', $component2['componente']['descripcion']);
+        $this->assertEquals('CODE2', $component2['componente']['codigo']);
     }
 
 
