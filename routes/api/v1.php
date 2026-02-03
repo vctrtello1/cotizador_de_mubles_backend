@@ -6,6 +6,7 @@ use App\Http\Controllers\CantidadPorHerrajeController;
 use App\Http\Controllers\CantidadPorMaterialController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\CotizacionController;
+use App\Http\Controllers\EstructuraController;
 use App\Http\Controllers\MaterialesPorComponenteController;
 use App\Http\Controllers\ComponenteController;
 use App\Http\Controllers\ComponentesPorCotizacionController;
@@ -28,6 +29,7 @@ Route::get('clientes/{cliente}/cotizaciones', [ClienteController::class, 'cotiza
 Route::apiResources([
     'herrajes'      => HerrajeController::class,
     'acabados'      => AcabadoController::class,
+    'estructuras'   => EstructuraController::class,
     'mano-de-obras' => ManoDeObraController::class,
     'componentes'   => ComponenteController::class,
     'modulos'       => ModulosController::class,
