@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AcabadoController;
+use App\Http\Controllers\AcabadoCubreCantoController;
 use App\Http\Controllers\AcabadoTableroController;
 use App\Http\Controllers\AccesoriosPorComponenteController;
 use App\Http\Controllers\CantidadPorHerrajeController;
@@ -28,14 +29,15 @@ Route::apiResource('tipo-de-materiales', TipoDeMaterialController::class)
 Route::get('clientes/{cliente}/cotizaciones', [ClienteController::class, 'cotizaciones']);
 
 Route::apiResources([
-    'herrajes'          => HerrajeController::class,
-    'acabados'          => AcabadoController::class,
-    'acabado-tableros'  => AcabadoTableroController::class,
-    'estructuras'       => EstructuraController::class,
-    'mano-de-obras'     => ManoDeObraController::class,
-    'componentes'       => ComponenteController::class,
-    'modulos'           => ModulosController::class,
-    'clientes'          => ClienteController::class,
+    'herrajes'              => HerrajeController::class,
+    'acabados'              => AcabadoController::class,
+    'acabado-tableros'      => AcabadoTableroController::class,
+    'acabado-cubre-cantos'  => AcabadoCubreCantoController::class,
+    'estructuras'           => EstructuraController::class,
+    'mano-de-obras'         => ManoDeObraController::class,
+    'componentes'           => ComponenteController::class,
+    'modulos'               => ModulosController::class,
+    'clientes'              => ClienteController::class,
 ]);
 
 Route::apiResource('cotizaciones', CotizacionController::class)
