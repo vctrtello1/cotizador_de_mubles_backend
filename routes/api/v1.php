@@ -19,6 +19,7 @@ use App\Http\Controllers\ManoDeObraController;
 use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\MaterialesPorComponenteController;
 use App\Http\Controllers\ModulosController;
+use App\Http\Controllers\PuertaController;
 use App\Http\Controllers\TipoDeMaterialController;
 use Illuminate\Support\Facades\Route;
 
@@ -47,6 +48,8 @@ Route::apiResources([
 
 Route::apiResource('compases-abatibles', CompasAbatibleController::class)
     ->parameters(['compases-abatibles' => 'compasAbatible']);
+
+Route::apiResource('puertas', PuertaController::class);
 
 Route::apiResource('cotizaciones', CotizacionController::class)
     ->parameters(['cotizaciones' => 'cotizacion']);
