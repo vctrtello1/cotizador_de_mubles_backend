@@ -13,7 +13,7 @@ class ClienteController extends Controller
 {
     public function index()
     {
-        return ClienteResource::collection(Cliente::all());
+        return ClienteResource::collection(Cliente::paginate(15));
     }
 
     public function store(StoreClienteRequest $request)

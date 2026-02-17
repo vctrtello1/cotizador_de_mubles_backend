@@ -13,7 +13,9 @@ class CotizacionController extends Controller
 {
     public function index()
     {
-        return CotizacionResource::collection(Cotizacion::with(['cliente'])->get());
+        return CotizacionResource::collection(
+            Cotizacion::with(['cliente'])->paginate(15)
+        );
     }
 
     public function store(StoreCotizacionRequest $request)

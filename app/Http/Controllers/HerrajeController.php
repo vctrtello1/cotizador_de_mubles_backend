@@ -14,7 +14,7 @@ class HerrajeController extends Controller
      */
     public function index()
     {
-        return HerrajeResource::collection(Herraje::all());
+        return HerrajeResource::collection(Herraje::paginate(15));
     }
 
 
@@ -23,7 +23,6 @@ class HerrajeController extends Controller
      */
     public function store(StoreHerrajeRequest $request)
     {
-        //
         $herraje = Herraje::create($request->validated());
         return new HerrajeResource($herraje);
     }
@@ -33,9 +32,7 @@ class HerrajeController extends Controller
      */
     public function show(Herraje $herraje)
     {
-        //
         return new HerrajeResource($herraje);
-
     }
 
     /**
@@ -43,7 +40,6 @@ class HerrajeController extends Controller
      */
     public function update(UpdateHerrajeRequest $request, Herraje $herraje)
     {
-        //
         $herraje->update($request->validated());
         return new HerrajeResource($herraje);
     }
@@ -53,7 +49,6 @@ class HerrajeController extends Controller
      */
     public function destroy(Herraje $herraje)
     {
-        //
         $herraje->delete();
         return response()->noContent();
     }
