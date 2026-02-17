@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use App\Models\Acabado;
+use App\Models\Componente;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -38,7 +40,7 @@ class AcabadoTest extends TestCase
     public function test_acabado_show(): void
     {
         // First, create a acabado to show
-        $acabado = \App\Models\Acabado::factory()->create();
+        $acabado = Acabado::factory()->create();
 
         $response = $this->getJson("/api/v1/acabados/{$acabado->id}");
 
@@ -56,10 +58,10 @@ class AcabadoTest extends TestCase
     public function test_acabado_with_componentes(): void
     {
         // Create an acabado
-        $acabado = \App\Models\Acabado::factory()->create();
+        $acabado = Acabado::factory()->create();
 
         // Create componentes associated with this acabado
-        $componentes = \App\Models\Componente::factory()
+        $componentes = Componente::factory()
             ->count(3)
             ->withAcabado($acabado->id)
             ->create();
@@ -101,7 +103,7 @@ class AcabadoTest extends TestCase
     public function test_acabado_update(): void
     {
         // First, create a acabado to update
-        $acabado = \App\Models\Acabado::factory()->create();
+        $acabado = Acabado::factory()->create();
 
         $updatedData = [
             'nombre' => 'Acabado Actualizado',
@@ -118,7 +120,7 @@ class AcabadoTest extends TestCase
     public function test_acabado_delete(): void
     {
         // First, create a acabado to delete
-        $acabado = \App\Models\Acabado::factory()->create();
+        $acabado = Acabado::factory()->create();
 
         $response = $this->deleteJson("/api/v1/acabados/{$acabado->id}");
 
@@ -145,7 +147,7 @@ class AcabadoTest extends TestCase
     public function test_acabado_validation_on_update(): void
     {
         // First, create a acabado to update
-        $acabado = \App\Models\Acabado::factory()->create();
+        $acabado = Acabado::factory()->create();
 
         // Invalid data: 'costo' is not numeric
         $invalidData = [
