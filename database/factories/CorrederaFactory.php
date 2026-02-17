@@ -16,8 +16,15 @@ class CorrederaFactory extends Factory
      */
     public function definition(): array
     {
+        $sizes = [350, 400, 450, 500, 550];
+        $size = $this->faker->randomElement($sizes);
+        $precioBase = $this->faker->randomFloat(2, 300, 450);
+        $precioConAcoplamiento = $precioBase + 50.20;
+
         return [
-            //
+            'nombre' => "CORREDERA TANDEM PARCIAL BLUMOTION 30kgs {$size}mm 550H{$size}0B",
+            'precio_base' => $precioBase,
+            'precio_con_acoplamiento' => $precioConAcoplamiento,
         ];
     }
 }
