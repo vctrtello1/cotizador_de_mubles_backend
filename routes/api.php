@@ -11,6 +11,5 @@ use App\Http\Controllers\AcabadoController;
 use App\Http\Controllers\ComponenteController;
 use App\Http\Controllers\HerrajeController;
 use App\Http\Controllers\MaterialController;
-use App\Http\Controllers\ManoDeObraController;
 
 Route::prefix('v1')->group(base_path('routes/api/v1.php'));

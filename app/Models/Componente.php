@@ -15,13 +15,7 @@ class Componente extends Model
         'descripcion',
         'codigo',
         'accesorios',
-        'mano_de_obra_id',
     ];
-
-    public function mano_de_obra()
-    {
-        return $this->belongsTo(ManoDeObra::class);
-    }
 
     public function accesorios_por_componente()
     {
@@ -52,8 +46,6 @@ class Componente extends Model
             return $herraje->costo_unitario * $herraje->pivot->cantidad;
         });
 
-        $costoManoDeObra = $this->mano_de_obra ? $this->mano_de_obra->costo_total : 0;
-
-        return $costoMateriales + $costoHerrajes + $costoManoDeObra;
+        return $costoMateriales + $costoHerrajes;
     }
 }

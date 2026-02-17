@@ -27,7 +27,7 @@ class StoreComponenteRequest extends FormRequest
             'descripcion' => 'nullable|string',
             'codigo' => 'required|string|max:255|unique:componentes,codigo',
             'accesorios' => 'nullable|string',
-            'mano_de_obra_id' => 'required|exists:mano_de_obras,id',            'materiales' => 'nullable|array',
+            'materiales' => 'nullable|array',
             'materiales.*.id' => 'required|exists:materiales,id',
             'materiales.*.cantidad' => 'required|integer|min:1',
             'herrajes' => 'nullable|array',

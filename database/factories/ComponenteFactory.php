@@ -22,7 +22,6 @@ class ComponenteFactory extends Factory
             'descripcion' => $this->faker->sentence(),
             'codigo' => $this->faker->unique()->bothify('???-#####'),
             'accesorios' => $this->faker->word(),
-            'mano_de_obra_id' => \App\Models\ManoDeObra::factory(),
         ];
     }
 

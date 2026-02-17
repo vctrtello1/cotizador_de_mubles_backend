@@ -14,8 +14,6 @@ use App\Http\Controllers\CotizacionController;
 use App\Http\Controllers\EstructuraController;
 use App\Http\Controllers\GolaController;
 use App\Http\Controllers\HerrajeController;
-use App\Http\Controllers\HorasDeManoDeObraPorComponenteController;
-use App\Http\Controllers\ManoDeObraController;
 use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\MaterialesPorComponenteController;
 use App\Http\Controllers\ModulosController;
@@ -37,7 +35,6 @@ Route::apiResources([
     'acabado-cubre-cantos'  => AcabadoCubreCantoController::class,
     'estructuras'           => EstructuraController::class,
     'golas'                 => GolaController::class,
-    'mano-de-obras'         => ManoDeObraController::class,
     'componentes'           => ComponenteController::class,
     'modulos'               => ModulosController::class,
     'clientes'              => ClienteController::class,
@@ -78,9 +75,6 @@ use App\Http\Controllers\CantidadPorComponenteController;
 
 Route::apiResource('cantidad-por-componentes', CantidadPorComponenteController::class)
     ->parameters(['cantidad-por-componentes' => 'cantidadPorComponente']);
-
-Route::apiResource('horas-de-mano-de-obra-por-componentes', HorasDeManoDeObraPorComponenteController::class)
-    ->parameters(['horas-de-mano-de-obra-por-componentes' => 'horasDeManoDeObraPorComponente']);
 
 Route::apiResource('accesorios-por-componente', AccesoriosPorComponenteController::class)
     ->parameters(['accesorios-por-componente' => 'accesoriosPorComponente']);

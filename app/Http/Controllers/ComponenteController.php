@@ -14,7 +14,7 @@ class ComponenteController extends Controller
     public function index()
     {
         //
-        return Componente::with(['mano_de_obra', 'accesorios_por_componente', 'materiales', 'herrajes'])->get()->toResourceCollection();
+        return Componente::with(['accesorios_por_componente', 'materiales', 'herrajes'])->get()->toResourceCollection();
     }
 
 
@@ -51,7 +51,7 @@ class ComponenteController extends Controller
             $componente->herrajes()->sync($herrajes);
         }
 
-        return $componente->load(['mano_de_obra', 'accesorios_por_componente', 'materiales', 'herrajes'])->toResource();
+        return $componente->load(['accesorios_por_componente', 'materiales', 'herrajes'])->toResource();
     }
 
     /**
@@ -60,7 +60,7 @@ class ComponenteController extends Controller
     public function show(Componente $componente)
     {
         //
-        return $componente->load(['mano_de_obra', 'accesorios_por_componente', 'materiales', 'herrajes'])->toResource();
+        return $componente->load(['accesorios_por_componente', 'materiales', 'herrajes'])->toResource();
     }
 
     /**
@@ -97,7 +97,7 @@ class ComponenteController extends Controller
             $componente->herrajes()->sync($herrajes);
         }
 
-        return $componente->load(['mano_de_obra', 'accesorios_por_componente', 'materiales', 'herrajes'])->toResource();
+        return $componente->load(['accesorios_por_componente', 'materiales', 'herrajes'])->toResource();
     }
 
     /**

@@ -180,7 +180,6 @@ class ClienteTest extends TestCase
             'descripcion' => 'Descripcion actualizada',
             'codigo' => 'CMP-54321',
             'accesorios' => 'Accesorio3, Accesorio4',
-            'mano_de_obra_id' => \App\Models\ManoDeObra::factory()->create()->id,
             'materiales' => [
                 ['id' => $material->id, 'cantidad' => 10]
             ],
@@ -232,7 +231,6 @@ class ClienteTest extends TestCase
             'descripcion' => 'Descripcion actualizada',
             'codigo' => 'CMP-54321',
             'accesorios' => 'Accesorio3, Accesorio4',
-            'mano_de_obra_id' => \App\Models\ManoDeObra::factory()->create()->id,
             'materiales' => [
                 ['id' => $material->id, 'cantidad' => 10]
             ],
@@ -300,7 +298,6 @@ class ClienteTest extends TestCase
             'descripcion' => 'Descripcion actualizada',
             'codigo' => 'CMP-54321',
             'accesorios' => 'Accesorio3, Accesorio4',
-            'mano_de_obra_id' => \App\Models\ManoDeObra::factory()->create()->id,
             // No materiales or herrajes provided
         ];
 
@@ -332,7 +329,6 @@ class ClienteTest extends TestCase
             'descripcion' => 'Descripcion actualizada',
             'codigo' => 'CMP-54321',
             'accesorios' => 'Accesorio3, Accesorio4',
-            'mano_de_obra_id' => \App\Models\ManoDeObra::factory()->create()->id,
             'materiales' => [], // Empty materiales
             'herrajes' => [],   // Empty herrajes
         ];
@@ -364,7 +360,6 @@ class ClienteTest extends TestCase
             'nombre' => 'Componente Actualizado',
             'descripcion' => 'Descripcion actualizada',
             'codigo' => 'CMP-54321',
-            'mano_de_obra_id' => \App\Models\ManoDeObra::factory()->create()->id,
             'materiales' => [],
             'herrajes' => [],
             // No accesorios provided
@@ -396,7 +391,6 @@ class ClienteTest extends TestCase
             'descripcion' => 'Descripcion actualizada',
             'codigo' => 'CMP-54321',
             'accesorios' => '', // Empty accesorios
-            'mano_de_obra_id' => \App\Models\ManoDeObra::factory()->create()->id,
             'materiales' => [],
             'herrajes' => [],
         ];

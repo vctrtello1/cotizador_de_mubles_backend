@@ -32,7 +32,6 @@ class ComponenteTest extends TestCase
                     'descripcion',
                     'codigo',
                     'costo_total',
-                    'mano_de_obra_id',
                 ],
             ],
         ]);
@@ -54,7 +53,6 @@ class ComponenteTest extends TestCase
                 'codigo',
                 'costo_total',
                 'accesorios',
-                'mano_de_obra_id',
             ],
         ]);
     }
@@ -69,7 +67,6 @@ class ComponenteTest extends TestCase
             'descripcion' => 'Descripcion del componente test',
             'codigo' => 'CMP-12345',
             'accesorios' => 'Accesorio1, Accesorio2',
-            'mano_de_obra_id' => \App\Models\ManoDeObra::factory()->create()->id,
             'materiales' => [
                 ['id' => $material->id, 'cantidad' => 5]
             ],
@@ -121,7 +118,6 @@ class ComponenteTest extends TestCase
             'descripcion' => 'Descripcion actualizada',
             'codigo' => 'CMP-54321',
             'accesorios' => 'Accesorio3, Accesorio4',
-            'mano_de_obra_id' => \App\Models\ManoDeObra::factory()->create()->id,
             'materiales' => [
                 ['id' => $material->id, 'cantidad' => 10]
             ],
@@ -181,20 +177,17 @@ class ComponenteTest extends TestCase
     {
         $material = \App\Models\Material::factory()->create(['precio_unitario' => 10]);
         $herraje = \App\Models\Herraje::factory()->create(['costo_unitario' => 5]);
-        $manoDeObra = \App\Models\ManoDeObra::factory()->create(['costo_hora' => 30]);
 
-        $componente = \App\Models\Componente::factory()->create([
-            'mano_de_obra_id' => $manoDeObra->id,
-        ]);
+        $componente = \App\Models\Componente::factory()->create();
 
         $componente->materiales()->attach($material->id, ['cantidad' => 2]); // 10 * 2 = 20
         $componente->herrajes()->attach($herraje->id, ['cantidad' => 3]); // 5 * 3 = 15
 
-        // Total Cost = 20 (Material) + 15 (Herraje) + 30 (ManoDeObra: 1 hour * 30) = 65
+        // Total Cost = 20 (Material) + 15 (Herraje) = 35
 
         $response = $this->getJson("/api/v1/componentes/{$componente->id}");
 
         $response->assertStatus(200);
-        $response->assertJsonFragment(['costo_total' => 65]);
+        $response->assertJsonFragment(['costo_total' => 35]);
     }
 }

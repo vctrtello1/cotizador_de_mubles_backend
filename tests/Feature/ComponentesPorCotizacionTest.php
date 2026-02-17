@@ -353,11 +353,7 @@ class ComponentesPorCotizacionTest extends TestCase
      */
     public function test_model_calculates_subtotal_correctly(): void
     {
-        $manoDeObra = ManoDeObra::factory()->create(['costo_hora' => 50]);
-        
-        $componente = Componente::factory()->create([
-            'mano_de_obra_id' => $manoDeObra->id,
-        ]);
+        $componente = Componente::factory()->create();
 
         $componentePorCotizacion = ComponentesPorCotizacion::factory()->create([
             'componente_id' => $componente->id,
@@ -365,10 +361,10 @@ class ComponentesPorCotizacionTest extends TestCase
         ]);
 
         // Reload with relationships
-        $componentePorCotizacion->load('componente.mano_de_obra');
+        $componentePorCotizacion->load('componente');
 
         // The subtotal depends on the component's costo_total calculation
-        // which includes materials, herrajes, and mano_de_obra
+        // which includes materials and herrajes
         $this->assertIsNumeric($componentePorCotizacion->subtotal);
         $this->assertGreaterThanOrEqual(0, $componentePorCotizacion->subtotal);
     }
