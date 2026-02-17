@@ -13,6 +13,7 @@ use App\Http\Controllers\ComponentesPorCotizacionController;
 use App\Http\Controllers\CorrederaController;
 use App\Http\Controllers\CotizacionController;
 use App\Http\Controllers\EstructuraController;
+use App\Http\Controllers\GolaController;
 use App\Http\Controllers\HerrajeController;
 use App\Http\Controllers\HorasDeManoDeObraPorComponenteController;
 use App\Http\Controllers\ManoDeObraController;
@@ -37,6 +38,7 @@ Route::apiResources([
     'acabado-tableros'      => AcabadoTableroController::class,
     'acabado-cubre-cantos'  => AcabadoCubreCantoController::class,
     'estructuras'           => EstructuraController::class,
+    'golas'                 => GolaController::class,
     'mano-de-obras'         => ManoDeObraController::class,
     'componentes'           => ComponenteController::class,
     'modulos'               => ModulosController::class,
