@@ -7,6 +7,7 @@ use App\Http\Controllers\AccesoriosPorComponenteController;
 use App\Http\Controllers\CantidadPorHerrajeController;
 use App\Http\Controllers\CantidadPorMaterialController;
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\CompasAbatibleController;
 use App\Http\Controllers\ComponenteController;
 use App\Http\Controllers\ComponentesPorCotizacionController;
 use App\Http\Controllers\CorrederaController;
@@ -40,7 +41,12 @@ Route::apiResources([
     'modulos'               => ModulosController::class,
     'clientes'              => ClienteController::class,
     'correderas'            => CorrederaController::class,
-]);
+], ['parameters' => [
+    'compases-abatibles' => 'compasAbatible'
+]]);
+
+Route::apiResource('compases-abatibles', CompasAbatibleController::class)
+    ->parameters(['compases-abatibles' => 'compasAbatible']);
 
 Route::apiResource('cotizaciones', CotizacionController::class)
     ->parameters(['cotizaciones' => 'cotizacion']);
