@@ -21,8 +21,12 @@ class CorrederaFactory extends Factory
         $precioBase = $this->faker->randomFloat(2, 300, 450);
         $precioConAcoplamiento = $precioBase + 50.20;
 
+        $capacidades = [30, 40, 70];
+        $capacidad = $this->faker->randomElement($capacidades);
+
         return [
-            'nombre' => "CORREDERA TANDEM PARCIAL BLUMOTION 30kgs {$size}mm 550H{$size}0B",
+            'nombre' => "CORREDERA TANDEM PARCIAL BLUMOTION {$capacidad}kgs {$size}mm 550H{$size}0B",
+            'capacidad_carga' => $capacidad,
             'precio_base' => $precioBase,
             'precio_con_acoplamiento' => $precioConAcoplamiento,
         ];

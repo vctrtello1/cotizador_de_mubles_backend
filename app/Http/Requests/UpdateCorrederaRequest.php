@@ -23,6 +23,7 @@ class UpdateCorrederaRequest extends FormRequest
     {
         return [
             'nombre' => 'sometimes|string|max:255|unique:correderas,nombre,' . $this->route('corredera')->id,
+            'capacidad_carga' => 'sometimes|integer|min:1',
             'precio_base' => 'sometimes|numeric|min:0',
             'precio_con_acoplamiento' => 'sometimes|numeric|min:0',
         ];

@@ -22,6 +22,7 @@ class CorrederaTest extends TestCase
                 '*' => [
                     'id',
                     'nombre',
+                    'capacidad_carga',
                     'precio_base',
                     'precio_con_acoplamiento',
                     'created_at',
@@ -46,6 +47,7 @@ class CorrederaTest extends TestCase
             'data' => [
                 'id',
                 'nombre',
+                'capacidad_carga',
                 'precio_base',
                 'precio_con_acoplamiento',
                 'created_at',
@@ -61,6 +63,7 @@ class CorrederaTest extends TestCase
     {
         $correderaData = [
             'nombre' => 'CORREDERA TANDEM PARCIAL BLUMOTION 30kgs 600mm 550H6000B',
+            'capacidad_carga' => 30,
             'precio_base' => 420.50,
             'precio_con_acoplamiento' => 470.70,
         ];
@@ -70,6 +73,7 @@ class CorrederaTest extends TestCase
         $response->assertStatus(201);
         $response->assertJsonFragment([
             'nombre' => $correderaData['nombre'],
+            'capacidad_carga' => 30,
             'precio_base' => 420.5,
             'precio_con_acoplamiento' => 470.7,
         ]);
@@ -84,7 +88,7 @@ class CorrederaTest extends TestCase
         $response = $this->postJson('/api/v1/correderas', []);
 
         $response->assertStatus(422);
-        $response->assertJsonValidationErrors(['nombre', 'precio_base', 'precio_con_acoplamiento']);
+        $response->assertJsonValidationErrors(['nombre', 'capacidad_carga', 'precio_base', 'precio_con_acoplamiento']);
     }
 
     /**
@@ -96,6 +100,7 @@ class CorrederaTest extends TestCase
 
         $response = $this->postJson('/api/v1/correderas', [
             'nombre' => $corredera->nombre,
+            'capacidad_carga' => 30,
             'precio_base' => 420.50,
             'precio_con_acoplamiento' => 470.70,
         ]);
@@ -111,6 +116,7 @@ class CorrederaTest extends TestCase
     {
         $response = $this->postJson('/api/v1/correderas', [
             'nombre' => 'CORREDERA TEST',
+            'capacidad_carga' => 30,
             'precio_base' => 'not-a-number',
             'precio_con_acoplamiento' => 'not-a-number',
         ]);
@@ -129,6 +135,7 @@ class CorrederaTest extends TestCase
 
         $updatedData = [
             'nombre' => 'CORREDERA TANDEM PARCIAL BLUMOTION 30kgs 700mm 550H7000B',
+            'capacidad_carga' => 40,
             'precio_base' => 450.00,
             'precio_con_acoplamiento' => 500.20,
         ];
@@ -138,6 +145,7 @@ class CorrederaTest extends TestCase
         $response->assertStatus(200);
         $response->assertJsonFragment([
             'nombre' => $updatedData['nombre'],
+            'capacidad_carga' => 40,
             'precio_base' => 450.0,
             'precio_con_acoplamiento' => 500.2,
         ]);
@@ -152,12 +160,12 @@ class CorrederaTest extends TestCase
         $corredera = \App\Models\Corredera::factory()->create();
 
         $response = $this->putJson("/api/v1/correderas/{$corredera->id}", [
-            'precio_base' => 500.00,
+            'capacidad_carga' => 70,
         ]);
 
         $response->assertStatus(200);
         $response->assertJsonFragment([
-            'precio_base' => 500.0,
+            'capacidad_carga' => 70,
         ]);
     }
 
@@ -192,6 +200,7 @@ class CorrederaTest extends TestCase
     {
         $response = $this->putJson('/api/v1/correderas/99999', [
             'nombre' => 'Test',
+            'capacidad_carga' => 30,
             'precio_base' => 100.00,
             'precio_con_acoplamiento' => 150.00,
         ]);

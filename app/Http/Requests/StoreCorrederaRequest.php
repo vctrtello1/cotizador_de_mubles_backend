@@ -23,6 +23,7 @@ class StoreCorrederaRequest extends FormRequest
     {
         return [
             'nombre' => 'required|string|max:255|unique:correderas,nombre',
+            'capacidad_carga' => 'required|integer|min:1',
             'precio_base' => 'required|numeric|min:0',
             'precio_con_acoplamiento' => 'required|numeric|min:0',
         ];

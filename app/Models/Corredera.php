@@ -11,6 +11,7 @@ class Corredera extends Model
 
     protected $fillable = [
         'nombre',
+        'capacidad_carga',
         'precio_base',
         'precio_con_acoplamiento',
     ];
