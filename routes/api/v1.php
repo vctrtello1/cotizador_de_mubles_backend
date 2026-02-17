@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\AcabadoController;
 use App\Http\Controllers\AcabadoCubreCantoController;
 use App\Http\Controllers\AcabadoTableroController;
 use App\Http\Controllers\AccesoriosPorComponenteController;
@@ -34,7 +33,6 @@ Route::get('clientes/{cliente}/cotizaciones', [ClienteController::class, 'cotiza
 
 Route::apiResources([
     'herrajes'              => HerrajeController::class,
-    'acabados'              => AcabadoController::class,
     'acabado-tableros'      => AcabadoTableroController::class,
     'acabado-cubre-cantos'  => AcabadoCubreCantoController::class,
     'estructuras'           => EstructuraController::class,

@@ -5,7 +5,6 @@ namespace Tests\Feature;
 use App\Models\Componente;
 use App\Models\ComponentesPorCotizacion;
 use App\Models\Cotizacion;
-use App\Models\Acabado;
 use App\Models\ManoDeObra;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -354,11 +353,9 @@ class ComponentesPorCotizacionTest extends TestCase
      */
     public function test_model_calculates_subtotal_correctly(): void
     {
-        $acabado = Acabado::factory()->create(['costo' => 100]);
         $manoDeObra = ManoDeObra::factory()->create(['costo_hora' => 50]);
         
         $componente = Componente::factory()->create([
-            'acabado_id' => $acabado->id,
             'mano_de_obra_id' => $manoDeObra->id,
         ]);
 
@@ -368,10 +365,10 @@ class ComponentesPorCotizacionTest extends TestCase
         ]);
 
         // Reload with relationships
-        $componentePorCotizacion->load('componente.acabado', 'componente.mano_de_obra');
+        $componentePorCotizacion->load('componente.mano_de_obra');
 
         // The subtotal depends on the component's costo_total calculation
-        // which includes materials, herrajes, acabado, and mano_de_obra
+        // which includes materials, herrajes, and mano_de_obra
         $this->assertIsNumeric($componentePorCotizacion->subtotal);
         $this->assertGreaterThanOrEqual(0, $componentePorCotizacion->subtotal);
     }

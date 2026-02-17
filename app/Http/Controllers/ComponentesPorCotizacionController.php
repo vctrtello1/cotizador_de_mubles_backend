@@ -90,7 +90,6 @@ class ComponentesPorCotizacionController extends Controller
             ->with([
                 'componente.materiales',
                 'componente.herrajes',
-                'componente.acabado',
                 'componente.mano_de_obra'
             ])
             ->get();
@@ -148,7 +147,7 @@ class ComponentesPorCotizacionController extends Controller
         }
 
         $componentes = ComponentesPorCotizacion::where('cotizacion_id', $cotizacion->id)
-            ->with(['componente.acabado', 'componente.mano_de_obra'])
+            ->with(['componente.mano_de_obra'])
             ->get();
 
         return response()->json($componentes);

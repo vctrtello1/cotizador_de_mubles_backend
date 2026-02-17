@@ -15,14 +15,8 @@ class Componente extends Model
         'descripcion',
         'codigo',
         'accesorios',
-        'acabado_id',
         'mano_de_obra_id',
     ];
-
-    public function acabado()
-    {
-        return $this->belongsTo(Acabado::class);
-    }
 
     public function mano_de_obra()
     {
@@ -59,8 +53,7 @@ class Componente extends Model
         });
 
         $costoManoDeObra = $this->mano_de_obra ? $this->mano_de_obra->costo_total : 0;
-        $costoAcabado = $this->acabado ? $this->acabado->costo : 0;
 
-        return $costoMateriales + $costoHerrajes + $costoManoDeObra + $costoAcabado;
+        return $costoMateriales + $costoHerrajes + $costoManoDeObra;
     }
 }

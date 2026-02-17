@@ -180,7 +180,6 @@ class ClienteTest extends TestCase
             'descripcion' => 'Descripcion actualizada',
             'codigo' => 'CMP-54321',
             'accesorios' => 'Accesorio3, Accesorio4',
-            'acabado_id' => \App\Models\Acabado::factory()->create()->id,
             'mano_de_obra_id' => \App\Models\ManoDeObra::factory()->create()->id,
             'materiales' => [
                 ['id' => $material->id, 'cantidad' => 10]
@@ -233,7 +232,6 @@ class ClienteTest extends TestCase
             'descripcion' => 'Descripcion actualizada',
             'codigo' => 'CMP-54321',
             'accesorios' => 'Accesorio3, Accesorio4',
-            'acabado_id' => \App\Models\Acabado::factory()->create()->id,
             'mano_de_obra_id' => \App\Models\ManoDeObra::factory()->create()->id,
             'materiales' => [
                 ['id' => $material->id, 'cantidad' => 10]
@@ -302,7 +300,6 @@ class ClienteTest extends TestCase
             'descripcion' => 'Descripcion actualizada',
             'codigo' => 'CMP-54321',
             'accesorios' => 'Accesorio3, Accesorio4',
-            'acabado_id' => \App\Models\Acabado::factory()->create()->id,
             'mano_de_obra_id' => \App\Models\ManoDeObra::factory()->create()->id,
             // No materiales or herrajes provided
         ];
@@ -335,7 +332,6 @@ class ClienteTest extends TestCase
             'descripcion' => 'Descripcion actualizada',
             'codigo' => 'CMP-54321',
             'accesorios' => 'Accesorio3, Accesorio4',
-            'acabado_id' => \App\Models\Acabado::factory()->create()->id,
             'mano_de_obra_id' => \App\Models\ManoDeObra::factory()->create()->id,
             'materiales' => [], // Empty materiales
             'herrajes' => [],   // Empty herrajes
@@ -368,7 +364,6 @@ class ClienteTest extends TestCase
             'nombre' => 'Componente Actualizado',
             'descripcion' => 'Descripcion actualizada',
             'codigo' => 'CMP-54321',
-            'acabado_id' => \App\Models\Acabado::factory()->create()->id,
             'mano_de_obra_id' => \App\Models\ManoDeObra::factory()->create()->id,
             'materiales' => [],
             'herrajes' => [],
@@ -401,7 +396,6 @@ class ClienteTest extends TestCase
             'descripcion' => 'Descripcion actualizada',
             'codigo' => 'CMP-54321',
             'accesorios' => '', // Empty accesorios
-            'acabado_id' => \App\Models\Acabado::factory()->create()->id,
             'mano_de_obra_id' => \App\Models\ManoDeObra::factory()->create()->id,
             'materiales' => [],
             'herrajes' => [],

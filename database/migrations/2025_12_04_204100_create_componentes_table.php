@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('descripcion')->nullable();
             $table->string('codigo')->unique();
             $table->string('accesorios')->nullable();
-            $table->foreignId('acabado_id')->constrained();
             $table->foreignId('mano_de_obra_id')->constrained();
             $table->timestamps();
         });
@@ -25,23 +24,20 @@ return new class extends Migration
         DB::table('componentes')->insert([
             [
                 'nombre' => 'Silla Lucianica',
-                'descripcion' => 'Silla Lucianica de Roble con acabados de alta calidad',
+                'descripcion' => 'Silla Lucianica de Roble',
                 'codigo' => 'COMP_SILLA_LUCIANICA',
-                'acabado_id' => 1,
                 'mano_de_obra_id' => 1,
             ],
             [
                 'nombre' => 'Mesa Lucianica',
-                'descripcion' => 'Mesa Lucianica de Roble con acabados de alta calidad',
+                'descripcion' => 'Mesa Lucianica de Roble',
                 'codigo' => 'COMP_MESA_LUCIANICA',
-                'acabado_id' => 1,
                 'mano_de_obra_id' => 2,
             ],
             [
                 'nombre' => 'Estante Moderno',
-                'descripcion' => 'Estante Moderno de MDF con acabados elegantes',
+                'descripcion' => 'Estante Moderno de MDF',
                 'codigo' => 'COMP_ESTANTE_MODERNO',
-                'acabado_id' => 2,
                 'mano_de_obra_id' => 3,
             ],
 
@@ -51,7 +47,6 @@ return new class extends Migration
                 'nombre' => 'Mesa de Centro Purru',
                 'descripcion' => 'Mesa de centro minimalista con estructura metálica y superficie de vidrio templado',
                 'codigo' => 'COMP_MESA_CENTRO_MINIMALISTA',
-                'acabado_id' => 3,
                 'mano_de_obra_id' => 3,
             ],
         ]);
