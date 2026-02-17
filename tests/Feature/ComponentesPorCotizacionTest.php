@@ -5,11 +5,9 @@ namespace Tests\Feature;
 use App\Models\Componente;
 use App\Models\ComponentesPorCotizacion;
 use App\Models\Cotizacion;
-use App\Models\Cliente;
 use App\Models\Acabado;
 use App\Models\ManoDeObra;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class ComponentesPorCotizacionTest extends TestCase

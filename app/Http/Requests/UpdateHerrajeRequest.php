@@ -21,13 +21,15 @@ class UpdateHerrajeRequest extends FormRequest
      */
     public function rules(): array
     {
+        $herrajeId = $this->route('herraje') ? $this->route('herraje')->id : null;
+        
         return [
-            'nombre' => ['required', 'string', 'max:255'],
+            'nombre' => ['sometimes', 'string', 'max:255'],
             'descripcion' => ['nullable', 'string'],
-            'codigo' => ['nullable', 'string'],
-            'costo_unitario' => ['required', 'numeric', 'min:0'],
-            'unidad_medida' => ['required', 'string'],
-            'medida' => ['required', 'numeric', 'min:0'],
+            'codigo' => ['sometimes', 'string', 'unique:herrajes,codigo,' . $herrajeId],
+            'costo_unitario' => ['sometimes', 'numeric', 'min:0'],
+            'unidad_medida' => ['sometimes', 'string'],
+            'medida' => ['sometimes', 'numeric', 'min:0'],
         ];
     }
 }

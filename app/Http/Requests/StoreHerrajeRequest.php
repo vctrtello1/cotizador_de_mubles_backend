@@ -24,7 +24,7 @@ class StoreHerrajeRequest extends FormRequest
         return [
             'nombre' => ['required', 'string', 'max:255'],
             'descripcion' => ['nullable', 'string'],
-            'codigo' => ['nullable', 'string'],
+            'codigo' => ['required', 'string', 'unique:herrajes,codigo'],
             'costo_unitario' => ['required', 'numeric', 'min:0'],
             'unidad_medida' => ['required', 'string'],
             'medida' => ['required', 'numeric', 'min:0'],
