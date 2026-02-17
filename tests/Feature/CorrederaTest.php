@@ -23,6 +23,8 @@ class CorrederaTest extends TestCase
                     'id',
                     'nombre',
                     'capacidad_carga',
+                    'tipo',
+                    'incluye_varilla',
                     'precio_base',
                     'precio_con_acoplamiento',
                     'created_at',
@@ -48,6 +50,8 @@ class CorrederaTest extends TestCase
                 'id',
                 'nombre',
                 'capacidad_carga',
+                'tipo',
+                'incluye_varilla',
                 'precio_base',
                 'precio_con_acoplamiento',
                 'created_at',
@@ -64,6 +68,8 @@ class CorrederaTest extends TestCase
         $correderaData = [
             'nombre' => 'CORREDERA TANDEM PARCIAL BLUMOTION 30kgs 600mm 550H6000B',
             'capacidad_carga' => 30,
+            'tipo' => 'PARCIAL',
+            'incluye_varilla' => false,
             'precio_base' => 420.50,
             'precio_con_acoplamiento' => 470.70,
         ];
@@ -74,6 +80,8 @@ class CorrederaTest extends TestCase
         $response->assertJsonFragment([
             'nombre' => $correderaData['nombre'],
             'capacidad_carga' => 30,
+            'tipo' => 'PARCIAL',
+            'incluye_varilla' => false,
             'precio_base' => 420.5,
             'precio_con_acoplamiento' => 470.7,
         ]);
@@ -88,7 +96,7 @@ class CorrederaTest extends TestCase
         $response = $this->postJson('/api/v1/correderas', []);
 
         $response->assertStatus(422);
-        $response->assertJsonValidationErrors(['nombre', 'capacidad_carga', 'precio_base', 'precio_con_acoplamiento']);
+        $response->assertJsonValidationErrors(['nombre', 'capacidad_carga', 'tipo', 'incluye_varilla', 'precio_base', 'precio_con_acoplamiento']);
     }
 
     /**
@@ -101,6 +109,8 @@ class CorrederaTest extends TestCase
         $response = $this->postJson('/api/v1/correderas', [
             'nombre' => $corredera->nombre,
             'capacidad_carga' => 30,
+            'tipo' => 'TOTAL',
+            'incluye_varilla' => false,
             'precio_base' => 420.50,
             'precio_con_acoplamiento' => 470.70,
         ]);
@@ -136,6 +146,8 @@ class CorrederaTest extends TestCase
         $updatedData = [
             'nombre' => 'CORREDERA TANDEM PARCIAL BLUMOTION 30kgs 700mm 550H7000B',
             'capacidad_carga' => 40,
+            'tipo' => 'TOTAL_TIP_ON',
+            'incluye_varilla' => true,
             'precio_base' => 450.00,
             'precio_con_acoplamiento' => 500.20,
         ];
@@ -146,6 +158,8 @@ class CorrederaTest extends TestCase
         $response->assertJsonFragment([
             'nombre' => $updatedData['nombre'],
             'capacidad_carga' => 40,
+            'tipo' => 'TOTAL_TIP_ON',
+            'incluye_varilla' => true,
             'precio_base' => 450.0,
             'precio_con_acoplamiento' => 500.2,
         ]);
@@ -201,6 +215,8 @@ class CorrederaTest extends TestCase
         $response = $this->putJson('/api/v1/correderas/99999', [
             'nombre' => 'Test',
             'capacidad_carga' => 30,
+            'tipo' => 'TOTAL',
+            'incluye_varilla' => false,
             'precio_base' => 100.00,
             'precio_con_acoplamiento' => 150.00,
         ]);
@@ -216,5 +232,152 @@ class CorrederaTest extends TestCase
         $response = $this->deleteJson('/api/v1/correderas/99999');
 
         $response->assertStatus(404);
+    }
+
+    /**
+     * Test store endpoint validates tipo must be valid enum value.
+     */
+    public function test_corredera_store_validation_tipo_invalid(): void
+    {
+        $response = $this->postJson('/api/v1/correderas', [
+            'nombre' => 'CORREDERA TEST',
+            'capacidad_carga' => 30,
+            'tipo' => 'INVALIDO',
+            'incluye_varilla' => false,
+            'precio_base' => 420.50,
+            'precio_con_acoplamiento' => 470.70,
+        ]);
+
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors(['tipo']);
+    }
+
+    /**
+     * Test store endpoint validates incluye_varilla must be boolean.
+     */
+    public function test_corredera_store_validation_incluye_varilla_not_boolean(): void
+    {
+        $response = $this->postJson('/api/v1/correderas', [
+            'nombre' => 'CORREDERA TEST',
+            'capacidad_carga' => 30,
+            'tipo' => 'TOTAL',
+            'incluye_varilla' => 'not-a-boolean',
+            'precio_base' => 420.50,
+            'precio_con_acoplamiento' => 470.70,
+        ]);
+
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors(['incluye_varilla']);
+    }
+
+    /**
+     * Test store endpoint creates PARCIAL corredera without varilla.
+     */
+    public function test_corredera_store_parcial_type(): void
+    {
+        $correderaData = [
+            'nombre' => 'CORREDERA TANDEM PARCIAL TEST 350mm',
+            'capacidad_carga' => 30,
+            'tipo' => 'PARCIAL',
+            'incluye_varilla' => false,
+            'precio_base' => 344.40,
+            'precio_con_acoplamiento' => 394.60,
+        ];
+
+        $response = $this->postJson('/api/v1/correderas', $correderaData);
+
+        $response->assertStatus(201);
+        $response->assertJsonFragment([
+            'tipo' => 'PARCIAL',
+            'incluye_varilla' => false,
+        ]);
+        $this->assertDatabaseHas('correderas', [
+            'nombre' => 'CORREDERA TANDEM PARCIAL TEST 350mm',
+            'tipo' => 'PARCIAL',
+            'incluye_varilla' => false,
+        ]);
+    }
+
+    /**
+     * Test store endpoint creates TOTAL corredera without varilla.
+     */
+    public function test_corredera_store_total_type(): void
+    {
+        $correderaData = [
+            'nombre' => 'CORREDERA TANDEM TOTAL TEST 300mm',
+            'capacidad_carga' => 30,
+            'tipo' => 'TOTAL',
+            'incluye_varilla' => false,
+            'precio_base' => 662.80,
+            'precio_con_acoplamiento' => 713.00,
+        ];
+
+        $response = $this->postJson('/api/v1/correderas', $correderaData);
+
+        $response->assertStatus(201);
+        $response->assertJsonFragment([
+            'tipo' => 'TOTAL',
+            'incluye_varilla' => false,
+        ]);
+        $this->assertDatabaseHas('correderas', [
+            'nombre' => 'CORREDERA TANDEM TOTAL TEST 300mm',
+            'tipo' => 'TOTAL',
+            'incluye_varilla' => false,
+        ]);
+    }
+
+    /**
+     * Test store endpoint creates TOTAL_TIP_ON corredera with varilla.
+     */
+    public function test_corredera_store_total_tip_on_type(): void
+    {
+        $correderaData = [
+            'nombre' => 'CORREDERA TANDEM TOTAL TIP-ON TEST 300mm',
+            'capacidad_carga' => 30,
+            'tipo' => 'TOTAL_TIP_ON',
+            'incluye_varilla' => true,
+            'precio_base' => 719.70,
+            'precio_con_acoplamiento' => 898.20,
+        ];
+
+        $response = $this->postJson('/api/v1/correderas', $correderaData);
+
+        $response->assertStatus(201);
+        $response->assertJsonFragment([
+            'tipo' => 'TOTAL_TIP_ON',
+            'incluye_varilla' => true,
+        ]);
+        $this->assertDatabaseHas('correderas', [
+            'nombre' => 'CORREDERA TANDEM TOTAL TIP-ON TEST 300mm',
+            'tipo' => 'TOTAL_TIP_ON',
+            'incluye_varilla' => true,
+        ]);
+    }
+
+    /**
+     * Test update endpoint can change tipo and incluye_varilla.
+     */
+    public function test_corredera_update_tipo_and_incluye_varilla(): void
+    {
+        $corredera = \App\Models\Corredera::factory()->create([
+            'tipo' => 'TOTAL',
+            'incluye_varilla' => false,
+        ]);
+
+        $response = $this->putJson("/api/v1/correderas/{$corredera->id}", [
+            'tipo' => 'TOTAL_TIP_ON',
+            'incluye_varilla' => true,
+        ]);
+
+        $response->assertStatus(200);
+        $response->assertJsonFragment([
+            'tipo' => 'TOTAL_TIP_ON',
+            'incluye_varilla' => true,
+        ]);
+        $this->assertDatabaseHas('correderas', [
+            'id' => $corredera->id,
+            'tipo' => 'TOTAL_TIP_ON',
+            'incluye_varilla' => true,
+        ]);
     }
 }

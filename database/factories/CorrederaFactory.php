@@ -23,10 +23,15 @@ class CorrederaFactory extends Factory
 
         $capacidades = [30, 40, 70];
         $capacidad = $this->faker->randomElement($capacidades);
+        $tipos = ['PARCIAL', 'TOTAL', 'TOTAL_TIP_ON'];
+        $tipo = $this->faker->randomElement($tipos);
+        $incluyeVarilla = $tipo === 'TOTAL_TIP_ON';
 
         return [
-            'nombre' => "CORREDERA TANDEM PARCIAL BLUMOTION {$capacidad}kgs {$size}mm 550H{$size}0B",
+            'nombre' => "CORREDERA TANDEM {$tipo} BLUMOTION {$capacidad}kgs {$size}mm 550H{$size}0B",
             'capacidad_carga' => $capacidad,
+            'tipo' => $tipo,
+            'incluye_varilla' => $incluyeVarilla,
             'precio_base' => $precioBase,
             'precio_con_acoplamiento' => $precioConAcoplamiento,
         ];

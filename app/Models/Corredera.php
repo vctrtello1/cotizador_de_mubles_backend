@@ -12,7 +12,13 @@ class Corredera extends Model
     protected $fillable = [
         'nombre',
         'capacidad_carga',
+        'tipo',
+        'incluye_varilla',
         'precio_base',
         'precio_con_acoplamiento',
+    ];
+
+    protected $casts = [
+        'incluye_varilla' => 'boolean',
     ];
 }

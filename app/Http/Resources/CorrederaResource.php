@@ -18,6 +18,8 @@ class CorrederaResource extends JsonResource
             'id' => $this->id,
             'nombre' => $this->nombre,
             'capacidad_carga' => $this->capacidad_carga,
+            'tipo' => $this->tipo,
+            'incluye_varilla' => $this->incluye_varilla,
             'precio_base' => $this->precio_base,
             'precio_con_acoplamiento' => $this->precio_con_acoplamiento,
             'created_at' => $this->created_at,
