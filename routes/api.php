@@ -7,9 +7,5 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-use App\Http\Controllers\AcabadoController;
-use App\Http\Controllers\ComponenteController;
-use App\Http\Controllers\HerrajeController;
-use App\Http\Controllers\MaterialController;
 
 Route::prefix('v1')->group(base_path('routes/api/v1.php'));

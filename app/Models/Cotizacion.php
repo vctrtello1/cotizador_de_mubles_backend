@@ -33,6 +33,11 @@ class Cotizacion extends Model
         return $this->hasMany(DetalleCotizacion::class);
     }
 
+    public function componentesPorCotizacion()
+    {
+        return $this->hasMany(ComponentesPorCotizacion::class, 'cotizacion_id');
+    }
+
     // Método para calcular el total (no accessor) 
     public function calculateTotal()
     {

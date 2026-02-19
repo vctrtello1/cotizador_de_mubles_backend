@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\ComponentesPorCotizacion;
 use App\Models\Cotizacion;
-use App\Models\Componente;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
@@ -26,12 +25,7 @@ class ComponentesPorCotizacionController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-        $validated = $request->validate([
-            'cotizacion_id' => 'required|integer|exists:cotizaciones,id',
-            'componente_id' => 'required|integer|exists:componentes,id',
-            'modulo_id' => 'nullable|integer|exists:modulos,id',
-            'cantidad' => 'required|integer|min:1',
-        ]);
+        $validated = $this->validateComponentesPorCotizacion($request, true);
 
         $componentePorCotizacion = ComponentesPorCotizacion::create($validated);
 
@@ -54,12 +48,7 @@ class ComponentesPorCotizacionController extends Controller
      */
     public function update(Request $request, ComponentesPorCotizacion $componentesPorCotizacion): JsonResponse
     {
-        $validated = $request->validate([
-            'cotizacion_id' => 'sometimes|integer|exists:cotizaciones,id',
-            'componente_id' => 'sometimes|integer|exists:componentes,id',
-            'modulo_id' => 'nullable|integer|exists:modulos,id',
-            'cantidad' => 'sometimes|integer|min:1',
-        ]);
+        $validated = $this->validateComponentesPorCotizacion($request, false);
 
         $componentesPorCotizacion->update($validated);
 
@@ -136,19 +125,38 @@ class ComponentesPorCotizacionController extends Controller
         // Delete existing relationships
         ComponentesPorCotizacion::where('cotizacion_id', $cotizacion->id)->delete();
 
-        // Create new relationships
-        foreach ($validated['componentes'] as $componente) {
-            ComponentesPorCotizacion::create([
+        // Create new relationships using bulk insert for better performance
+        $insertData = collect($validated['componentes'])->map(function ($componente) use ($cotizacion) {
+            return [
                 'cotizacion_id' => $cotizacion->id,
                 'componente_id' => $componente['id'],
                 'cantidad' => $componente['cantidad'],
-            ]);
-        }
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+        })->toArray();
+
+        ComponentesPorCotizacion::insert($insertData);
 
         $componentes = ComponentesPorCotizacion::where('cotizacion_id', $cotizacion->id)
             ->with(['componente'])
             ->get();
 
         return response()->json($componentes);
+    }
+
+    /**
+     * Validate component-quotation data
+     */
+    private function validateComponentesPorCotizacion(Request $request, bool $required): array
+    {
+        $rule = $required ? 'required' : 'sometimes';
+        
+        return $request->validate([
+            'cotizacion_id' => "{$rule}|integer|exists:cotizaciones,id",
+            'componente_id' => "{$rule}|integer|exists:componentes,id",
+            'modulo_id' => 'nullable|integer|exists:modulos,id',
+            'cantidad' => "{$rule}|integer|min:1",
+        ]);
     }
 }

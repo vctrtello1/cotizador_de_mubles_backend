@@ -26,15 +26,7 @@ class ModulosController extends Controller
         unset($validated['componentes']);
 
         $modulo = Modulos::create($validated);
-
-        // Sincronizar componentes
-        if (!empty($componentes)) {
-            $syncData = [];
-            foreach ($componentes as $componente) {
-                $syncData[$componente['id']] = ['cantidad' => $componente['cantidad']];
-            }
-            $modulo->componentes()->sync($syncData);
-        }
+        $this->syncComponentes($modulo, $componentes);
 
         return $modulo->load('componentes')->toResource();
     }
@@ -57,18 +49,7 @@ class ModulosController extends Controller
         unset($validated['componentes']);
 
         $modulo->update($validated);
-
-        // Sincronizar componentes
-        if (!empty($componentes)) {
-            $syncData = [];
-            foreach ($componentes as $componente) {
-                $syncData[$componente['id']] = ['cantidad' => $componente['cantidad']];
-            }
-            $modulo->componentes()->sync($syncData);
-        } else {
-            // Si no hay componentes, limpiar la relación
-            $modulo->componentes()->detach();
-        }
+        $this->syncComponentes($modulo, $componentes);
 
         return $modulo->load('componentes')->toResource();
     }
@@ -78,8 +59,24 @@ class ModulosController extends Controller
      */
     public function destroy(modulos $modulo)
     {
-        //
         $modulo->delete();
         return response()->noContent();
+    }
+
+    /**
+     * Sync components for the module
+     */
+    private function syncComponentes(Modulos $modulo, array $componentes): void
+    {
+        if (empty($componentes)) {
+            $modulo->componentes()->detach();
+            return;
+        }
+
+        $syncData = collect($componentes)->mapWithKeys(function ($componente) {
+            return [$componente['id'] => ['cantidad' => $componente['cantidad']]];
+        })->toArray();
+
+        $modulo->componentes()->sync($syncData);
     }
 }

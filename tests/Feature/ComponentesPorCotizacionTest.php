@@ -5,7 +5,6 @@ namespace Tests\Feature;
 use App\Models\Componente;
 use App\Models\ComponentesPorCotizacion;
 use App\Models\Cotizacion;
-use App\Models\ManoDeObra;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 

@@ -77,18 +77,16 @@ class ComponenteController extends Controller
         }
 
         if ($request->has('materiales')) {
-            $materiales = [];
-            foreach ($request->materiales as $material) {
-                $materiales[$material['id']] = ['cantidad' => $material['cantidad']];
-            }
+            $materiales = collect($request->materiales)->mapWithKeys(function ($material) {
+                return [$material['id'] => ['cantidad' => $material['cantidad']]];
+            })->toArray();
             $componente->materiales()->sync($materiales);
         }
 
         if ($request->has('herrajes')) {
-            $herrajes = [];
-            foreach ($request->herrajes as $herraje) {
-                $herrajes[$herraje['id']] = ['cantidad' => $herraje['cantidad']];
-            }
+            $herrajes = collect($request->herrajes)->mapWithKeys(function ($herraje) {
+                return [$herraje['id'] => ['cantidad' => $herraje['cantidad']]];
+            })->toArray();
             $componente->herrajes()->sync($herrajes);
         }
     }

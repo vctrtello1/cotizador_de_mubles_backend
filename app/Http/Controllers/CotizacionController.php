@@ -21,17 +21,22 @@ class CotizacionController extends Controller
     public function store(StoreCotizacionRequest $request)
     {
         $data = $request->validated();
-        $cotizacion = Cotizacion::create($data);
+        
+        $cotizacion = DB::transaction(function () use ($data) {
+            $cotizacion = Cotizacion::create($data);
 
-        if (isset($data['detalles'])) {
-            $detalles = collect($data['detalles'])->map(function ($detalle) {
-                if (!isset($detalle['subtotal'])) {
-                    $detalle['subtotal'] = $detalle['cantidad'] * $detalle['precio_unitario'];
-                }
-                return $detalle;
-            });
-            $cotizacion->detalles()->createMany($detalles);
-        }
+            if (isset($data['detalles'])) {
+                $detalles = collect($data['detalles'])->map(function ($detalle) {
+                    if (!isset($detalle['subtotal'])) {
+                        $detalle['subtotal'] = $detalle['cantidad'] * $detalle['precio_unitario'];
+                    }
+                    return $detalle;
+                });
+                $cotizacion->detalles()->createMany($detalles);
+            }
+
+            return $cotizacion;
+        });
 
         $cotizacion->load(['detalles', 'cliente']);
         return new CotizacionResource($cotizacion);
@@ -51,12 +56,9 @@ class CotizacionController extends Controller
 
     public function destroy(Cotizacion $cotizacion)
     {
-        // Delete related componentes_por_cotizacion records first to avoid foreign key constraint violation
-        DB::table('componentes_por_cotizacion')
-            ->where('cotizacion_id', $cotizacion->id)
-            ->delete();
-        
+        $cotizacion->componentesPorCotizacion()->delete();
         $cotizacion->delete();
+        
         return response()->noContent();
     }
 
