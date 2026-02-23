@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreTablerosPorComponenteRequest;
 use App\Http\Requests\UpdateTablerosPorComponenteRequest;
 use App\Http\Resources\TablerosPorComponenteResource;
+use App\Models\Material;
 use App\Models\TablerosPorComponente;
 
 class TablerosPorComponenteController extends Controller
@@ -14,7 +15,9 @@ class TablerosPorComponenteController extends Controller
      */
     public function index()
     {
-        $query = TablerosPorComponente::query();
+        $query = TablerosPorComponente::query()
+            ->leftJoin('materiales as tableros', 'tableros.id', '=', 'tableros_por_componente.tablero_id')
+            ->select('tableros_por_componente.*', 'tableros.nombre as tablero_nombre');
 
         $requestedIncludes = $this->requestedIncludes();
 
@@ -55,6 +58,11 @@ class TablerosPorComponenteController extends Controller
      */
     public function show(TablerosPorComponente $tablerosPorComponente)
     {
+        $tablerosPorComponente->setAttribute(
+            'tablero_nombre',
+            Material::query()->whereKey($tablerosPorComponente->tablero_id)->value('nombre')
+        );
+
         $requestedIncludes = $this->requestedIncludes();
 
         if (! empty($requestedIncludes)) {

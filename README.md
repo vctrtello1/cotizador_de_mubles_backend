@@ -79,6 +79,8 @@ Base URL local: `http://localhost:8000/api/v1`
 - `GET|PUT|DELETE /accesorios-por-componente/{accesoriosPorComponente}`
 - `GET|POST /materiales-por-componente`
 - `GET|PUT|DELETE /materiales-por-componente/{materialesPorComponente}`
+- `GET|POST /estructura-por-componente`
+- `GET|PUT|DELETE /estructura-por-componente/{estructuraPorComponente}`
 
 ### Tableros por componente
 - `GET|POST /tableros-por-componente`

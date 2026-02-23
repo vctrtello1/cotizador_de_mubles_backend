@@ -17,6 +17,7 @@ use App\Http\Controllers\MaterialesPorComponenteController;
 use App\Http\Controllers\ModulosController;
 use App\Http\Controllers\PuertaController;
 use App\Http\Controllers\CantidadPorComponenteController;
+use App\Http\Controllers\EstructuraPorComponenteController;
 use App\Http\Controllers\TablerosPorComponenteController;
 use Illuminate\Support\Facades\Route;
 
@@ -74,3 +75,6 @@ Route::apiResource('materiales-por-componente', MaterialesPorComponenteControlle
 
 Route::apiResource('tableros-por-componente', TablerosPorComponenteController::class)
     ->parameters(['tableros-por-componente' => 'tablerosPorComponente']);
+
+Route::apiResource('estructura-por-componente', EstructuraPorComponenteController::class)
+    ->parameters(['estructura-por-componente' => 'estructuraPorComponente']);

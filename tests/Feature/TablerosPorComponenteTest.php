@@ -17,6 +17,11 @@ class TablerosPorComponenteTest extends TestCase
 
     public function test_tableros_por_componente_index(): void
     {
+        $tablero = Material::factory()->create(['nombre' => 'Tablero Index']);
+        TablerosPorComponente::factory()->create([
+            'tablero_id' => $tablero->id,
+        ]);
+
         $response = $this->getJson('/api/v1/tableros-por-componente');
 
         $response->assertStatus(200);
@@ -26,15 +31,20 @@ class TablerosPorComponenteTest extends TestCase
                     'id',
                     'componente_id',
                     'tablero_id',
+                    'tablero_nombre',
                     'cantidad',
                 ],
             ],
         ]);
+        $response->assertJsonPath('data.0.tablero_nombre', 'Tablero Index');
     }
 
     public function test_tableros_por_componente_show(): void
     {
-        $tablerosPorComponente = TablerosPorComponente::factory()->create();
+        $tablero = Material::factory()->create(['nombre' => 'Tablero Show']);
+        $tablerosPorComponente = TablerosPorComponente::factory()->create([
+            'tablero_id' => $tablero->id,
+        ]);
 
         $response = $this->getJson("/api/v1/tableros-por-componente/{$tablerosPorComponente->id}");
 
@@ -44,9 +54,11 @@ class TablerosPorComponenteTest extends TestCase
                 'id',
                 'componente_id',
                 'tablero_id',
+                'tablero_nombre',
                 'cantidad',
             ],
         ]);
+        $response->assertJsonPath('data.tablero_nombre', 'Tablero Show');
     }
 
     public function test_tableros_por_componente_creation(): void

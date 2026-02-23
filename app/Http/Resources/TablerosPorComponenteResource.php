@@ -18,6 +18,8 @@ class TablerosPorComponenteResource extends JsonResource
             'id' => $this->id,
             'componente_id' => $this->componente_id,
             'tablero_id' => $this->tablero_id,
+            'tablero_nombre' => $this->tablero_nombre
+                ?? ($this->relationLoaded('tablero') ? $this->tablero?->nombre : null),
             'cantidad' => $this->cantidad,
             'componente' => $this->whenLoaded('componente', function () {
                 return new ComponenteResource($this->componente);
