@@ -363,7 +363,7 @@ class ComponentesPorCotizacionTest extends TestCase
         $componentePorCotizacion->load('componente');
 
         // The subtotal depends on the component's costo_total calculation
-        // which includes materials and herrajes
+        // which includes material costs
         $this->assertIsNumeric($componentePorCotizacion->subtotal);
         $this->assertGreaterThanOrEqual(0, $componentePorCotizacion->subtotal);
     }

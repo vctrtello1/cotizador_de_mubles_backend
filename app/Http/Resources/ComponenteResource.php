@@ -32,18 +32,6 @@ class ComponenteResource extends JsonResource
                     ];
                 });
             }),
-            'herrajes' => $this->whenLoaded('herrajes', function () {
-                return $this->herrajes->map(function ($herraje) {
-                    return [
-                        'id' => $herraje->id,
-                        'nombre' => $herraje->nombre,
-                        'codigo' => $herraje->codigo,
-                        'precio_unitario' => $herraje->costo_unitario,
-                        'unidad_medida' => $herraje->unidad_medida,
-                        'cantidad' => $herraje->pivot->cantidad,
-                    ];
-                });
-            }),
             'cantidad' => $this->whenPivotLoaded('cantidad_por_componente', function () {
                 return $this->pivot->cantidad;
             }),

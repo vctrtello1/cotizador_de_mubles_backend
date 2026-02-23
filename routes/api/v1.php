@@ -3,7 +3,6 @@
 use App\Http\Controllers\AcabadoCubreCantoController;
 use App\Http\Controllers\AcabadoTableroController;
 use App\Http\Controllers\AccesoriosPorComponenteController;
-use App\Http\Controllers\CantidadPorHerrajeController;
 use App\Http\Controllers\CantidadPorMaterialController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\CompasAbatibleController;
@@ -13,11 +12,11 @@ use App\Http\Controllers\CorrederaController;
 use App\Http\Controllers\CotizacionController;
 use App\Http\Controllers\EstructuraController;
 use App\Http\Controllers\GolaController;
-use App\Http\Controllers\HerrajeController;
 use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\MaterialesPorComponenteController;
 use App\Http\Controllers\ModulosController;
 use App\Http\Controllers\PuertaController;
+use App\Http\Controllers\CantidadPorComponenteController;
 use Illuminate\Support\Facades\Route;
 
 Route::apiResource('materiales', MaterialController::class)
@@ -26,7 +25,6 @@ Route::apiResource('materiales', MaterialController::class)
 Route::get('clientes/{cliente}/cotizaciones', [ClienteController::class, 'cotizaciones']);
 
 Route::apiResources([
-    'herrajes'              => HerrajeController::class,
     'acabado-tableros'      => AcabadoTableroController::class,
     'acabado-cubre-cantos'  => AcabadoCubreCantoController::class,
     'estructuras'           => EstructuraController::class,
@@ -63,11 +61,6 @@ Route::get('componentes-por-cotizacion/cotizacion/{cotizacion}', [ComponentesPor
 
 Route::apiResource('cantidad-por-materiales', CantidadPorMaterialController::class)
     ->parameters(['cantidad-por-materiales' => 'cantidadPorMaterial']);
-
-Route::apiResource('cantidad-por-herrajes', CantidadPorHerrajeController::class)
-    ->parameters(['cantidad-por-herrajes' => 'cantidadPorHerraje']);
-
-use App\Http\Controllers\CantidadPorComponenteController;
 
 Route::apiResource('cantidad-por-componentes', CantidadPorComponenteController::class)
     ->parameters(['cantidad-por-componentes' => 'cantidadPorComponente']);

@@ -41,8 +41,6 @@ Base URL local: `http://localhost:8000/api/v1`
 
 - `GET|POST /materiales`
 - `GET|PUT|DELETE /materiales/{material}`
-- `GET|POST /herrajes`
-- `GET|PUT|DELETE /herrajes/{herraje}`
 - `GET|POST /acabado-tableros`
 - `GET|PUT|DELETE /acabado-tableros/{acabado_tablero}`
 - `GET|POST /acabado-cubre-cantos`
@@ -75,8 +73,6 @@ Base URL local: `http://localhost:8000/api/v1`
 - `GET /componentes-por-cotizacion/cotizacion/{cotizacion}`
 - `GET|POST /cantidad-por-materiales`
 - `GET|PUT|DELETE /cantidad-por-materiales/{cantidadPorMaterial}`
-- `GET|POST /cantidad-por-herrajes`
-- `GET|PUT|DELETE /cantidad-por-herrajes/{cantidadPorHerraje}`
 - `GET|POST /cantidad-por-componentes`
 - `GET|PUT|DELETE /cantidad-por-componentes/{cantidadPorComponente}`
 - `GET|POST /accesorios-por-componente`

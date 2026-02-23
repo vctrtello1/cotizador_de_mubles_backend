@@ -24,7 +24,6 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             MaterialSeeder::class,
-            HerrajeSeeder::class,
             ComponenteSeeder::class,
             ModuloSeeder::class,
             EstructuraSeeder::class,
@@ -34,7 +33,6 @@ class DatabaseSeeder extends Seeder
             CorrederaSeeder::class,
             CompasAbatibleSeeder::class,
             PuertaSeeder::class,
-            CantidadPorHerrajeSeeder::class,
             CantidadPorComponenteSeeder::class,
             AccesorioPorComponenteSeeder::class,
             MaterialesPorComponenteSeeder::class,

@@ -176,7 +176,6 @@ class ClienteTest extends TestCase
         // First, create a componente to update
         $componente = \App\Models\Componente::factory()->create();
         $material = \App\Models\Material::factory()->create();
-        $herraje = \App\Models\Herraje::factory()->create();        
         $updateData = [
             'nombre' => 'Componente Actualizado',
             'descripcion' => 'Descripcion actualizada',
@@ -184,9 +183,6 @@ class ClienteTest extends TestCase
             'accesorios' => 'Accesorio3, Accesorio4',
             'materiales' => [
                 ['id' => $material->id, 'cantidad' => 10]
-            ],
-            'herrajes' => [
-                ['id' => $herraje->id, 'cantidad' => 4]
             ]
         ];
         $response = $this->putJson("/api/v1/componentes/{$componente->id}", $updateData);
@@ -201,7 +197,6 @@ class ClienteTest extends TestCase
         $response->assertJsonFragment(['accesorio' => 'Accesorio4']);   
 
         $response->assertJsonFragment(['id' => $material->id, 'cantidad' => 10]);
-        $response->assertJsonFragment(['id' => $herraje->id, 'cantidad' => 4]); 
 
         $this->assertDatabaseHas('componentes', [
             'id' => $componente->id,
@@ -214,11 +209,6 @@ class ClienteTest extends TestCase
             'material_id' => $material->id,
             'cantidad' => 10
         ]);
-        $this->assertDatabaseHas('cantidad_por_herraje', [
-            'componente_id' => $componente->id,
-            'herraje_id' => $herraje->id,
-            'cantidad' => 4
-        ]);
     }
 
     public function test_componente_update_alternative(): void
@@ -226,7 +216,6 @@ class ClienteTest extends TestCase
         // First, create a componente to update
         $componente = \App\Models\Componente::factory()->create();
         $material = \App\Models\Material::factory()->create();
-        $herraje = \App\Models\Herraje::factory()->create();
 
         $updateData = [
             'nombre' => 'Componente Actualizado',
@@ -235,9 +224,6 @@ class ClienteTest extends TestCase
             'accesorios' => 'Accesorio3, Accesorio4',
             'materiales' => [
                 ['id' => $material->id, 'cantidad' => 10]
-            ],
-            'herrajes' => [
-                ['id' => $herraje->id, 'cantidad' => 4]
             ]
         ];
 
@@ -253,7 +239,6 @@ class ClienteTest extends TestCase
         $response->assertJsonFragment(['accesorio' => 'Accesorio4']);
         
         $response->assertJsonFragment(['id' => $material->id, 'cantidad' => 10]);
-        $response->assertJsonFragment(['id' => $herraje->id, 'cantidad' => 4]);
 
         $this->assertDatabaseHas('componentes', [
             'id' => $componente->id,
@@ -265,11 +250,6 @@ class ClienteTest extends TestCase
             'componente_id' => $componente->id,
             'material_id' => $material->id,
             'cantidad' => 10
-        ]);
-        $this->assertDatabaseHas('cantidad_por_herraje', [
-            'componente_id' => $componente->id,
-            'herraje_id' => $herraje->id,
-            'cantidad' => 4
         ]);
     }
 
@@ -290,7 +270,7 @@ class ClienteTest extends TestCase
         $response->assertJsonValidationErrors(['nombre', 'codigo']);
     }
 
-    public function test_componente_update_no_materials_herrajes(): void
+    public function test_componente_update_no_materiales(): void
     {
         // First, create a componente to update
         $componente = \App\Models\Componente::factory()->create();
@@ -300,7 +280,7 @@ class ClienteTest extends TestCase
             'descripcion' => 'Descripcion actualizada',
             'codigo' => 'CMP-54321',
             'accesorios' => 'Accesorio3, Accesorio4',
-            // No materiales or herrajes provided
+            // No materiales provided
         ];
 
         $response = $this->putJson("/api/v1/componentes/{$componente->id}", $updateData);
@@ -321,7 +301,7 @@ class ClienteTest extends TestCase
         ]);
     }
 
-    public function test_componente_update_empty_materials_herrajes(): void
+    public function test_componente_update_empty_materiales(): void
     {
         // First, create a componente to update
         $componente = \App\Models\Componente::factory()->create();
@@ -332,7 +312,6 @@ class ClienteTest extends TestCase
             'codigo' => 'CMP-54321',
             'accesorios' => 'Accesorio3, Accesorio4',
             'materiales' => [], // Empty materiales
-            'herrajes' => [],   // Empty herrajes
         ];
 
         $response = $this->putJson("/api/v1/componentes/{$componente->id}", $updateData);
@@ -363,7 +342,6 @@ class ClienteTest extends TestCase
             'descripcion' => 'Descripcion actualizada',
             'codigo' => 'CMP-54321',
             'materiales' => [],
-            'herrajes' => [],
             // No accesorios provided
         ];
 
@@ -394,7 +372,6 @@ class ClienteTest extends TestCase
             'codigo' => 'CMP-54321',
             'accesorios' => '', // Empty accesorios
             'materiales' => [],
-            'herrajes' => [],
         ];
 
         $response = $this->putJson("/api/v1/componentes/{$componente->id}", $updateData);

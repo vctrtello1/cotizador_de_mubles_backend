@@ -30,8 +30,6 @@ class UpdateComponenteRequest extends FormRequest
             'materiales' => 'nullable|array',
             'materiales.*.id' => 'required|exists:materiales,id',
             'materiales.*.cantidad' => 'required|integer|min:1',
-            'herrajes' => 'nullable|array',
-            'herrajes.*.id' => 'required|exists:herrajes,id',
-            'herrajes.*.cantidad' => 'required|integer|min:1',        ];
+        ];
     }
 }

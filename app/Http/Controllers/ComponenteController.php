@@ -13,7 +13,7 @@ class ComponenteController extends Controller
      */
     public function index()
     {
-        return Componente::with(['accesorios_por_componente', 'materiales', 'herrajes'])->get()->toResourceCollection();
+        return Componente::with(['accesorios_por_componente', 'materiales'])->get()->toResourceCollection();
     }
 
     /**
@@ -23,7 +23,7 @@ class ComponenteController extends Controller
     {
         $componente = Componente::create($request->validated());
         $this->syncRelations($componente, $request);
-        return $componente->load(['accesorios_por_componente', 'materiales', 'herrajes'])->toResource();
+        return $componente->load(['accesorios_por_componente', 'materiales'])->toResource();
     }
 
     /**
@@ -31,7 +31,7 @@ class ComponenteController extends Controller
      */
     public function show(Componente $componente)
     {
-        return $componente->load(['accesorios_por_componente', 'materiales', 'herrajes'])->toResource();
+        return $componente->load(['accesorios_por_componente', 'materiales'])->toResource();
     }
 
     /**
@@ -46,7 +46,7 @@ class ComponenteController extends Controller
         }
         
         $this->syncRelations($componente, $request);
-        return $componente->load(['accesorios_por_componente', 'materiales', 'herrajes'])->toResource();
+        return $componente->load(['accesorios_por_componente', 'materiales'])->toResource();
     }
 
     /**
@@ -56,14 +56,13 @@ class ComponenteController extends Controller
     {
         $componente->accesorios_por_componente()->delete();
         $componente->materiales()->detach();
-        $componente->herrajes()->detach();
         $componente->delete();
         
         return response()->noContent();
     }
 
     /**
-     * Sync component relations (accesorios, materiales, herrajes)
+    * Sync component relations (accesorios, materiales)
      */
     private function syncRelations(Componente $componente, $request): void
     {
@@ -81,13 +80,6 @@ class ComponenteController extends Controller
                 return [$material['id'] => ['cantidad' => $material['cantidad']]];
             })->toArray();
             $componente->materiales()->sync($materiales);
-        }
-
-        if ($request->has('herrajes')) {
-            $herrajes = collect($request->herrajes)->mapWithKeys(function ($herraje) {
-                return [$herraje['id'] => ['cantidad' => $herraje['cantidad']]];
-            })->toArray();
-            $componente->herrajes()->sync($herrajes);
         }
     }
 }

@@ -29,23 +29,12 @@ class Componente extends Model
                     ->withTimestamps();
     }
 
-    public function herrajes()
-    {
-        return $this->belongsToMany(Herraje::class, 'cantidad_por_herraje')
-                    ->withPivot('cantidad')
-                    ->withTimestamps();
-    }
-
     public function getCostoTotalAttribute()
     {
         $costoMateriales = $this->materiales->sum(function ($material) {
             return $material->precio_unitario * $material->pivot->cantidad;
         });
 
-        $costoHerrajes = $this->herrajes->sum(function ($herraje) {
-            return $herraje->costo_unitario * $herraje->pivot->cantidad;
-        });
-
-        return $costoMateriales + $costoHerrajes;
+        return $costoMateriales;
     }
 }
