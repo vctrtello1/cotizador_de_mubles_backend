@@ -35,6 +35,7 @@ class DatabaseSeeder extends Seeder
             CantidadPorComponenteSeeder::class,
             AccesorioPorComponenteSeeder::class,
             EstructuraPorComponenteSeeder::class,
+            AcabadoTableroPorComponenteSeeder::class,
             AcabadoCubreCantoPorComponenteSeeder::class,
             
             CotizacionSeeder::class,
