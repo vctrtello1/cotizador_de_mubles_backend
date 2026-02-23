@@ -20,27 +20,6 @@ return new class extends Migration
 
             $table->foreign('componente_id')->references('id')->on('componentes')->onDelete('cascade');
         });
-
-        db::table('accesorios_por_componente')->insert([
-            [
-                'componente_id' => 1,
-                'accesorio' => 'Mantel antideslizante',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'componente_id' => 2,
-                'accesorio' => 'Protector de esquinas',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'componente_id' => 3,
-                'accesorio' => 'Soportes ajustables',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-        ]);
     }
 
     /**

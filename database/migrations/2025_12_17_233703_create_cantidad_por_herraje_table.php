@@ -18,32 +18,6 @@ return new class extends Migration
             $table->integer('cantidad');
             $table->timestamps();
         });
-
-        DB::table('cantidad_por_herraje')->insert([
-            // Silla Lucianica
-            [
-                'herraje_id' => 1,
-                'cantidad' => 4,
-                'componente_id' => 1,
-            ],
-            [
-                'herraje_id' => 2,
-                'cantidad' => 8,
-                'componente_id' => 1,
-            ],
-
-            // Mesa Lucianica
-            [
-                'herraje_id' => 3,
-                'cantidad' => 6,
-                'componente_id' => 2,
-            ],
-            [
-                'herraje_id' => 4,
-                'cantidad' => 12,
-                'componente_id' => 2,
-            ],
-        ]);
     }
 
     /**

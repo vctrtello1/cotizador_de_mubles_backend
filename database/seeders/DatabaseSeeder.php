@@ -23,9 +23,21 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->call([
+            MaterialSeeder::class,
+            HerrajeSeeder::class,
+            ComponenteSeeder::class,
+            ModuloSeeder::class,
+            EstructuraSeeder::class,
+            AcabadoTableroSeeder::class,
+            AcabadoCubreCantoSeeder::class,
+            GolaSeeder::class,
             CorrederaSeeder::class,
             CompasAbatibleSeeder::class,
             PuertaSeeder::class,
+            CantidadPorHerrajeSeeder::class,
+            CantidadPorComponenteSeeder::class,
+            AccesorioPorComponenteSeeder::class,
+            MaterialesPorComponenteSeeder::class,
             CotizacionSeeder::class,
         ]);
     }

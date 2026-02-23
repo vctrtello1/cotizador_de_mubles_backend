@@ -8,6 +8,18 @@ use Tests\TestCase;
 class CotizacionTest extends TestCase
 {
     use RefreshDatabase;
+
+    private int $clienteId;
+    private int $otroClienteId;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->clienteId = \App\Models\Cliente::factory()->create()->id;
+        $this->otroClienteId = \App\Models\Cliente::factory()->create()->id;
+    }
+
     /**
      * A basic feature test example.
      */
@@ -79,7 +91,7 @@ class CotizacionTest extends TestCase
     public function test_cotizacion_store(): void
     {
         $cotizacionData = [
-            'cliente_id' => 1,
+            'cliente_id' => $this->clienteId,
             'fecha' => '2024-01-01',
             'total' => 1000.00,
         ];
@@ -94,7 +106,7 @@ class CotizacionTest extends TestCase
     public function test_cotizacion_store_with_detalles(): void
     {
         $cotizacionData = [
-            'cliente_id' => 1,
+            'cliente_id' => $this->clienteId,
             'fecha' => '2024-01-01',
             'total' => 1300.00,
             'detalles' => [
@@ -115,7 +127,7 @@ class CotizacionTest extends TestCase
 
         $response->assertStatus(201);
         $response->assertJsonFragment([
-            'cliente_id' => 1,
+            'cliente_id' => $this->clienteId,
             'fecha' => '2024-01-01',
             'total' => 1300.00,
         ]);
@@ -128,7 +140,7 @@ class CotizacionTest extends TestCase
         $cotizacion = \App\Models\Cotizacion::factory()->create();
 
         $updateData = [
-            'cliente_id' => 2,
+            'cliente_id' => $this->otroClienteId,
             'fecha' => '2024-02-01',
             'total' => 2000.00,
         ];
@@ -210,7 +222,7 @@ class CotizacionTest extends TestCase
     public function test_cotizacion_update_not_found(): void
     {
         $updateData = [
-            'cliente_id' => 2,
+            'cliente_id' => $this->otroClienteId,
             'fecha' => '2024-02-01',
             'total' => 2000.00,
         ];
@@ -223,7 +235,7 @@ class CotizacionTest extends TestCase
     public function test_cotizacion_empty_detalles(): void
     {
         $cotizacionData = [
-            'cliente_id' => 1,
+            'cliente_id' => $this->clienteId,
             'fecha' => '2024-01-01',
             'total' => 0.00,
             'detalles' => [],
@@ -233,7 +245,7 @@ class CotizacionTest extends TestCase
 
         $response->assertStatus(201);
         $response->assertJsonFragment([
-            'cliente_id' => 1,
+            'cliente_id' => $this->clienteId,
             'fecha' => '2024-01-01',
             'total' => 0.00,
         ]);
@@ -251,7 +263,7 @@ class CotizacionTest extends TestCase
         }
 
         $cotizacionData = [
-            'cliente_id' => 1,
+            'cliente_id' => $this->clienteId,
             'fecha' => '2024-01-01',
             'total' => 1000.00,
             'detalles' => $detalles,
@@ -266,7 +278,7 @@ class CotizacionTest extends TestCase
     public function test_cotizacion_date_format(): void
     {
         $cotizacionData = [
-            'cliente_id' => 1,
+            'cliente_id' => $this->clienteId,
             'fecha' => '2024-12-31', // Valid date format
             'total' => 500.00,
         ];
@@ -282,7 +294,7 @@ class CotizacionTest extends TestCase
     public function test_cotizacion_create_with_estado_activa(): void
     {
         $cotizacionData = [
-            'cliente_id' => 1,
+            'cliente_id' => $this->clienteId,
             'fecha' => '2024-01-01',
             'total' => 1000.00,
             'estado' => 'activa',
@@ -299,7 +311,7 @@ class CotizacionTest extends TestCase
     public function test_cotizacion_create_with_estado_cancelada(): void
     {
         $cotizacionData = [
-            'cliente_id' => 1,
+            'cliente_id' => $this->clienteId,
             'fecha' => '2024-01-01',
             'total' => 1000.00,
             'estado' => 'cancelada',
@@ -316,7 +328,7 @@ class CotizacionTest extends TestCase
     public function test_cotizacion_create_with_estado_completada(): void
     {
         $cotizacionData = [
-            'cliente_id' => 1,
+            'cliente_id' => $this->clienteId,
             'fecha' => '2024-01-01',
             'total' => 1000.00,
             'estado' => 'completada',
@@ -333,7 +345,7 @@ class CotizacionTest extends TestCase
     public function test_cotizacion_create_default_estado_activa(): void
     {
         $cotizacionData = [
-            'cliente_id' => 1,
+            'cliente_id' => $this->clienteId,
             'fecha' => '2024-01-01',
             'total' => 1000.00,
         ];
@@ -365,7 +377,7 @@ class CotizacionTest extends TestCase
     public function test_cotizacion_invalid_estado(): void
     {
         $cotizacionData = [
-            'cliente_id' => 1,
+            'cliente_id' => $this->clienteId,
             'fecha' => '2024-01-01',
             'total' => 1000.00,
             'estado' => 'invalido',

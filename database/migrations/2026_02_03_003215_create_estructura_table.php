@@ -17,21 +17,6 @@ return new class extends Migration
             $table->decimal('costo_unitario', 10, 2);
             $table->timestamps();
         });
-
-        DB::table('estructura')->insert([
-            [
-                'nombre' => 'BCO FROSTY',
-                'costo_unitario' => 800.00,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'nombre' => 'ARAURCO LINO CAIRO',
-                'costo_unitario' => 1200.00,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]
-        ]);
     }
 
     /**

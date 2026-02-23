@@ -18,44 +18,6 @@ return new class extends Migration
             $table->decimal('total', 10, 2);
             $table->timestamps();
         });
-
-        DB::table('cotizaciones')->insert([
-            [
-                'cliente_id' => 1,
-                'fecha' => '2025-12-19',
-                'total' => 1500.00,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'cliente_id' => 2,
-                'fecha' => '2025-12-18',
-                'total' => 2500.00,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-
-            [
-                'cliente_id' => 3,
-                'fecha' => '2025-12-17',
-                'total' => 3500.00,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-
-            [
-                'cliente_id' => 1,
-                'fecha' => '2025-12-16',
-                'total' => 4500.00,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],            [
-                'cliente_id' => 3,
-                'fecha' => '2025-12-20',
-                'total' => 3000.00,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],        ]);
     }
 
     /**

@@ -31,7 +31,7 @@ class GolaTest extends TestCase
                 ],
             ],
         ]);
-        $response->assertJsonCount(6, 'data'); // 3 from seed + 3 created
+        $response->assertJsonCount(3, 'data');
     }
 
     /**
@@ -302,6 +302,8 @@ class GolaTest extends TestCase
      */
     public function test_gola_seed_data_exists(): void
     {
+        $this->seed(\Database\Seeders\GolaSeeder::class);
+
         // Verify seed data in database
         $this->assertDatabaseHas('table_gola', [
             'nombre' => 'SUPERIOR',
@@ -324,6 +326,8 @@ class GolaTest extends TestCase
      */
     public function test_gola_index_includes_seed_data(): void
     {
+        $this->seed(\Database\Seeders\GolaSeeder::class);
+
         $response = $this->getJson('/api/v1/golas');
 
         $response->assertStatus(200);

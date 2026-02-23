@@ -22,47 +22,6 @@ return new class extends Migration
             $table->foreign('modulo_id')->references('id')->on('modulos')->onDelete('cascade');
             $table->foreign('componente_id')->references('id')->on('componentes')->onDelete('cascade');
         });
-
-        DB::table('cantidad_por_componente')->insert([
-            [
-                'modulo_id' => 1,
-                'componente_id' => 1,
-                'cantidad' => 4,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'modulo_id' => 1,
-                'componente_id' => 2,
-                'cantidad' => 1,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'modulo_id' => 1,
-                'componente_id' => 3,
-                'cantidad' => 1,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-
-
-            // centro de entretenimiento purru
-            [
-                'modulo_id' => 2,
-                'componente_id' => 4,
-                'cantidad' => 4,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'modulo_id' => 2,
-                'componente_id' => 1,
-                'cantidad' => 2,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-        ]);
     }
 
     /**
