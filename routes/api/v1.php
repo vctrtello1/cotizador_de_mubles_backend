@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AcabadoCubreCantoController;
+use App\Http\Controllers\AcabadoCubreCantoPorComponenteController;
 use App\Http\Controllers\AcabadoTableroController;
 use App\Http\Controllers\AccesoriosPorComponenteController;
 use App\Http\Controllers\CantidadPorMaterialController;
@@ -78,3 +79,6 @@ Route::apiResource('tableros-por-componente', TablerosPorComponenteController::c
 
 Route::apiResource('estructura-por-componente', EstructuraPorComponenteController::class)
     ->parameters(['estructura-por-componente' => 'estructuraPorComponente']);
+
+Route::apiResource('acabado-cubre-canto-por-componente', AcabadoCubreCantoPorComponenteController::class)
+    ->parameters(['acabado-cubre-canto-por-componente' => 'acabadoCubreCantoPorComponente']);
