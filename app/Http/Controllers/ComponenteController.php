@@ -13,7 +13,7 @@ class ComponenteController extends Controller
      */
     public function index()
     {
-        return Componente::with(['accesorios_por_componente', 'materiales'])->get()->toResourceCollection();
+        return Componente::with(['accesorios_por_componente'])->get()->toResourceCollection();
     }
 
     /**
@@ -23,7 +23,7 @@ class ComponenteController extends Controller
     {
         $componente = Componente::create($request->validated());
         $this->syncRelations($componente, $request);
-        return $componente->load(['accesorios_por_componente', 'materiales'])->toResource();
+        return $componente->load(['accesorios_por_componente'])->toResource();
     }
 
     /**
@@ -31,7 +31,7 @@ class ComponenteController extends Controller
      */
     public function show(Componente $componente)
     {
-        return $componente->load(['accesorios_por_componente', 'materiales'])->toResource();
+        return $componente->load(['accesorios_por_componente'])->toResource();
     }
 
     /**
@@ -46,7 +46,7 @@ class ComponenteController extends Controller
         }
         
         $this->syncRelations($componente, $request);
-        return $componente->load(['accesorios_por_componente', 'materiales'])->toResource();
+        return $componente->load(['accesorios_por_componente'])->toResource();
     }
 
     /**
@@ -55,14 +55,13 @@ class ComponenteController extends Controller
     public function destroy(Componente $componente)
     {
         $componente->accesorios_por_componente()->delete();
-        $componente->materiales()->detach();
         $componente->delete();
         
         return response()->noContent();
     }
 
     /**
-    * Sync component relations (accesorios, materiales)
+    * Sync component relations (accesorios)
      */
     private function syncRelations(Componente $componente, $request): void
     {
@@ -73,13 +72,6 @@ class ComponenteController extends Controller
                     'accesorio' => trim($accesorio),
                 ]);
             }
-        }
-
-        if ($request->has('materiales')) {
-            $materiales = collect($request->materiales)->mapWithKeys(function ($material) {
-                return [$material['id'] => ['cantidad' => $material['cantidad']]];
-            })->toArray();
-            $componente->materiales()->sync($materiales);
         }
     }
 }

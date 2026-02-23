@@ -39,8 +39,6 @@ Base URL local: `http://localhost:8000/api/v1`
 
 ## Endpoints principales
 
-- `GET|POST /materiales`
-- `GET|PUT|DELETE /materiales/{material}`
 - `GET|POST /acabado-tableros`
 - `GET|PUT|DELETE /acabado-tableros/{acabado_tablero}`
 - `GET|POST /acabado-cubre-cantos`
@@ -71,63 +69,14 @@ Base URL local: `http://localhost:8000/api/v1`
 - `PUT|DELETE /componentes-por-cotizacion/{componentesPorCotizacion}`
 - `GET /componentes-por-cotizacion/{cotizacion}`
 - `GET /componentes-por-cotizacion/cotizacion/{cotizacion}`
-- `GET|POST /cantidad-por-materiales`
-- `GET|PUT|DELETE /cantidad-por-materiales/{cantidadPorMaterial}`
 - `GET|POST /cantidad-por-componentes`
 - `GET|PUT|DELETE /cantidad-por-componentes/{cantidadPorComponente}`
 - `GET|POST /accesorios-por-componente`
 - `GET|PUT|DELETE /accesorios-por-componente/{accesoriosPorComponente}`
-- `GET|POST /materiales-por-componente`
-- `GET|PUT|DELETE /materiales-por-componente/{materialesPorComponente}`
 - `GET|POST /estructura-por-componente`
 - `GET|PUT|DELETE /estructura-por-componente/{estructuraPorComponente}`
 - `GET|POST /acabado-cubre-canto-por-componente`
 - `GET|PUT|DELETE /acabado-cubre-canto-por-componente/{acabadoCubreCantoPorComponente}`
-
-### Tableros por componente
-- `GET|POST /tableros-por-componente`
-- `GET|PUT|DELETE /tableros-por-componente/{tablerosPorComponente}`
-
-Soporta `include` opcional para detalle de relaciones:
-
-- `GET /tableros-por-componente` → respuesta ligera (sin `componente` ni `tablero`).
-- `GET /tableros-por-componente?include=componente` → incluye solo detalle de `componente`.
-- `GET /tableros-por-componente?include=tablero` → incluye solo detalle de `tablero`.
-- `GET /tableros-por-componente?include=componente,tablero` → incluye ambos detalles.
-- `GET /tableros-por-componente/{tablerosPorComponente}` → respuesta ligera por defecto.
-- `GET /tableros-por-componente/{tablerosPorComponente}?include=componente,tablero` → detalle completo en `show`.
-
-Ejemplos `curl`:
-
-```bash
-# Index ligero
-curl -X GET "http://localhost:8000/api/v1/tableros-por-componente"
-
-# Index con detalle completo
-curl -X GET "http://localhost:8000/api/v1/tableros-por-componente?include=componente,tablero"
-
-# Show ligero
-curl -X GET "http://localhost:8000/api/v1/tableros-por-componente/1"
-
-# Show con detalle completo
-curl -X GET "http://localhost:8000/api/v1/tableros-por-componente/1?include=componente,tablero"
-
-# Crear registro
-curl -X POST "http://localhost:8000/api/v1/tableros-por-componente" \
-	-H "Content-Type: application/json" \
-	-d '{
-		"componente_id": 1,
-		"tablero_id": 2,
-		"cantidad": 3
-	}'
-
-# Actualizar cantidad
-curl -X PUT "http://localhost:8000/api/v1/tableros-por-componente/1" \
-	-H "Content-Type: application/json" \
-	-d '{
-		"cantidad": 5
-	}'
-```
 
 ## Testing
 
@@ -140,5 +89,5 @@ php artisan test
 Ejecutar un archivo puntual:
 
 ```bash
-php artisan test tests/Feature/MaterialesTest.php
+php artisan test tests/Feature/ComponenteTest.php
 ```

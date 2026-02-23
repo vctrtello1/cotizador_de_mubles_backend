@@ -27,9 +27,6 @@ class UpdateComponenteRequest extends FormRequest
             'descripcion' => 'nullable|string',
             'codigo' => 'required|string|max:255|unique:componentes,codigo,' . $this->route('componente')->id,
             'accesorios' => 'nullable|string',
-            'materiales' => 'nullable|array',
-            'materiales.*.id' => 'required|exists:materiales,id',
-            'materiales.*.cantidad' => 'required|integer|min:1',
         ];
     }
 }

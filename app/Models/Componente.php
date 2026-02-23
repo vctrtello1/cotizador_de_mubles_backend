@@ -22,19 +22,8 @@ class Componente extends Model
         return $this->hasMany(AccesoriosPorComponente::class);
     }
 
-    public function materiales()
-    {
-        return $this->belongsToMany(Material::class, 'materiales_por_componente')
-                    ->withPivot('cantidad')
-                    ->withTimestamps();
-    }
-
     public function getCostoTotalAttribute()
     {
-        $costoMateriales = $this->materiales->sum(function ($material) {
-            return $material->precio_unitario * $material->pivot->cantidad;
-        });
-
-        return $costoMateriales;
+        return 0;
     }
 }

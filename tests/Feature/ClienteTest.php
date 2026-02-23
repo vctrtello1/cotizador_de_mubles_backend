@@ -175,15 +175,11 @@ class ClienteTest extends TestCase
     {
         // First, create a componente to update
         $componente = \App\Models\Componente::factory()->create();
-        $material = \App\Models\Material::factory()->create();
         $updateData = [
             'nombre' => 'Componente Actualizado',
             'descripcion' => 'Descripcion actualizada',
             'codigo' => 'CMP-54321',
             'accesorios' => 'Accesorio3, Accesorio4',
-            'materiales' => [
-                ['id' => $material->id, 'cantidad' => 10]
-            ]
         ];
         $response = $this->putJson("/api/v1/componentes/{$componente->id}", $updateData);
         $response->assertStatus(200);
@@ -196,35 +192,24 @@ class ClienteTest extends TestCase
         $response->assertJsonFragment(['accesorio' => 'Accesorio3']);
         $response->assertJsonFragment(['accesorio' => 'Accesorio4']);   
 
-        $response->assertJsonFragment(['id' => $material->id, 'cantidad' => 10]);
-
         $this->assertDatabaseHas('componentes', [
             'id' => $componente->id,
             'nombre' => 'Componente Actualizado',
             'codigo' => 'CMP-54321',
         ]);
 
-        $this->assertDatabaseHas('materiales_por_componente', [
-            'componente_id' => $componente->id,
-            'material_id' => $material->id,
-            'cantidad' => 10
-        ]);
     }
 
     public function test_componente_update_alternative(): void
     {
         // First, create a componente to update
         $componente = \App\Models\Componente::factory()->create();
-        $material = \App\Models\Material::factory()->create();
 
         $updateData = [
             'nombre' => 'Componente Actualizado',
             'descripcion' => 'Descripcion actualizada',
             'codigo' => 'CMP-54321',
             'accesorios' => 'Accesorio3, Accesorio4',
-            'materiales' => [
-                ['id' => $material->id, 'cantidad' => 10]
-            ]
         ];
 
         $response = $this->putJson("/api/v1/componentes/{$componente->id}", $updateData);
@@ -237,8 +222,6 @@ class ClienteTest extends TestCase
         ]);
         $response->assertJsonFragment(['accesorio' => 'Accesorio3']);
         $response->assertJsonFragment(['accesorio' => 'Accesorio4']);
-        
-        $response->assertJsonFragment(['id' => $material->id, 'cantidad' => 10]);
 
         $this->assertDatabaseHas('componentes', [
             'id' => $componente->id,
@@ -246,11 +229,6 @@ class ClienteTest extends TestCase
             'codigo' => 'CMP-54321',
         ]);
         
-        $this->assertDatabaseHas('materiales_por_componente', [
-            'componente_id' => $componente->id,
-            'material_id' => $material->id,
-            'cantidad' => 10
-        ]);
     }
 
     public function test_componente_update_validation(): void
@@ -270,7 +248,7 @@ class ClienteTest extends TestCase
         $response->assertJsonValidationErrors(['nombre', 'codigo']);
     }
 
-    public function test_componente_update_no_materiales(): void
+    public function test_componente_update_without_optional_lists(): void
     {
         // First, create a componente to update
         $componente = \App\Models\Componente::factory()->create();
@@ -280,7 +258,6 @@ class ClienteTest extends TestCase
             'descripcion' => 'Descripcion actualizada',
             'codigo' => 'CMP-54321',
             'accesorios' => 'Accesorio3, Accesorio4',
-            // No materiales provided
         ];
 
         $response = $this->putJson("/api/v1/componentes/{$componente->id}", $updateData);
@@ -301,7 +278,7 @@ class ClienteTest extends TestCase
         ]);
     }
 
-    public function test_componente_update_empty_materiales(): void
+    public function test_componente_update_without_accesorios(): void
     {
         // First, create a componente to update
         $componente = \App\Models\Componente::factory()->create();
@@ -310,8 +287,6 @@ class ClienteTest extends TestCase
             'nombre' => 'Componente Actualizado',
             'descripcion' => 'Descripcion actualizada',
             'codigo' => 'CMP-54321',
-            'accesorios' => 'Accesorio3, Accesorio4',
-            'materiales' => [], // Empty materiales
         ];
 
         $response = $this->putJson("/api/v1/componentes/{$componente->id}", $updateData);
@@ -322,9 +297,6 @@ class ClienteTest extends TestCase
             'descripcion' => 'Descripcion actualizada',
             'codigo' => 'CMP-54321',
         ]);
-        $response->assertJsonFragment(['accesorio' => 'Accesorio3']);
-        $response->assertJsonFragment(['accesorio' => 'Accesorio4']);
-
         $this->assertDatabaseHas('componentes', [
             'id' => $componente->id,
             'nombre' => 'Componente Actualizado',
@@ -341,7 +313,6 @@ class ClienteTest extends TestCase
             'nombre' => 'Componente Actualizado',
             'descripcion' => 'Descripcion actualizada',
             'codigo' => 'CMP-54321',
-            'materiales' => [],
             // No accesorios provided
         ];
 
@@ -371,7 +342,6 @@ class ClienteTest extends TestCase
             'descripcion' => 'Descripcion actualizada',
             'codigo' => 'CMP-54321',
             'accesorios' => '', // Empty accesorios
-            'materiales' => [],
         ];
 
         $response = $this->putJson("/api/v1/componentes/{$componente->id}", $updateData);

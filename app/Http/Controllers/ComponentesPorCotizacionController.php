@@ -76,9 +76,7 @@ class ComponentesPorCotizacionController extends Controller
         
         // Get direct component assignments with all necessary relationships for cost calculation
         $directComponents = ComponentesPorCotizacion::where('cotizacion_id', $cotizacion->id)
-            ->with([
-                'componente.materiales'
-            ])
+            ->with(['componente'])
             ->get();
 
         // Add direct assignments
