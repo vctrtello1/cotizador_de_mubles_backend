@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -18,7 +19,6 @@ return new class extends Migration
             $table->string('codigo')->unique();
             $table->float('precio_unitario');
             $table->string('unidad_medida');
-            $table->foreignId('tipo_de_material_id')->constrained('tipo_de_material');
             $table->float('alto');
             $table->float('ancho');
             $table->float('largo');
@@ -33,7 +33,6 @@ return new class extends Migration
                 'codigo' => 'PAT-LUC-001',
                 'precio_unitario' => 15.75,
                 'unidad_medida' => 'cm',
-                'tipo_de_material_id' => 1,
                 'alto' => 47,
                 'ancho' => 2.7,
                 'largo' => 2.7,
@@ -46,7 +45,6 @@ return new class extends Migration
                 'codigo' => 'TAB-LUC-001',
                 'precio_unitario' => 500,
                 'unidad_medida' => 'cm',
-                'tipo_de_material_id' => 1,
                 'alto' => 2.7,
                 'ancho' => 42,
                 'largo' => 42,
@@ -59,7 +57,6 @@ return new class extends Migration
                 'codigo' => 'BCK-LUC-001',
                 'precio_unitario' => 200,
                 'unidad_medida' => 'cm',
-                'tipo_de_material_id' => 1,
                 'alto' => 42,
                 'ancho' => 42,
                 'largo' => 2.7,
@@ -72,7 +69,6 @@ return new class extends Migration
                 'codigo' => 'SEA-LUC-001',
                 'precio_unitario' => 250,
                 'unidad_medida' => 'cm',
-                'tipo_de_material_id' => 5,
                 'alto' => 2.7,
                 'ancho' => 42,
                 'largo' => 42,
@@ -89,7 +85,6 @@ return new class extends Migration
                 'codigo' => 'PAT-MES-001',
                 'precio_unitario' => 25.50,
                 'unidad_medida' => 'cm',
-                'tipo_de_material_id' => 1,
                 'alto' => 75,
                 'ancho' => 5,
                 'largo' => 5,
@@ -102,7 +97,6 @@ return new class extends Migration
                 'codigo' => 'TAB-MES-001',
                 'precio_unitario' => 800,
                 'unidad_medida' => 'cm',
-                'tipo_de_material_id' => 1,
                 'alto' => 4,
                 'ancho' => 120,
                 'largo' => 80,
@@ -123,7 +117,6 @@ return new class extends Migration
                 'codigo' => 'EST-PUR-001',
                 'precio_unitario' => 1200,
                 'unidad_medida' => 'cm',
-                'tipo_de_material_id' => 2,
                 'alto' => 60,
                 'ancho' => 150,
                 'largo' => 40,
@@ -136,7 +129,6 @@ return new class extends Migration
                 'codigo' => 'PAT-PUR-001',
                 'precio_unitario' => 300,
                 'unidad_medida' => 'cm',
-                'tipo_de_material_id' => 2,
                 'alto' => 50,
                 'ancho' => 2,
                 'largo' => 2,
@@ -151,7 +143,6 @@ return new class extends Migration
                 'codigo' => 'GLA-PUR-001',
                 'precio_unitario' => 400,
                 'unidad_medida' => 'cm',
-                'tipo_de_material_id' => 3,
                 'alto' => 55,
                 'ancho' => 45,
                 'largo' => 1,
@@ -168,7 +159,6 @@ return new class extends Migration
                 'codigo' => 'SHE-PUR-001',
                 'precio_unitario' => 250,
                 'unidad_medida' => 'cm',
-                'tipo_de_material_id' => 2,
                 'alto' => 2,
                 'ancho' => 140,
                 'largo' => 35,

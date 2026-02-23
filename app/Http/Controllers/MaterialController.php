@@ -15,7 +15,7 @@ class MaterialController extends Controller
     public function index()
     {
         return MaterialResource::collection(
-            Material::with('tipo_de_material')->paginate(15)
+            Material::paginate(15)
         );
     }
 
@@ -26,7 +26,6 @@ class MaterialController extends Controller
     public function store(StoreMaterialRequest $request)
     {
         $material = Material::create($request->validated());
-        $material->load('tipo_de_material');
         return new MaterialResource($material);
     }
 
@@ -35,7 +34,6 @@ class MaterialController extends Controller
      */
     public function show(Material $material)
     {
-        $material->load('tipo_de_material');
         return new MaterialResource($material);
     }
 
@@ -45,7 +43,6 @@ class MaterialController extends Controller
     public function update(UpdateMaterialRequest $request, Material $material)
     {
         $material->update($request->validated());
-        $material->load('tipo_de_material');
         return new MaterialResource($material);
     }
 

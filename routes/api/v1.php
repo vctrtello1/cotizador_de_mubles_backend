@@ -18,14 +18,10 @@ use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\MaterialesPorComponenteController;
 use App\Http\Controllers\ModulosController;
 use App\Http\Controllers\PuertaController;
-use App\Http\Controllers\TipoDeMaterialController;
 use Illuminate\Support\Facades\Route;
 
 Route::apiResource('materiales', MaterialController::class)
     ->parameters(['materiales' => 'material']);
-
-Route::apiResource('tipo-de-materiales', TipoDeMaterialController::class)
-    ->parameters(['tipo-de-materiales' => 'tipoDeMaterial']);
 
 Route::get('clientes/{cliente}/cotizaciones', [ClienteController::class, 'cotizaciones']);
 

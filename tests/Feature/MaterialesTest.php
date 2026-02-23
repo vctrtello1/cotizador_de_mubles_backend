@@ -31,12 +31,6 @@ class MaterialesTest extends TestCase
                     'descripcion',
                     'codigo',
                     'precio_unitario',
-                    'tipo_de_material' => [
-                        'id',
-                        'nombre',
-                        'descripcion',
-                        'codigo',
-                    ],
                 ],
             ],
         ]);
@@ -57,12 +51,6 @@ class MaterialesTest extends TestCase
                 'descripcion',
                 'codigo',
                 'precio_unitario',
-                'tipo_de_material' => [
-                    'id',
-                    'nombre',
-                    'descripcion',
-                    'codigo',
-                ],
             ],
         ]);
     }
@@ -75,7 +63,6 @@ class MaterialesTest extends TestCase
             'codigo' => 'MAT-001',
             'precio_unitario' => 50.75,
             'unidad_medida' => 'cm',
-            'tipo_de_material_id' => 1,
             'alto' => 10.5,
             'ancho' => 5.0,
             'largo' => 2.0,
@@ -100,7 +87,6 @@ class MaterialesTest extends TestCase
             'codigo' => 'MAT-002',
             'precio_unitario' => 75.50,
             'unidad_medida' => 'm',
-            'tipo_de_material_id' => 1,
             'alto' => 12.0,
             'ancho' => 6.0,
             'largo' => 3.0,

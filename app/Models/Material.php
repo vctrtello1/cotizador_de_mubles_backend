@@ -18,14 +18,8 @@ class Material extends Model
         'codigo',
         'precio_unitario',
         'unidad_medida',
-        'tipo_de_material_id',
         'alto',
         'ancho',
         'largo',
     ];
-
-    public function tipo_de_material()
-    {
-        return $this->belongsTo(TipoDeMaterial::class, 'tipo_de_material_id');
-    }
 }

@@ -22,7 +22,6 @@ class MaterialFactory extends Factory
             'precio_unitario' => $this->faker->randomFloat(2, 1, 1000),
             'codigo' => $this->faker->unique()->bothify('???-#####'),
             'unidad_medida' => $this->faker->randomElement(['kg', 'm', 'cm', 'mm']),
-            'tipo_de_material_id' => $this->faker->numberBetween(1, 4),
             'alto' => $this->faker->randomFloat(2, 0.1, 10),
             'ancho' => $this->faker->randomFloat(2, 0.1, 10),
             'largo' => $this->faker->randomFloat(2, 0.1, 10),

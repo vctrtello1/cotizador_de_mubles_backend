@@ -74,7 +74,6 @@ class CantidadPorMaterialTest extends TestCase
                     'nombre',
                     'descripcion',
                     'precio_unitario',
-                    'tipo_de_material_id',
                 ],
             ],
         ]);
