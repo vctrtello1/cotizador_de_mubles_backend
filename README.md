@@ -84,6 +84,47 @@ Base URL local: `http://localhost:8000/api/v1`
 - `GET|POST /tableros-por-componente`
 - `GET|PUT|DELETE /tableros-por-componente/{tablerosPorComponente}`
 
+Soporta `include` opcional para detalle de relaciones:
+
+- `GET /tableros-por-componente` → respuesta ligera (sin `componente` ni `tablero`).
+- `GET /tableros-por-componente?include=componente` → incluye solo detalle de `componente`.
+- `GET /tableros-por-componente?include=tablero` → incluye solo detalle de `tablero`.
+- `GET /tableros-por-componente?include=componente,tablero` → incluye ambos detalles.
+- `GET /tableros-por-componente/{tablerosPorComponente}` → respuesta ligera por defecto.
+- `GET /tableros-por-componente/{tablerosPorComponente}?include=componente,tablero` → detalle completo en `show`.
+
+Ejemplos `curl`:
+
+```bash
+# Index ligero
+curl -X GET "http://localhost:8000/api/v1/tableros-por-componente"
+
+# Index con detalle completo
+curl -X GET "http://localhost:8000/api/v1/tableros-por-componente?include=componente,tablero"
+
+# Show ligero
+curl -X GET "http://localhost:8000/api/v1/tableros-por-componente/1"
+
+# Show con detalle completo
+curl -X GET "http://localhost:8000/api/v1/tableros-por-componente/1?include=componente,tablero"
+
+# Crear registro
+curl -X POST "http://localhost:8000/api/v1/tableros-por-componente" \
+	-H "Content-Type: application/json" \
+	-d '{
+		"componente_id": 1,
+		"tablero_id": 2,
+		"cantidad": 3
+	}'
+
+# Actualizar cantidad
+curl -X PUT "http://localhost:8000/api/v1/tableros-por-componente/1" \
+	-H "Content-Type: application/json" \
+	-d '{
+		"cantidad": 5
+	}'
+```
+
 ## Testing
 
 Ejecutar toda la suite:

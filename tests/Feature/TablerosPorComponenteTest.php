@@ -187,4 +187,139 @@ class TablerosPorComponenteTest extends TestCase
             'cantidad' => 2,
         ]);
     }
+
+    public function test_tableros_por_componente_show_includes_detailed_componente_and_tablero(): void
+    {
+        $componente = Componente::factory()->create([
+            'nombre' => 'Componente Demo',
+            'codigo' => 'CMP-10001',
+        ]);
+        $tablero = Material::factory()->create([
+            'nombre' => 'Tablero Demo',
+            'codigo' => 'TBL-10001',
+        ]);
+
+        $tablerosPorComponente = TablerosPorComponente::factory()->create([
+            'componente_id' => $componente->id,
+            'tablero_id' => $tablero->id,
+            'cantidad' => 7,
+        ]);
+
+        $response = $this->getJson("/api/v1/tableros-por-componente/{$tablerosPorComponente->id}?include=componente,tablero");
+
+        $response->assertStatus(200);
+        $response->assertJsonPath('data.componente.id', $componente->id);
+        $response->assertJsonPath('data.componente.nombre', 'Componente Demo');
+        $response->assertJsonPath('data.tablero.id', $tablero->id);
+        $response->assertJsonPath('data.tablero.nombre', 'Tablero Demo');
+        $response->assertJsonPath('data.tablero.codigo', 'TBL-10001');
+    }
+
+    public function test_tableros_por_componente_show_does_not_include_detailed_relations_by_default(): void
+    {
+        $tablerosPorComponente = TablerosPorComponente::factory()->create();
+
+        $response = $this->getJson("/api/v1/tableros-por-componente/{$tablerosPorComponente->id}");
+
+        $response->assertStatus(200);
+        $response->assertJsonMissingPath('data.componente');
+        $response->assertJsonMissingPath('data.tablero');
+    }
+
+    public function test_tableros_por_componente_index_allows_partial_include(): void
+    {
+        $componente = Componente::factory()->create(['nombre' => 'Componente Parcial']);
+        $tablero = Material::factory()->create(['nombre' => 'Tablero Parcial']);
+
+        TablerosPorComponente::factory()->create([
+            'componente_id' => $componente->id,
+            'tablero_id' => $tablero->id,
+        ]);
+
+        $response = $this->getJson('/api/v1/tableros-por-componente?include=componente');
+
+        $response->assertStatus(200);
+        $response->assertJsonPath('data.0.componente.id', $componente->id);
+        $response->assertJsonPath('data.0.componente.nombre', 'Componente Parcial');
+        $response->assertJsonMissingPath('data.0.tablero');
+    }
+
+    public function test_tableros_por_componente_index_ignores_invalid_include_values(): void
+    {
+        TablerosPorComponente::factory()->create();
+
+        $response = $this->getJson('/api/v1/tableros-por-componente?include=foo,bar');
+
+        $response->assertStatus(200);
+        $response->assertJsonMissingPath('data.0.componente');
+        $response->assertJsonMissingPath('data.0.tablero');
+    }
+
+    public function test_tableros_por_componente_store_and_update_return_detailed_relations(): void
+    {
+        $componente = Componente::factory()->create(['nombre' => 'Componente Store']);
+        $tablero = Material::factory()->create(['nombre' => 'Tablero Store']);
+
+        $storeResponse = $this->postJson('/api/v1/tableros-por-componente', [
+            'componente_id' => $componente->id,
+            'tablero_id' => $tablero->id,
+            'cantidad' => 9,
+        ]);
+
+        $storeResponse->assertStatus(201);
+        $storeResponse->assertJsonPath('data.componente.id', $componente->id);
+        $storeResponse->assertJsonPath('data.tablero.id', $tablero->id);
+
+        $rowId = $storeResponse->json('data.id');
+
+        $updateResponse = $this->putJson("/api/v1/tableros-por-componente/{$rowId}", [
+            'cantidad' => 11,
+        ]);
+
+        $updateResponse->assertStatus(200);
+        $updateResponse->assertJsonPath('data.cantidad', 11);
+        $updateResponse->assertJsonPath('data.componente.id', $componente->id);
+        $updateResponse->assertJsonPath('data.tablero.id', $tablero->id);
+    }
+
+    public function test_tableros_por_componente_index_includes_detailed_relations_when_requested(): void
+    {
+        $componente = Componente::factory()->create([
+            'nombre' => 'Componente Incluido',
+        ]);
+        $tablero = Material::factory()->create([
+            'nombre' => 'Tablero Incluido',
+        ]);
+
+        $tablerosPorComponente = TablerosPorComponente::factory()->create([
+            'componente_id' => $componente->id,
+            'tablero_id' => $tablero->id,
+            'cantidad' => 3,
+        ]);
+
+        $response = $this->getJson('/api/v1/tableros-por-componente?include=componente,tablero');
+
+        $response->assertStatus(200);
+        $response->assertJsonFragment([
+            'id' => $tablerosPorComponente->id,
+            'componente_id' => $componente->id,
+            'tablero_id' => $tablero->id,
+            'cantidad' => 3,
+        ]);
+        $response->assertJsonPath('data.0.componente.id', $componente->id);
+        $response->assertJsonPath('data.0.componente.nombre', 'Componente Incluido');
+        $response->assertJsonPath('data.0.tablero.id', $tablero->id);
+        $response->assertJsonPath('data.0.tablero.nombre', 'Tablero Incluido');
+    }
+
+    public function test_tableros_por_componente_index_does_not_include_detailed_relations_by_default(): void
+    {
+        TablerosPorComponente::factory()->create();
+
+        $response = $this->getJson('/api/v1/tableros-por-componente');
+
+        $response->assertStatus(200);
+        $response->assertJsonMissingPath('data.0.componente');
+        $response->assertJsonMissingPath('data.0.tablero');
+    }
 }

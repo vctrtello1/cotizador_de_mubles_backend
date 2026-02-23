@@ -16,6 +16,12 @@ class TablerosPorComponenteController extends Controller
     {
         $query = TablerosPorComponente::query();
 
+        $requestedIncludes = $this->requestedIncludes();
+
+        if (! empty($requestedIncludes)) {
+            $query->with($requestedIncludes);
+        }
+
         if (request()->has('componente_id')) {
             $query->where('componente_id', request('componente_id'));
         }
@@ -39,6 +45,7 @@ class TablerosPorComponenteController extends Controller
     public function store(StoreTablerosPorComponenteRequest $request)
     {
         $tablerosPorComponente = TablerosPorComponente::create($request->validated());
+        $tablerosPorComponente->load(['componente', 'tablero']);
 
         return new TablerosPorComponenteResource($tablerosPorComponente);
     }
@@ -48,6 +55,12 @@ class TablerosPorComponenteController extends Controller
      */
     public function show(TablerosPorComponente $tablerosPorComponente)
     {
+        $requestedIncludes = $this->requestedIncludes();
+
+        if (! empty($requestedIncludes)) {
+            $tablerosPorComponente->loadMissing($requestedIncludes);
+        }
+
         return new TablerosPorComponenteResource($tablerosPorComponente);
     }
 
@@ -57,6 +70,7 @@ class TablerosPorComponenteController extends Controller
     public function update(UpdateTablerosPorComponenteRequest $request, TablerosPorComponente $tablerosPorComponente)
     {
         $tablerosPorComponente->update($request->validated());
+        $tablerosPorComponente->load(['componente', 'tablero']);
 
         return new TablerosPorComponenteResource($tablerosPorComponente);
     }
@@ -69,5 +83,17 @@ class TablerosPorComponenteController extends Controller
         $tablerosPorComponente->delete();
 
         return response()->noContent();
+    }
+
+    private function requestedIncludes(): array
+    {
+        $allowedIncludes = ['componente', 'tablero'];
+
+        return collect(explode(',', (string) request('include')))
+            ->map(fn ($include) => trim($include))
+            ->filter()
+            ->intersect($allowedIncludes)
+            ->values()
+            ->all();
     }
 }
