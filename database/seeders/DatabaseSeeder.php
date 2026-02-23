@@ -23,6 +23,9 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->call([
+            CorrederaSeeder::class,
+            CompasAbatibleSeeder::class,
+            PuertaSeeder::class,
             CotizacionSeeder::class,
         ]);
     }

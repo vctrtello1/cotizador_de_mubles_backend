@@ -14,7 +14,11 @@ return new class extends Migration
         Schema::create('correderas', function (Blueprint $table) {
             $table->id();
             $table->string('nombre')->unique();
-            $table->decimal('costo_unitario', 10, 2);
+            $table->integer('capacidad_carga')->comment('Capacidad de carga en kilogramos');
+            $table->enum('tipo', ['PARCIAL', 'TOTAL', 'TOTAL_TIP_ON'])->comment('Tipo de corredera');
+            $table->boolean('incluye_varilla')->default(false)->comment('Indica si incluye varilla de sincronización');
+            $table->decimal('precio_base', 10, 2);
+            $table->decimal('precio_con_acoplamiento', 10, 2);
             $table->timestamps();
         });
     }
