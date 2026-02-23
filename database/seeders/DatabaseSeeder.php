@@ -36,6 +36,7 @@ class DatabaseSeeder extends Seeder
             CantidadPorComponenteSeeder::class,
             AccesorioPorComponenteSeeder::class,
             MaterialesPorComponenteSeeder::class,
+            TablerosPorComponenteSeeder::class,
             CotizacionSeeder::class,
         ]);
     }

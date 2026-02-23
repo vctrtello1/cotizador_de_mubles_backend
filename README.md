@@ -80,6 +80,10 @@ Base URL local: `http://localhost:8000/api/v1`
 - `GET|POST /materiales-por-componente`
 - `GET|PUT|DELETE /materiales-por-componente/{materialesPorComponente}`
 
+### Tableros por componente
+- `GET|POST /tableros-por-componente`
+- `GET|PUT|DELETE /tableros-por-componente/{tablerosPorComponente}`
+
 ## Testing
 
 Ejecutar toda la suite:
