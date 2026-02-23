@@ -3,6 +3,7 @@
 use App\Http\Controllers\AcabadoCubreCantoController;
 use App\Http\Controllers\AcabadoCubreCantoPorComponenteController;
 use App\Http\Controllers\AcabadoTableroController;
+use App\Http\Controllers\AcabadoTableroPorComponenteController;
 use App\Http\Controllers\AccesoriosPorComponenteController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\CompasAbatibleController;
@@ -66,3 +67,6 @@ Route::apiResource('estructura-por-componente', EstructuraPorComponenteControlle
 
 Route::apiResource('acabado-cubre-canto-por-componente', AcabadoCubreCantoPorComponenteController::class)
     ->parameters(['acabado-cubre-canto-por-componente' => 'acabadoCubreCantoPorComponente']);
+
+Route::apiResource('acabado-tablero-por-componente', AcabadoTableroPorComponenteController::class)
+    ->parameters(['acabado-tablero-por-componente' => 'acabadoTableroPorComponente']);
