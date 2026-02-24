@@ -14,10 +14,12 @@ class AccesorioResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $canViewDetailedPrices = ! $request->user() || $request->user()->hasPermission('catalogs.write');
+
         return [
             'id' => $this->id,
             'nombre' => $this->nombre,
-            'precio' => $this->precio,
+            'precio' => $this->when($canViewDetailedPrices, $this->precio),
         ];
     }
 }

@@ -15,12 +15,14 @@ class AccesoriosPorComponenteResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $canViewDetailedPrices = ! $request->user() || $request->user()->hasPermission('catalogs.write');
+
         return [
             'id' => $this->id,
             'componente_id' => $this->componente_id,
             'accesorio' => $this->accesorio,
             'cantidad' => $this->cantidad,
-            'costo' => $this->costoAccesorio(),
+            'costo' => $this->when($canViewDetailedPrices, $this->costoAccesorio()),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

@@ -14,6 +14,8 @@ class ComponenteResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $canViewDetailedPrices = ! $request->user() || $request->user()->hasPermission('catalogs.write');
+
         return [ 
             'id' => $this->id,
             'nombre' => $this->nombre,
@@ -24,7 +26,7 @@ class ComponenteResource extends JsonResource
             'cantidad' => $this->whenPivotLoaded('cantidad_por_componente', function () {
                 return $this->pivot->cantidad;
             }),
-            'costo_total' => $this->costo_total,
+            'costo_total' => $this->when($canViewDetailedPrices, $this->costo_total),
         ];
     }
 }

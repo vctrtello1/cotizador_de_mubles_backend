@@ -14,10 +14,12 @@ class AcabadoTableroResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $canViewDetailedPrices = ! $request->user() || $request->user()->hasPermission('catalogs.write');
+
         return [
             'id' => $this->id,
             'nombre' => $this->nombre,
-            'costo_unitario' => $this->costo_unitario,
+            'costo_unitario' => $this->when($canViewDetailedPrices, $this->costo_unitario),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
