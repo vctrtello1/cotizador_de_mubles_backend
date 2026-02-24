@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreAccesoriosPorComponenteRequest;
 use App\Http\Requests\UpdateAccesoriosPorComponenteRequest;
 use App\Http\Resources\AccesoriosPorComponenteResource;
+use App\Models\Accesorio;
 use App\Models\AccesoriosPorComponente;
 
 class AccesoriosPorComponenteController extends Controller
@@ -22,7 +23,13 @@ class AccesoriosPorComponenteController extends Controller
      */
     public function store(StoreAccesoriosPorComponenteRequest $request)
     {
-        $accesoriosPorComponente = AccesoriosPorComponente::create($request->validated());
+        $payload = $request->validated();
+        if (isset($payload['accesorio_id'])) {
+            $payload['accesorio'] = Accesorio::query()->whereKey($payload['accesorio_id'])->value('nombre');
+            unset($payload['accesorio_id']);
+        }
+
+        $accesoriosPorComponente = AccesoriosPorComponente::create($payload);
 
         return new AccesoriosPorComponenteResource($accesoriosPorComponente);
     }
@@ -40,7 +47,13 @@ class AccesoriosPorComponenteController extends Controller
      */
     public function update(UpdateAccesoriosPorComponenteRequest $request, AccesoriosPorComponente $accesoriosPorComponente)
     {
-        $accesoriosPorComponente->update($request->validated());
+        $payload = $request->validated();
+        if (isset($payload['accesorio_id'])) {
+            $payload['accesorio'] = Accesorio::query()->whereKey($payload['accesorio_id'])->value('nombre');
+            unset($payload['accesorio_id']);
+        }
+
+        $accesoriosPorComponente->update($payload);
 
         return new AccesoriosPorComponenteResource($accesoriosPorComponente);
     }

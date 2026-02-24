@@ -6,6 +6,19 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class StoreAccesoriosPorComponenteRequest extends FormRequest
 {
+    protected function prepareForValidation(): void
+    {
+        if (is_array($this->accesorio)) {
+            if (array_key_exists('id', $this->accesorio)) {
+                $this->merge(['accesorio_id' => $this->accesorio['id']]);
+            }
+
+            if (array_key_exists('nombre', $this->accesorio)) {
+                $this->merge(['accesorio' => $this->accesorio['nombre']]);
+            }
+        }
+    }
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -23,7 +36,8 @@ class StoreAccesoriosPorComponenteRequest extends FormRequest
     {
         return [
             'componente_id' => ['required', 'exists:componentes,id'],
-            'accesorio' => ['required', 'string', 'max:255'],
+            'accesorio' => ['required_without:accesorio_id', 'string', 'max:255'],
+            'accesorio_id' => ['required_without:accesorio', 'integer', 'exists:accesorios,id'],
         ];
     }
 }
