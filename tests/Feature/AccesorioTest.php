@@ -157,4 +157,19 @@ class AccesorioTest extends TestCase
             'nombre' => 'Accesorio Restringido',
         ]);
     }
+
+    public function test_desarrollador_can_create_accesorio(): void
+    {
+        Sanctum::actingAs(User::factory()->create(['rol' => 'desarrollador']));
+
+        $response = $this->postJson('/api/v1/accesorios', [
+            'nombre' => 'Accesorio Dev Permitido',
+            'precio' => 99.90,
+        ]);
+
+        $response->assertStatus(201);
+        $this->assertDatabaseHas('accesorios', [
+            'nombre' => 'Accesorio Dev Permitido',
+        ]);
+    }
 }

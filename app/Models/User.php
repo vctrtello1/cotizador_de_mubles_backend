@@ -47,4 +47,14 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function permissions(): array
+    {
+        return config('role_permissions.' . $this->rol, []);
+    }
+
+    public function hasPermission(string $permission): bool
+    {
+        return in_array($permission, $this->permissions(), true);
+    }
 }

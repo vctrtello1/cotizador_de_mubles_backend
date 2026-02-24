@@ -27,42 +27,42 @@ Route::get('clientes/{cliente}/cotizaciones', [ClienteController::class, 'cotiza
 Route::apiResource('acabado-tableros', AcabadoTableroController::class)->only(['index', 'show']);
 Route::apiResource('acabado-tableros', AcabadoTableroController::class)
     ->except(['index', 'show'])
-    ->middleware('role:admin');
+    ->middleware('permission:catalogs.write');
 
 Route::apiResource('acabado-cubre-cantos', AcabadoCubreCantoController::class)->only(['index', 'show']);
 Route::apiResource('acabado-cubre-cantos', AcabadoCubreCantoController::class)
     ->except(['index', 'show'])
-    ->middleware('role:admin');
+    ->middleware('permission:catalogs.write');
 
 Route::apiResource('accesorios', AccesorioController::class)->only(['index', 'show']);
 Route::apiResource('accesorios', AccesorioController::class)
     ->except(['index', 'show'])
-    ->middleware('role:admin');
+    ->middleware('permission:catalogs.write');
 
 Route::apiResource('estructuras', EstructuraController::class)->only(['index', 'show']);
 Route::apiResource('estructuras', EstructuraController::class)
     ->except(['index', 'show'])
-    ->middleware('role:admin');
+    ->middleware('permission:catalogs.write');
 
 Route::apiResource('golas', GolaController::class)->only(['index', 'show']);
 Route::apiResource('golas', GolaController::class)
     ->except(['index', 'show'])
-    ->middleware('role:admin');
+    ->middleware('permission:catalogs.write');
 
 Route::apiResource('componentes', ComponenteController::class)->only(['index', 'show']);
 Route::apiResource('componentes', ComponenteController::class)
     ->except(['index', 'show'])
-    ->middleware('role:admin');
+    ->middleware('permission:catalogs.write');
 
 Route::apiResource('modulos', ModulosController::class)->only(['index', 'show']);
 Route::apiResource('modulos', ModulosController::class)
     ->except(['index', 'show'])
-    ->middleware('role:admin');
+    ->middleware('permission:catalogs.write');
 
 Route::apiResource('correderas', CorrederaController::class)->only(['index', 'show']);
 Route::apiResource('correderas', CorrederaController::class)
     ->except(['index', 'show'])
-    ->middleware('role:admin');
+    ->middleware('permission:catalogs.write');
 
 Route::apiResource('compases-abatibles', CompasAbatibleController::class)
     ->only(['index', 'show'])
@@ -70,12 +70,12 @@ Route::apiResource('compases-abatibles', CompasAbatibleController::class)
 Route::apiResource('compases-abatibles', CompasAbatibleController::class)
     ->except(['index', 'show'])
     ->parameters(['compases-abatibles' => 'compasAbatible'])
-    ->middleware('role:admin');
+    ->middleware('permission:catalogs.write');
 
 Route::apiResource('puertas', PuertaController::class)->only(['index', 'show']);
 Route::apiResource('puertas', PuertaController::class)
     ->except(['index', 'show'])
-    ->middleware('role:admin');
+    ->middleware('permission:catalogs.write');
 
 Route::apiResource('clientes', ClienteController::class);
 
