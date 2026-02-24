@@ -80,6 +80,25 @@ class AuthController extends Controller
         ]);
     }
 
+    public function destroyUser(Request $request, int $userId)
+    {
+        if ($request->user()?->rol !== 'admin') {
+            return response()->json([
+                'message' => 'No tienes permisos para eliminar usuarios.',
+            ], 403);
+        }
+
+        if ((int) $request->user()->id === $userId) {
+            return response()->json([
+                'message' => 'No puedes eliminar tu propio usuario.',
+            ], 422);
+        }
+
+        User::query()->whereKey($userId)->delete();
+
+        return response()->noContent();
+    }
+
     public function logout(Request $request)
     {
         $token = $request->user()?->currentAccessToken();

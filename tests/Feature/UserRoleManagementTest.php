@@ -39,6 +39,51 @@ class UserRoleManagementTest extends TestCase
         $response->assertStatus(403);
     }
 
+    public function test_admin_can_delete_user(): void
+    {
+        $admin = User::factory()->create(['rol' => 'admin']);
+        $targetUser = User::factory()->create(['rol' => 'vendedor']);
+        Sanctum::actingAs($admin);
+
+        $response = $this->deleteJson("/api/v1/auth/users/{$targetUser->id}");
+
+        $response->assertStatus(204);
+        $this->assertDatabaseMissing('users', ['id' => $targetUser->id]);
+    }
+
+    public function test_non_admin_cannot_delete_user(): void
+    {
+        $vendedor = User::factory()->create(['rol' => 'vendedor']);
+        $targetUser = User::factory()->create(['rol' => 'desarrollador']);
+        Sanctum::actingAs($vendedor);
+
+        $response = $this->deleteJson("/api/v1/auth/users/{$targetUser->id}");
+
+        $response->assertStatus(403);
+        $this->assertDatabaseHas('users', ['id' => $targetUser->id]);
+    }
+
+    public function test_admin_cannot_delete_himself(): void
+    {
+        $admin = User::factory()->create(['rol' => 'admin']);
+        Sanctum::actingAs($admin);
+
+        $response = $this->deleteJson("/api/v1/auth/users/{$admin->id}");
+
+        $response->assertStatus(422);
+        $this->assertDatabaseHas('users', ['id' => $admin->id]);
+    }
+
+    public function test_admin_delete_is_idempotent_when_user_does_not_exist(): void
+    {
+        $admin = User::factory()->create(['rol' => 'admin']);
+        Sanctum::actingAs($admin);
+
+        $response = $this->deleteJson('/api/v1/auth/users/999999');
+
+        $response->assertStatus(204);
+    }
+
     public function test_admin_can_update_user_role(): void
     {
         $admin = User::factory()->create(['rol' => 'admin']);
