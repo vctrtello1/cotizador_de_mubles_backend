@@ -153,3 +153,189 @@ php artisan test tests/Feature/ComponenteTest.php
 	"cantidad": 3
 }
 ```
+
+## Ejemplos de respuesta (201/200)
+
+`POST /acabado-tablero-por-componente` (`201`)
+
+```json
+{
+	"data": {
+		"id": 1,
+		"componente_id": 1,
+		"componente_nombre": "Base 60",
+		"acabado_tablero_id": 1,
+		"acabado_tablero_nombre": "Melamina Blanca",
+		"cantidad": 2
+	}
+}
+```
+
+`PUT /acabado-tablero-por-componente/{acabadoTableroPorComponente}` (`200`)
+
+```json
+{
+	"data": {
+		"id": 1,
+		"componente_id": 1,
+		"componente_nombre": "Base 60",
+		"acabado_tablero_id": 1,
+		"acabado_tablero_nombre": "Melamina Blanca",
+		"cantidad": 3
+	}
+}
+```
+
+`POST /puertas-por-componente` (`201`)
+
+```json
+{
+	"data": {
+		"id": 1,
+		"componente_id": 1,
+		"componente_nombre": "Base 60",
+		"puerta_id": 1,
+		"puerta_nombre": "Puerta Cristal Standard",
+		"cantidad": 2
+	}
+}
+```
+
+`PUT /puertas-por-componente/{puertasPorComponente}` (`200`)
+
+```json
+{
+	"data": {
+		"id": 1,
+		"componente_id": 1,
+		"componente_nombre": "Base 60",
+		"puerta_id": 1,
+		"puerta_nombre": "Puerta Cristal Standard",
+		"cantidad": 3
+	}
+}
+```
+
+`POST /gola-por-componente` (`201`)
+
+```json
+{
+	"data": {
+		"id": 1,
+		"componente_id": 1,
+		"componente_nombre": "Base 60",
+		"gola_id": 1,
+		"gola_nombre": "Lateral",
+		"cantidad": 2
+	}
+}
+```
+
+`PUT /gola-por-componente/{golaPorComponente}` (`200`)
+
+```json
+{
+	"data": {
+		"id": 1,
+		"componente_id": 1,
+		"componente_nombre": "Base 60",
+		"gola_id": 1,
+		"gola_nombre": "Lateral",
+		"cantidad": 3
+	}
+}
+```
+
+## Errores comunes
+
+`422 Unprocessable Entity` (validación)
+
+Ejemplo: `POST /gola-por-componente` con payload vacío.
+
+```json
+{
+	"message": "The componente id field is required. (and 2 more errors)",
+	"errors": {
+		"componente_id": [
+			"The componente id field is required."
+		],
+		"gola_id": [
+			"The gola id field is required."
+		],
+		"cantidad": [
+			"The cantidad field is required."
+		]
+	}
+}
+```
+
+Ejemplo: combinación duplicada en `POST /puertas-por-componente`.
+
+```json
+{
+	"message": "The puerta id has already been taken.",
+	"errors": {
+		"puerta_id": [
+			"The puerta id has already been taken."
+		]
+	}
+}
+```
+
+`404 Not Found`
+
+Ejemplo: `GET /gola-por-componente/99999`.
+
+```json
+{
+	"message": "No query results for model [App\\Models\\GolaPorComponente] 99999"
+}
+```
+
+## Resumen de códigos HTTP
+
+### Patrón CRUD (aplica a la mayoría de recursos)
+
+| Operación | Método | Código esperado |
+|---|---|---|
+| Listar colección | `GET /recurso` | `200` |
+| Crear | `POST /recurso` | `201`, `422` |
+| Obtener detalle | `GET /recurso/{id}` | `200`, `404` |
+| Actualizar | `PUT /recurso/{id}` | `200`, `422`, `404` |
+| Eliminar | `DELETE /recurso/{id}` | `204`, `404` |
+
+Recursos que siguen este patrón:
+
+- `/acabado-tableros`
+- `/acabado-cubre-cantos`
+- `/estructuras`
+- `/golas`
+- `/componentes`
+- `/modulos`
+- `/clientes`
+- `/correderas`
+- `/compases-abatibles`
+- `/puertas`
+- `/cotizaciones`
+- `/cantidad-por-componentes`
+- `/accesorios-por-componente`
+- `/estructura-por-componente`
+- `/acabado-cubre-canto-por-componente`
+- `/acabado-tablero-por-componente`
+- `/puertas-por-componente`
+- `/gola-por-componente`
+
+### Endpoints especiales
+
+| Endpoint | Método | Código esperado |
+|---|---|---|
+| `/clientes/{id}/cotizaciones` | `GET` | `200`, `404` |
+| `/cotizaciones/{id}/estado` | `PUT` | `200`, `422`, `404` |
+| `/cotizaciones/{id}/componentes` | `GET` | `200`, `404` |
+| `/cotizaciones/{id}/sync-componentes` | `POST` | `200`, `422`, `404` |
+| `/componentes-por-cotizacion` | `GET` | `200` |
+| `/componentes-por-cotizacion` | `POST` | `201`, `422` |
+| `/componentes-por-cotizacion/{id}` | `PUT` | `200`, `422`, `404` |
+| `/componentes-por-cotizacion/{id}` | `DELETE` | `204`, `404` |
+| `/componentes-por-cotizacion/{cotizacion}` | `GET` | `200`, `404` |
+| `/componentes-por-cotizacion/cotizacion/{cotizacion}` | `GET` | `200`, `404` |
