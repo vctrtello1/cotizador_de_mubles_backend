@@ -31,6 +31,7 @@ class AccesorioPorComponenteTest extends TestCase
                     'id',
                     'componente_id',
                     'accesorio',
+                    'cantidad',
                     'costo',
                 ],
             ],
@@ -50,6 +51,7 @@ class AccesorioPorComponenteTest extends TestCase
                 'id',
                 'componente_id',
                 'accesorio',
+                'cantidad',
                 'costo',
             ],
         ]);
@@ -61,6 +63,7 @@ class AccesorioPorComponenteTest extends TestCase
         $data = [
             'componente_id' => $componente->id,
             'accesorio' => 'Tornillo de 1/2 pulgada',
+            'cantidad' => 2,
         ];
 
         $response = $this->postJson('/api/v1/accesorios-por-componente', $data);
@@ -80,10 +83,12 @@ class AccesorioPorComponenteTest extends TestCase
         $response = $this->postJson('/api/v1/accesorios-por-componente', [
             'componente_id' => $componente->id,
             'accesorio_id' => $accesorio->id,
+            'cantidad' => 3,
         ]);
 
         $response->assertStatus(201);
         $response->assertJsonPath('data.accesorio', 'PATAS NIVELADORAS');
+        $response->assertJsonPath('data.cantidad', 3);
         $response->assertJsonPath('data.costo', '20.00');
     }
 
@@ -94,12 +99,40 @@ class AccesorioPorComponenteTest extends TestCase
 
         $updateData = [
             'accesorio' => 'Tornillo de 1 pulgada',
+            'cantidad' => 4,
         ];
 
         $response = $this->putJson("/api/v1/accesorios-por-componente/{$accesorioPorComponente->id}", $updateData);
 
         $response->assertStatus(200);
         $response->assertJsonFragment($updateData);
+    }
+
+    public function test_accesorio_por_componente_creation_defaults_cantidad_to_one(): void
+    {
+        $componente = Componente::factory()->create();
+
+        $response = $this->postJson('/api/v1/accesorios-por-componente', [
+            'componente_id' => $componente->id,
+            'accesorio' => 'ZOCLO',
+        ]);
+
+        $response->assertStatus(201);
+        $response->assertJsonPath('data.cantidad', 1);
+    }
+
+    public function test_accesorio_por_componente_validation_cantidad_min_one(): void
+    {
+        $componente = Componente::factory()->create();
+
+        $response = $this->postJson('/api/v1/accesorios-por-componente', [
+            'componente_id' => $componente->id,
+            'accesorio' => 'ZOCLO',
+            'cantidad' => 0,
+        ]);
+
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors(['cantidad']);
     }
 
     public function test_accesorio_por_componente_deletion(): void

@@ -38,6 +38,7 @@ class UpdateAccesoriosPorComponenteRequest extends FormRequest
             'componente_id' => ['sometimes', 'exists:componentes,id'],
             'accesorio' => ['sometimes', 'string', 'max:255'],
             'accesorio_id' => ['sometimes', 'integer', 'exists:accesorios,id'],
+            'cantidad' => ['sometimes', 'integer', 'min:1'],
         ];
     }
 }

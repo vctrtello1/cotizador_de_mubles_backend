@@ -14,6 +14,7 @@ class AccesoriosPorComponente extends Model
     protected $fillable = [
         'componente_id',
         'accesorio',
+        'cantidad',
     ];
 
     public function componente()

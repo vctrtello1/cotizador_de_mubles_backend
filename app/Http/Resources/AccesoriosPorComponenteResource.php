@@ -19,6 +19,7 @@ class AccesoriosPorComponenteResource extends JsonResource
             'id' => $this->id,
             'componente_id' => $this->componente_id,
             'accesorio' => $this->accesorio,
+            'cantidad' => $this->cantidad,
             'costo' => $this->costoAccesorio(),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,

@@ -17,6 +17,10 @@ class StoreAccesoriosPorComponenteRequest extends FormRequest
                 $this->merge(['accesorio' => $this->accesorio['nombre']]);
             }
         }
+
+        if (!$this->has('cantidad')) {
+            $this->merge(['cantidad' => 1]);
+        }
     }
 
     /**
@@ -38,6 +42,7 @@ class StoreAccesoriosPorComponenteRequest extends FormRequest
             'componente_id' => ['required', 'exists:componentes,id'],
             'accesorio' => ['required_without:accesorio_id', 'string', 'max:255'],
             'accesorio_id' => ['required_without:accesorio', 'integer', 'exists:accesorios,id'],
+            'cantidad' => ['required', 'integer', 'min:1'],
         ];
     }
 }

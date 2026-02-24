@@ -20,6 +20,7 @@ class AccesoriosPorComponenteFactory extends Factory
         return [
             'componente_id' => Componente::factory(),
             'accesorio' => $this->faker->word(),
+            'cantidad' => $this->faker->numberBetween(1, 10),
         ];
     }
 }
