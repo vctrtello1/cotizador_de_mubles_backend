@@ -14,7 +14,7 @@ abstract class TestCase extends BaseTestCase
         parent::setUp();
 
         if (Schema::hasTable('users')) {
-            Sanctum::actingAs(User::factory()->create());
+            Sanctum::actingAs(User::factory()->create(['rol' => 'admin']));
         }
     }
 }

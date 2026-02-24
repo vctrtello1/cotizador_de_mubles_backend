@@ -24,24 +24,60 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('clientes/{cliente}/cotizaciones', [ClienteController::class, 'cotizaciones']);
 
-Route::apiResources([
-    'acabado-tableros'      => AcabadoTableroController::class,
-    'acabado-cubre-cantos'  => AcabadoCubreCantoController::class,
-    'accesorios'            => AccesorioController::class,
-    'estructuras'           => EstructuraController::class,
-    'golas'                 => GolaController::class,
-    'componentes'           => ComponenteController::class,
-    'modulos'               => ModulosController::class,
-    'clientes'              => ClienteController::class,
-    'correderas'            => CorrederaController::class,
-], ['parameters' => [
-    'compases-abatibles' => 'compasAbatible'
-]]);
+Route::apiResource('acabado-tableros', AcabadoTableroController::class)->only(['index', 'show']);
+Route::apiResource('acabado-tableros', AcabadoTableroController::class)
+    ->except(['index', 'show'])
+    ->middleware('role:admin');
+
+Route::apiResource('acabado-cubre-cantos', AcabadoCubreCantoController::class)->only(['index', 'show']);
+Route::apiResource('acabado-cubre-cantos', AcabadoCubreCantoController::class)
+    ->except(['index', 'show'])
+    ->middleware('role:admin');
+
+Route::apiResource('accesorios', AccesorioController::class)->only(['index', 'show']);
+Route::apiResource('accesorios', AccesorioController::class)
+    ->except(['index', 'show'])
+    ->middleware('role:admin');
+
+Route::apiResource('estructuras', EstructuraController::class)->only(['index', 'show']);
+Route::apiResource('estructuras', EstructuraController::class)
+    ->except(['index', 'show'])
+    ->middleware('role:admin');
+
+Route::apiResource('golas', GolaController::class)->only(['index', 'show']);
+Route::apiResource('golas', GolaController::class)
+    ->except(['index', 'show'])
+    ->middleware('role:admin');
+
+Route::apiResource('componentes', ComponenteController::class)->only(['index', 'show']);
+Route::apiResource('componentes', ComponenteController::class)
+    ->except(['index', 'show'])
+    ->middleware('role:admin');
+
+Route::apiResource('modulos', ModulosController::class)->only(['index', 'show']);
+Route::apiResource('modulos', ModulosController::class)
+    ->except(['index', 'show'])
+    ->middleware('role:admin');
+
+Route::apiResource('correderas', CorrederaController::class)->only(['index', 'show']);
+Route::apiResource('correderas', CorrederaController::class)
+    ->except(['index', 'show'])
+    ->middleware('role:admin');
 
 Route::apiResource('compases-abatibles', CompasAbatibleController::class)
+    ->only(['index', 'show'])
     ->parameters(['compases-abatibles' => 'compasAbatible']);
+Route::apiResource('compases-abatibles', CompasAbatibleController::class)
+    ->except(['index', 'show'])
+    ->parameters(['compases-abatibles' => 'compasAbatible'])
+    ->middleware('role:admin');
 
-Route::apiResource('puertas', PuertaController::class);
+Route::apiResource('puertas', PuertaController::class)->only(['index', 'show']);
+Route::apiResource('puertas', PuertaController::class)
+    ->except(['index', 'show'])
+    ->middleware('role:admin');
+
+Route::apiResource('clientes', ClienteController::class);
 
 Route::apiResource('cotizaciones', CotizacionController::class)
     ->parameters(['cotizaciones' => 'cotizacion']);

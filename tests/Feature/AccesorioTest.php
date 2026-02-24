@@ -3,7 +3,9 @@
 namespace Tests\Feature;
 
 use App\Models\Accesorio;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class AccesorioTest extends TestCase
@@ -139,5 +141,20 @@ class AccesorioTest extends TestCase
 
         $response->assertStatus(422);
         $response->assertJsonValidationErrors(['precio']);
+    }
+
+    public function test_non_admin_cannot_create_accesorio(): void
+    {
+        Sanctum::actingAs(User::factory()->create(['rol' => 'vendedor']));
+
+        $response = $this->postJson('/api/v1/accesorios', [
+            'nombre' => 'Accesorio Restringido',
+            'precio' => 50.00,
+        ]);
+
+        $response->assertStatus(403);
+        $this->assertDatabaseMissing('accesorios', [
+            'nombre' => 'Accesorio Restringido',
+        ]);
     }
 }
