@@ -77,6 +77,12 @@ Base URL local: `http://localhost:8000/api/v1`
 - `GET|PUT|DELETE /estructura-por-componente/{estructuraPorComponente}`
 - `GET|POST /acabado-cubre-canto-por-componente`
 - `GET|PUT|DELETE /acabado-cubre-canto-por-componente/{acabadoCubreCantoPorComponente}`
+- `GET|POST /acabado-tablero-por-componente`
+- `GET|PUT|DELETE /acabado-tablero-por-componente/{acabadoTableroPorComponente}`
+- `GET|POST /puertas-por-componente`
+- `GET|PUT|DELETE /puertas-por-componente/{puertasPorComponente}`
+- `GET|POST /gola-por-componente`
+- `GET|PUT|DELETE /gola-por-componente/{golaPorComponente}`
 
 ## Testing
 
@@ -90,4 +96,60 @@ Ejecutar un archivo puntual:
 
 ```bash
 php artisan test tests/Feature/ComponenteTest.php
+```
+
+## Ejemplos de payload (POST/PUT)
+
+`POST /acabado-tablero-por-componente`
+
+```json
+{
+	"componente_id": 1,
+	"acabado_tablero_id": 1,
+	"cantidad": 2
+}
+```
+
+`PUT /acabado-tablero-por-componente/{acabadoTableroPorComponente}`
+
+```json
+{
+	"cantidad": 3
+}
+```
+
+`POST /puertas-por-componente`
+
+```json
+{
+	"componente_id": 1,
+	"puerta_id": 1,
+	"cantidad": 2
+}
+```
+
+`PUT /puertas-por-componente/{puertasPorComponente}`
+
+```json
+{
+	"cantidad": 3
+}
+```
+
+`POST /gola-por-componente`
+
+```json
+{
+	"componente_id": 1,
+	"gola_id": 1,
+	"cantidad": 2
+}
+```
+
+`PUT /gola-por-componente/{golaPorComponente}`
+
+```json
+{
+	"cantidad": 3
+}
 ```

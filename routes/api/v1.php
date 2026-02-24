@@ -13,6 +13,7 @@ use App\Http\Controllers\CorrederaController;
 use App\Http\Controllers\CotizacionController;
 use App\Http\Controllers\EstructuraController;
 use App\Http\Controllers\GolaController;
+use App\Http\Controllers\GolaPorComponenteController;
 use App\Http\Controllers\ModulosController;
 use App\Http\Controllers\PuertaController;
 use App\Http\Controllers\PuertasPorComponenteController;
@@ -74,3 +75,6 @@ Route::apiResource('acabado-tablero-por-componente', AcabadoTableroPorComponente
 
 Route::apiResource('puertas-por-componente', PuertasPorComponenteController::class)
     ->parameters(['puertas-por-componente' => 'puertasPorComponente']);
+
+Route::apiResource('gola-por-componente', GolaPorComponenteController::class)
+    ->parameters(['gola-por-componente' => 'golaPorComponente']);

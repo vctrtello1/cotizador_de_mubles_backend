@@ -38,6 +38,7 @@ class DatabaseSeeder extends Seeder
             AcabadoTableroPorComponenteSeeder::class,
             AcabadoCubreCantoPorComponenteSeeder::class,
             PuertasPorComponenteSeeder::class,
+            GolaPorComponenteSeeder::class,
             
             CotizacionSeeder::class,
         ]);
