@@ -111,6 +111,13 @@ class PuertasPorComponenteTest extends TestCase
         $response->assertStatus(204);
     }
 
+    public function test_deletion_is_idempotent_when_resource_does_not_exist(): void
+    {
+        $response = $this->deleteJson('/api/v1/puertas-por-componente/999999');
+
+        $response->assertStatus(204);
+    }
+
     public function test_validation(): void
     {
         $response = $this->postJson('/api/v1/puertas-por-componente', []);

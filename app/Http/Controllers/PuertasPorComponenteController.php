@@ -98,9 +98,9 @@ class PuertasPorComponenteController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(PuertasPorComponente $puertasPorComponente)
+    public function destroy(int $puertasPorComponente)
     {
-        $puertasPorComponente->delete();
+        PuertasPorComponente::query()->whereKey($puertasPorComponente)->delete();
 
         return response()->noContent();
     }
