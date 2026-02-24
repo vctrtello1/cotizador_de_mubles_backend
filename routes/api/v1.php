@@ -15,6 +15,7 @@ use App\Http\Controllers\EstructuraController;
 use App\Http\Controllers\GolaController;
 use App\Http\Controllers\ModulosController;
 use App\Http\Controllers\PuertaController;
+use App\Http\Controllers\PuertasPorComponenteController;
 use App\Http\Controllers\CantidadPorComponenteController;
 use App\Http\Controllers\EstructuraPorComponenteController;
 use Illuminate\Support\Facades\Route;
@@ -70,3 +71,6 @@ Route::apiResource('acabado-cubre-canto-por-componente', AcabadoCubreCantoPorCom
 
 Route::apiResource('acabado-tablero-por-componente', AcabadoTableroPorComponenteController::class)
     ->parameters(['acabado-tablero-por-componente' => 'acabadoTableroPorComponente']);
+
+Route::apiResource('puertas-por-componente', PuertasPorComponenteController::class)
+    ->parameters(['puertas-por-componente' => 'puertasPorComponente']);
