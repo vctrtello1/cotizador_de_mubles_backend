@@ -62,6 +62,24 @@ class AuthController extends Controller
         ]);
     }
 
+    public function users(Request $request)
+    {
+        if ($request->user()?->rol !== 'admin') {
+            return response()->json([
+                'message' => 'No tienes permisos para consultar usuarios.',
+            ], 403);
+        }
+
+        $users = User::query()
+            ->select(['id', 'name', 'email', 'rol', 'created_at', 'updated_at'])
+            ->orderBy('name')
+            ->get();
+
+        return response()->json([
+            'data' => $users,
+        ]);
+    }
+
     public function logout(Request $request)
     {
         $token = $request->user()?->currentAccessToken();

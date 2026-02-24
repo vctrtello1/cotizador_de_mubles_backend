@@ -11,6 +11,34 @@ class UserRoleManagementTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function test_admin_can_list_users(): void
+    {
+        $admin = User::factory()->create(['rol' => 'admin', 'name' => 'Admin A']);
+        User::factory()->create(['rol' => 'vendedor', 'name' => 'Vendedor B']);
+        Sanctum::actingAs($admin);
+
+        $response = $this->getJson('/api/v1/auth/users');
+
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            'data' => [
+                '*' => ['id', 'name', 'email', 'rol', 'created_at', 'updated_at'],
+            ],
+        ]);
+        $response->assertJsonFragment(['rol' => 'admin']);
+        $response->assertJsonFragment(['rol' => 'vendedor']);
+    }
+
+    public function test_non_admin_cannot_list_users(): void
+    {
+        $vendedor = User::factory()->create(['rol' => 'vendedor']);
+        Sanctum::actingAs($vendedor);
+
+        $response = $this->getJson('/api/v1/auth/users');
+
+        $response->assertStatus(403);
+    }
+
     public function test_admin_can_update_user_role(): void
     {
         $admin = User::factory()->create(['rol' => 'admin']);

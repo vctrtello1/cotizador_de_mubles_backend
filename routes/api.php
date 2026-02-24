@@ -15,6 +15,7 @@ Route::prefix('v1')->group(function () {
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('/auth/me', [AuthController::class, 'me']);
+        Route::get('/auth/users', [AuthController::class, 'users']);
         Route::post('/auth/logout', [AuthController::class, 'logout']);
         Route::patch('/auth/users/{user}/rol', [UserRoleController::class, 'update']);
 
