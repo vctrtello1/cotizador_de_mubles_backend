@@ -26,6 +26,7 @@ class StoreComponenteRequest extends FormRequest
             'nombre' => 'required|string|max:255',
             'descripcion' => 'nullable|string',
             'codigo' => 'required|string|max:255|unique:componentes,codigo',
+            'precio_unitario' => 'nullable|numeric|min:0',
             'accesorios' => 'nullable|string',
         ];
     }

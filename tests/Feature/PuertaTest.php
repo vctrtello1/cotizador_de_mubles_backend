@@ -27,6 +27,7 @@ class PuertaTest extends TestCase
                     'precio_escuadras',
                     'precio_silicon',
                     'precio_cristal_m2',
+                    'precio_final',
                     'alto_maximo',
                     'ancho_maximo',
                     'created_at',
@@ -54,6 +55,7 @@ class PuertaTest extends TestCase
                 'precio_escuadras',
                 'precio_silicon',
                 'precio_cristal_m2',
+                'precio_final',
                 'alto_maximo',
                 'ancho_maximo',
                 'created_at',
@@ -86,8 +88,13 @@ class PuertaTest extends TestCase
             'precio_escuadras' => 60.0,
             'precio_silicon' => 90.0,
             'precio_cristal_m2' => 1600.0,
+            'precio_final' => 2600.0,
         ]);
         $this->assertDatabaseHas('puertas', $puertaData);
+        $this->assertDatabaseHas('puertas', [
+            'nombre' => $puertaData['nombre'],
+            'precio_final' => 2600.00,
+        ]);
     }
 
     /**
@@ -196,6 +203,7 @@ class PuertaTest extends TestCase
             'precio_escuadras' => 70.0,
             'precio_silicon' => 100.0,
             'precio_cristal_m2' => 1800.0,
+            'precio_final' => 2870.0,
         ]);
         $this->assertDatabaseHas('puertas', array_merge(['id' => $puerta->id], $updatedData));
     }
@@ -205,7 +213,12 @@ class PuertaTest extends TestCase
      */
     public function test_puerta_update_partial(): void
     {
-        $puerta = \App\Models\Puerta::factory()->create();
+        $puerta = \App\Models\Puerta::factory()->create([
+            'precio_perfil_aluminio' => 793.00,
+            'precio_escuadras' => 50.00,
+            'precio_silicon' => 80.00,
+            'precio_cristal_m2' => 1400.00,
+        ]);
 
         $response = $this->putJson("/api/v1/puertas/{$puerta->id}", [
             'precio_cristal_m2' => 1500.00,
@@ -214,6 +227,7 @@ class PuertaTest extends TestCase
         $response->assertStatus(200);
         $response->assertJsonFragment([
             'precio_cristal_m2' => 1500.0,
+            'precio_final' => 2423.0,
         ]);
     }
 
@@ -287,6 +301,7 @@ class PuertaTest extends TestCase
         $response->assertJsonFragment([
             'nombre' => 'Puerta Cristal Standard',
             'precio_perfil_aluminio' => 793.0,
+            'precio_final' => 2323.0,
             'alto_maximo' => 2.4,
             'ancho_maximo' => 0.6,
         ]);

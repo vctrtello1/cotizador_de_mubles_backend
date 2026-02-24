@@ -14,7 +14,12 @@ class Componente extends Model
         'nombre',
         'descripcion',
         'codigo',
+        'precio_unitario',
         'accesorios',
+    ];
+
+    protected $casts = [
+        'precio_unitario' => 'decimal:2',
     ];
 
     public function accesorios_por_componente()
@@ -24,6 +29,6 @@ class Componente extends Model
 
     public function getCostoTotalAttribute()
     {
-        return 0;
+        return (float) ($this->precio_unitario ?? 0);
     }
 }

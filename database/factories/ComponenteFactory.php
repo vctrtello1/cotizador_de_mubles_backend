@@ -21,6 +21,7 @@ class ComponenteFactory extends Factory
             'nombre' => $this->faker->word(),
             'descripcion' => $this->faker->sentence(),
             'codigo' => $this->faker->unique()->bothify('???-#####'),
+            'precio_unitario' => $this->faker->randomFloat(2, 10, 1000),
             'accesorios' => $this->faker->word(),
         ];
     }

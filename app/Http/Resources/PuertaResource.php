@@ -21,6 +21,7 @@ class PuertaResource extends JsonResource
             'precio_escuadras' => $this->precio_escuadras,
             'precio_silicon' => $this->precio_silicon,
             'precio_cristal_m2' => $this->precio_cristal_m2,
+            'precio_final' => $this->precio_final,
             'alto_maximo' => $this->alto_maximo,
             'ancho_maximo' => $this->ancho_maximo,
             'created_at' => $this->created_at,

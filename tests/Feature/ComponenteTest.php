@@ -32,6 +32,7 @@ class ComponenteTest extends TestCase
                     'nombre',
                     'descripcion',
                     'codigo',
+                    'precio_unitario',
                     'costo_total',
                 ],
             ],
@@ -52,6 +53,7 @@ class ComponenteTest extends TestCase
                 'nombre',
                 'descripcion',
                 'codigo',
+                'precio_unitario',
                 'costo_total',
                 'accesorios',
             ],
@@ -64,6 +66,7 @@ class ComponenteTest extends TestCase
             'nombre' => 'Componente Test',
             'descripcion' => 'Descripcion del componente test',
             'codigo' => 'CMP-12345',
+            'precio_unitario' => 350.50,
             'accesorios' => 'Accesorio1, Accesorio2',
         ];
 
@@ -74,6 +77,7 @@ class ComponenteTest extends TestCase
             'nombre' => 'Componente Test',
             'descripcion' => 'Descripcion del componente test',
             'codigo' => 'CMP-12345',
+            'precio_unitario' => '350.50',
         ]);
         $response->assertJsonFragment(['accesorio' => 'Accesorio1']);
         $response->assertJsonFragment(['accesorio' => 'Accesorio2']);
@@ -81,6 +85,7 @@ class ComponenteTest extends TestCase
         $this->assertDatabaseHas('componentes', [
             'nombre' => 'Componente Test',
             'codigo' => 'CMP-12345',
+            'precio_unitario' => 350.50,
         ]);
     }
 
@@ -93,6 +98,7 @@ class ComponenteTest extends TestCase
             'nombre' => 'Componente Actualizado',
             'descripcion' => 'Descripcion actualizada',
             'codigo' => 'CMP-54321',
+            'precio_unitario' => 899.99,
             'accesorios' => 'Accesorio3, Accesorio4',
         ];
 
@@ -103,6 +109,7 @@ class ComponenteTest extends TestCase
             'nombre' => 'Componente Actualizado',
             'descripcion' => 'Descripcion actualizada',
             'codigo' => 'CMP-54321',
+            'precio_unitario' => '899.99',
         ]);
         $response->assertJsonFragment(['accesorio' => 'Accesorio3']);
         $response->assertJsonFragment(['accesorio' => 'Accesorio4']);
@@ -111,6 +118,7 @@ class ComponenteTest extends TestCase
             'id' => $componente->id,
             'nombre' => 'Componente Actualizado',
             'codigo' => 'CMP-54321',
+            'precio_unitario' => 899.99,
         ]);
     }
 
@@ -130,11 +138,13 @@ class ComponenteTest extends TestCase
 
     public function test_componente_cost_calculation(): void
     {
-        $componente = \App\Models\Componente::factory()->create();
+        $componente = \App\Models\Componente::factory()->create([
+            'precio_unitario' => 420.00,
+        ]);
 
         $response = $this->getJson("/api/v1/componentes/{$componente->id}");
 
         $response->assertStatus(200);
-        $response->assertJsonFragment(['costo_total' => 0]);
+        $response->assertJsonFragment(['costo_total' => 420.0]);
     }
 }

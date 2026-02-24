@@ -100,6 +100,79 @@ php artisan test tests/Feature/ComponenteTest.php
 
 ## Ejemplos de payload (POST/PUT)
 
+### Componente (`precio_unitario`)
+
+`POST /componentes`
+
+```json
+{
+	"nombre": "Componente Premium",
+	"descripcion": "Componente de prueba",
+	"codigo": "CMP-90001",
+	"precio_unitario": 899.99,
+	"accesorios": "Accesorio1, Accesorio2"
+}
+```
+
+`PUT /componentes/{componente}`
+
+```json
+{
+	"nombre": "Componente Premium Actualizado",
+	"descripcion": "Descripción actualizada",
+	"codigo": "CMP-90001",
+	"precio_unitario": 999.99,
+	"accesorios": "Accesorio3, Accesorio4"
+}
+```
+
+Respuesta esperada (extracto):
+
+```json
+{
+	"data": {
+		"nombre": "Componente Premium",
+		"codigo": "CMP-90001",
+		"precio_unitario": "899.99",
+		"costo_total": 899.99
+	}
+}
+```
+
+### Nota sobre `puertas`
+
+En el recurso `puertas`, el campo `precio_final` **no se envía en el payload**. El backend lo calcula y lo persiste automáticamente como suma de:
+
+- `precio_perfil_aluminio`
+- `precio_escuadras`
+- `precio_silicon`
+- `precio_cristal_m2`
+
+Ejemplo de `POST /puertas`:
+
+```json
+{
+	"nombre": "Puerta Cristal Standard",
+	"precio_perfil_aluminio": 793.0,
+	"precio_escuadras": 50.0,
+	"precio_silicon": 80.0,
+	"precio_cristal_m2": 1400.0,
+	"alto_maximo": 2.4,
+	"ancho_maximo": 0.6
+}
+```
+
+Respuesta esperada (extracto):
+
+```json
+{
+	"data": {
+		"nombre": "Puerta Cristal Standard",
+		"precio_final": 2323.0
+	}
+}
+```
+
 `POST /acabado-tablero-por-componente`
 
 ```json
@@ -277,6 +350,19 @@ Ejemplo: combinación duplicada en `POST /puertas-por-componente`.
 	"errors": {
 		"puerta_id": [
 			"The puerta id has already been taken."
+		]
+	}
+}
+```
+
+Ejemplo: `POST /componentes` con `precio_unitario` negativo.
+
+```json
+{
+	"message": "The precio unitario field must be at least 0.",
+	"errors": {
+		"precio_unitario": [
+			"The precio unitario field must be at least 0."
 		]
 	}
 }
