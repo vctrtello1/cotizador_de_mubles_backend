@@ -17,7 +17,6 @@ class AccesorioResource extends JsonResource
         return [
             'id' => $this->id,
             'nombre' => $this->nombre,
-            'descripcion' => $this->descripcion,
             'precio' => $this->precio,
         ];
     }

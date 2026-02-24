@@ -29,7 +29,6 @@ class AccesorioTest extends TestCase
                 '*' => [
                     'id',
                     'nombre',
-                    'descripcion',
                     'precio',
                 ],
             ],
@@ -68,7 +67,6 @@ class AccesorioTest extends TestCase
     {
         $payload = [
             'nombre' => 'Jaladera Nova',
-            'descripcion' => 'Jaladera de aluminio anodizado',
             'precio' => 39.00,
         ];
 

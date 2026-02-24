@@ -123,7 +123,6 @@ php artisan test tests/Feature/ComponenteTest.php
 ```json
 {
 	"nombre": "Bisagra Premium",
-	"descripcion": "Bisagra para puerta de mueble",
 	"precio": 45.9
 }
 ```

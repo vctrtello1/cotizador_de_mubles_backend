@@ -18,7 +18,6 @@ class AccesorioFactory extends Factory
     {
         return [
             'nombre' => $this->faker->unique()->word(),
-            'descripcion' => $this->faker->sentence(),
             'precio' => $this->faker->randomFloat(2, 5, 500),
         ];
     }

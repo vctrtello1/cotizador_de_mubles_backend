@@ -23,7 +23,6 @@ class StoreAccesorioRequest extends FormRequest
     {
         return [
             'nombre' => ['required', 'string', 'max:255', 'unique:accesorios,nombre'],
-            'descripcion' => ['nullable', 'string'],
             'precio' => ['required', 'numeric', 'min:0'],
         ];
     }

@@ -20,7 +20,6 @@ class AccesorioModelTest extends TestCase
 
         $this->assertEquals([
             'nombre',
-            'descripcion',
             'precio',
         ], $model->getFillable());
     }
@@ -29,12 +28,10 @@ class AccesorioModelTest extends TestCase
     {
         $model = new Accesorio([
             'nombre' => 'Accesorio de prueba',
-            'descripcion' => 'Descripción de prueba',
             'precio' => 15.50,
         ]);
 
         $this->assertEquals('Accesorio de prueba', $model->getAttribute('nombre'));
-        $this->assertEquals('Descripción de prueba', $model->getAttribute('descripcion'));
         $this->assertEquals(15.50, (float) $model->getAttribute('precio'));
     }
 }

@@ -29,7 +29,6 @@ class UpdateAccesorioRequest extends FormRequest
                 'max:255',
                 Rule::unique('accesorios', 'nombre')->ignore($this->route('accesorio')),
             ],
-            'descripcion' => ['nullable', 'string'],
             'precio' => ['sometimes', 'numeric', 'min:0'],
         ];
     }

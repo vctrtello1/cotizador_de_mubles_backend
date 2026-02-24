@@ -15,7 +15,6 @@ return new class extends Migration
         Schema::create('accesorios', function (Blueprint $table) {
             $table->id();
             $table->string('nombre')->unique();
-            $table->string('descripcion')->nullable();
             $table->decimal('precio', 10, 2);
             $table->timestamps();
         });
@@ -23,28 +22,24 @@ return new class extends Migration
         DB::table('accesorios')->insert([
             [
                 'nombre' => 'MENSULA REPISA',
-                'descripcion' => null,
                 'precio' => 2.00,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'nombre' => 'ZOCLO',
-                'descripcion' => null,
                 'precio' => 450.00,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'nombre' => 'CLIPS ZOCLO',
-                'descripcion' => null,
                 'precio' => 2.00,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'nombre' => 'PATAS NIVELADORAS',
-                'descripcion' => null,
                 'precio' => 20.00,
                 'created_at' => now(),
                 'updated_at' => now(),
