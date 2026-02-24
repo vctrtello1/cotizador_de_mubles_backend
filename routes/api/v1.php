@@ -4,6 +4,7 @@ use App\Http\Controllers\AcabadoCubreCantoController;
 use App\Http\Controllers\AcabadoCubreCantoPorComponenteController;
 use App\Http\Controllers\AcabadoTableroController;
 use App\Http\Controllers\AcabadoTableroPorComponenteController;
+use App\Http\Controllers\AccesorioController;
 use App\Http\Controllers\AccesoriosPorComponenteController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\CompasAbatibleController;
@@ -26,6 +27,7 @@ Route::get('clientes/{cliente}/cotizaciones', [ClienteController::class, 'cotiza
 Route::apiResources([
     'acabado-tableros'      => AcabadoTableroController::class,
     'acabado-cubre-cantos'  => AcabadoCubreCantoController::class,
+    'accesorios'            => AccesorioController::class,
     'estructuras'           => EstructuraController::class,
     'golas'                 => GolaController::class,
     'componentes'           => ComponenteController::class,

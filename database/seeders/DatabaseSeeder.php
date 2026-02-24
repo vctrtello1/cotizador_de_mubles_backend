@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
             EstructuraSeeder::class,
             AcabadoTableroSeeder::class,
             AcabadoCubreCantoSeeder::class,
+            AccesorioSeeder::class,
             GolaSeeder::class,
             CorrederaSeeder::class,
             CompasAbatibleSeeder::class,

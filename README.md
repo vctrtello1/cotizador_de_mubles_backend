@@ -43,6 +43,8 @@ Base URL local: `http://localhost:8000/api/v1`
 - `GET|PUT|DELETE /acabado-tableros/{acabado_tablero}`
 - `GET|POST /acabado-cubre-cantos`
 - `GET|PUT|DELETE /acabado-cubre-cantos/{acabado_cubre_canto}`
+- `GET|POST /accesorios`
+- `GET|PUT|DELETE /accesorios/{accesorio}`
 - `GET|POST /estructuras`
 - `GET|PUT|DELETE /estructuras/{estructura}`
 - `GET|POST /golas`
@@ -111,6 +113,37 @@ php artisan test tests/Feature/ComponenteTest.php
 	"codigo": "CMP-90001",
 	"precio_unitario": 899.99,
 	"accesorios": "Accesorio1, Accesorio2"
+}
+```
+
+### Accesorio
+
+`POST /accesorios`
+
+```json
+{
+	"nombre": "Bisagra Premium",
+	"descripcion": "Bisagra para puerta de mueble",
+	"precio": 45.9
+}
+```
+
+`PUT /accesorios/{accesorio}`
+
+```json
+{
+	"precio": 55.5
+}
+```
+
+Respuesta esperada (extracto):
+
+```json
+{
+	"data": {
+		"nombre": "Bisagra Premium",
+		"precio": "45.90"
+	}
 }
 ```
 
@@ -394,6 +427,7 @@ Recursos que siguen este patrón:
 
 - `/acabado-tableros`
 - `/acabado-cubre-cantos`
+- `/accesorios`
 - `/estructuras`
 - `/golas`
 - `/componentes`
