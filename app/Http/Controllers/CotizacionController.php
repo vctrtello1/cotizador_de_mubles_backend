@@ -27,7 +27,9 @@ class CotizacionController extends Controller
             });
         }
 
-        return CotizacionResource::collection($query->paginate(15));
+        return CotizacionResource::collection($query->paginate(
+            min((int) $request->query('per_page', 100), 200)
+        ));
     }
 
     public function store(StoreCotizacionRequest $request)

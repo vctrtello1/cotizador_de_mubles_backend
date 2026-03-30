@@ -646,7 +646,28 @@ class CotizacionTest extends TestCase
         $response = $this->getJson('/api/v1/cotizaciones');
 
         $response->assertStatus(200);
-        $this->assertGreaterThanOrEqual(5, count($response->json('data')));
+        $this->assertGreaterThanOrEqual(5, $response->json('meta.total'));
+    }
+
+    public function test_per_page_respeta_parametro_del_request(): void
+    {
+        \App\Models\Cotizacion::factory()->count(20)->create();
+
+        $response = $this->getJson('/api/v1/cotizaciones?per_page=5');
+
+        $response->assertStatus(200);
+        $this->assertCount(5, $response->json('data'));
+        $this->assertGreaterThanOrEqual(20, $response->json('meta.total'));
+    }
+
+    public function test_per_page_no_supera_limite_maximo(): void
+    {
+        \App\Models\Cotizacion::factory()->count(5)->create();
+
+        $response = $this->getJson('/api/v1/cotizaciones?per_page=9999');
+
+        $response->assertStatus(200);
+        $this->assertLessThanOrEqual(200, $response->json('meta.per_page'));
     }
 
     public function test_vendedor_no_ve_cotizacion_de_otro_vendedor(): void
