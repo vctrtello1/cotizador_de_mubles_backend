@@ -14,7 +14,16 @@ class CapacidadCorrederaController extends Controller
      */
     public function index()
     {
-        return CapacidadCorrederaResource::collection(CapacidadCorredera::all());
+        // Devuelve solo las capacidades únicas disponibles
+        $capacidades = CapacidadCorredera::select('capacidad')
+            ->distinct()
+            ->orderBy('capacidad')
+            ->get()
+            ->map(function ($item) {
+                return ['capacidad' => $item->capacidad];
+            });
+        
+        return response()->json(['data' => $capacidades]);
     }
 
     /**

@@ -12,24 +12,30 @@ class CapacidadCorrederaTest extends TestCase
     use RefreshDatabase;
 
     /**
-     * Test index endpoint returns all capacidades de correderas.
+     * Test index endpoint returns all capacidades únicas.
      */
     public function test_capacidad_corredera_index(): void
     {
+        $corredera = Corredera::factory()->create();
+        
+        // Crear varias capacidades para la misma corredera
+        CapacidadCorredera::factory()->create(['corredera_id' => $corredera->id, 'capacidad' => 30]);
+        CapacidadCorredera::factory()->create(['corredera_id' => $corredera->id, 'capacidad' => 40]);
+        CapacidadCorredera::factory()->create(['corredera_id' => $corredera->id, 'capacidad' => 70]);
+
         $response = $this->getJson('/api/v1/capacidad-correderas');
 
         $response->assertStatus(200);
         $response->assertJsonStructure([
             'data' => [
                 '*' => [
-                    'id',
                     'capacidad',
-                    'corredera_id',
-                    'created_at',
-                    'updated_at',
                 ],
             ],
         ]);
+        
+        // Debe devolver solo las capacidades únicas
+        $this->assertCount(3, $response->json('data'));
     }
 
     /**
