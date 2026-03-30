@@ -6,6 +6,8 @@ use App\Http\Controllers\AcabadoTableroController;
 use App\Http\Controllers\AcabadoTableroPorComponenteController;
 use App\Http\Controllers\AccesorioController;
 use App\Http\Controllers\AccesoriosPorComponenteController;
+use App\Http\Controllers\CantidadPorComponenteController;
+use App\Http\Controllers\CapacidadCorrederaController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\CompasAbatibleController;
 use App\Http\Controllers\ComponenteController;
@@ -13,13 +15,12 @@ use App\Http\Controllers\ComponentesPorCotizacionController;
 use App\Http\Controllers\CorrederaController;
 use App\Http\Controllers\CotizacionController;
 use App\Http\Controllers\EstructuraController;
+use App\Http\Controllers\EstructuraPorComponenteController;
 use App\Http\Controllers\GolaController;
 use App\Http\Controllers\GolaPorComponenteController;
 use App\Http\Controllers\ModulosController;
 use App\Http\Controllers\PuertaController;
 use App\Http\Controllers\PuertasPorComponenteController;
-use App\Http\Controllers\CantidadPorComponenteController;
-use App\Http\Controllers\EstructuraPorComponenteController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('clientes/{cliente}/cotizaciones', [ClienteController::class, 'cotizaciones']);
@@ -62,6 +63,14 @@ Route::apiResource('modulos', ModulosController::class)
 Route::apiResource('correderas', CorrederaController::class)->only(['index', 'show']);
 Route::apiResource('correderas', CorrederaController::class)
     ->except(['index', 'show'])
+    ->middleware('permission:catalogs.write');
+
+Route::apiResource('capacidad-correderas', CapacidadCorrederaController::class)
+    ->only(['index', 'show'])
+    ->parameters(['capacidad-correderas' => 'capacidadCorredera']);
+Route::apiResource('capacidad-correderas', CapacidadCorrederaController::class)
+    ->except(['index', 'show'])
+    ->parameters(['capacidad-correderas' => 'capacidadCorredera'])
     ->middleware('permission:catalogs.write');
 
 Route::apiResource('compases-abatibles', CompasAbatibleController::class)
