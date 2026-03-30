@@ -55,6 +55,8 @@ Route::apiResource('componentes', ComponenteController::class)->only(['index', '
 Route::apiResource('componentes', ComponenteController::class)
     ->except(['index', 'show'])
     ->middleware('permission:catalogs.write');
+Route::post('componentes/{componente}/duplicate', [ComponenteController::class, 'duplicate'])
+    ->middleware('permission:catalogs.write');
 
 Route::apiResource('modulos', ModulosController::class)->only(['index', 'show']);
 Route::apiResource('modulos', ModulosController::class)

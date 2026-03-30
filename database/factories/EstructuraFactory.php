@@ -18,7 +18,6 @@ class EstructuraFactory extends Factory
     {
         return [
             'nombre' => fake()->words(3, true),
-            'costo_unitario' => fake()->randomFloat(2, 100, 2000),
         ];
     }
 }

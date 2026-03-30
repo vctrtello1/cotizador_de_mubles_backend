@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreComponenteRequest;
 use App\Http\Requests\UpdateComponenteRequest;
 use App\Models\Componente;
+use Illuminate\Support\Facades\DB;
 
 class ComponenteController extends Controller
 {
@@ -58,6 +59,75 @@ class ComponenteController extends Controller
         $componente->delete();
         
         return response()->noContent();
+    }
+
+    /**
+     * Duplicate the specified component including all its relations.
+     */
+    public function duplicate(Componente $componente)
+    {
+        $nuevo = DB::transaction(function () use ($componente) {
+            $componente->loadMissing([
+                'accesorios_por_componente',
+                'estructuras_por_componente',
+                'acabado_tablero_por_componente',
+                'acabado_cubre_canto_por_componente',
+                'puertas_por_componente',
+                'gola_por_componente',
+            ]);
+
+            $nuevo = $componente->replicate();
+            $nuevo->nombre = 'Copia de ' . $componente->nombre;
+            $nuevo->codigo = $componente->codigo . '-' . strtolower(substr(md5(uniqid()), 0, 6));
+            $nuevo->save();
+
+            foreach ($componente->accesorios_por_componente as $rel) {
+                $nuevo->accesorios_por_componente()->create(
+                    collect($rel->toArray())->except(['id', 'componente_id', 'created_at', 'updated_at'])->toArray()
+                );
+            }
+
+            foreach ($componente->estructuras_por_componente as $rel) {
+                $nuevo->estructuras_por_componente()->create(
+                    collect($rel->toArray())->except(['id', 'componente_id', 'created_at', 'updated_at'])->toArray()
+                );
+            }
+
+            foreach ($componente->acabado_tablero_por_componente as $rel) {
+                $nuevo->acabado_tablero_por_componente()->create(
+                    collect($rel->toArray())->except(['id', 'componente_id', 'created_at', 'updated_at'])->toArray()
+                );
+            }
+
+            foreach ($componente->acabado_cubre_canto_por_componente as $rel) {
+                $nuevo->acabado_cubre_canto_por_componente()->create(
+                    collect($rel->toArray())->except(['id', 'componente_id', 'created_at', 'updated_at'])->toArray()
+                );
+            }
+
+            foreach ($componente->puertas_por_componente as $rel) {
+                $nuevo->puertas_por_componente()->create(
+                    collect($rel->toArray())->except(['id', 'componente_id', 'created_at', 'updated_at'])->toArray()
+                );
+            }
+
+            foreach ($componente->gola_por_componente as $rel) {
+                $nuevo->gola_por_componente()->create(
+                    collect($rel->toArray())->except(['id', 'componente_id', 'created_at', 'updated_at'])->toArray()
+                );
+            }
+
+            return $nuevo;
+        });
+
+        return $nuevo->load([
+            'accesorios_por_componente',
+            'estructuras_por_componente',
+            'acabado_tablero_por_componente',
+            'acabado_cubre_canto_por_componente',
+            'puertas_por_componente',
+            'gola_por_componente',
+        ])->toResource();
     }
 
     /**

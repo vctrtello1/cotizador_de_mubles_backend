@@ -27,6 +27,31 @@ class Componente extends Model
         return $this->hasMany(AccesoriosPorComponente::class);
     }
 
+    public function estructuras_por_componente()
+    {
+        return $this->hasMany(EstructuraPorComponente::class);
+    }
+
+    public function acabado_tablero_por_componente()
+    {
+        return $this->hasMany(AcabadoTableroPorComponente::class);
+    }
+
+    public function acabado_cubre_canto_por_componente()
+    {
+        return $this->hasMany(AcabadoCubreCantoPorComponente::class);
+    }
+
+    public function puertas_por_componente()
+    {
+        return $this->hasMany(PuertasPorComponente::class);
+    }
+
+    public function gola_por_componente()
+    {
+        return $this->hasMany(GolaPorComponente::class);
+    }
+
     public function getCostoTotalAttribute()
     {
         return (float) ($this->precio_unitario ?? 0);
