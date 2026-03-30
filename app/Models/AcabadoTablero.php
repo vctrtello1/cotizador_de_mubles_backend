@@ -14,10 +14,5 @@ class AcabadoTablero extends Model
 
     protected $fillable = [
         'nombre',
-        'costo_unitario',
-    ];
-
-    protected $casts = [
-        'costo_unitario' => 'decimal:2',
     ];
 }
