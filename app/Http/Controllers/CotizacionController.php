@@ -11,11 +11,19 @@ use Illuminate\Http\Request;
 
 class CotizacionController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return CotizacionResource::collection(
-            Cotizacion::with(['cliente'])->paginate(15)
-        );
+        $user = $request->user();
+
+        $query = Cotizacion::with(['cliente']);
+
+        if ($user->rol === 'vendedor') {
+            $query->whereHas('usuariosAsignados', function ($q) use ($user) {
+                $q->where('user_id', $user->id);
+            });
+        }
+
+        return CotizacionResource::collection($query->paginate(15));
     }
 
     public function store(StoreCotizacionRequest $request)

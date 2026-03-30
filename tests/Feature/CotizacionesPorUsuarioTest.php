@@ -116,4 +116,70 @@ class CotizacionesPorUsuarioTest extends TestCase
         $response->assertStatus(204);
         $this->assertDatabaseMissing('cotizaciones_por_usuario', ['id' => $registro->id]);
     }
+
+    public function test_no_se_puede_duplicar_asignacion(): void
+    {
+        $cotizacion = Cotizacion::factory()->create();
+
+        CotizacionesPorUsuario::factory()->create([
+            'user_id'       => $this->user->id,
+            'cotizacion_id' => $cotizacion->id,
+        ]);
+
+        $this->expectException(\Illuminate\Database\QueryException::class);
+
+        CotizacionesPorUsuario::factory()->create([
+            'user_id'       => $this->user->id,
+            'cotizacion_id' => $cotizacion->id,
+        ]);
+    }
+
+    public function test_index_incluye_relaciones_cargadas(): void
+    {
+        CotizacionesPorUsuario::factory()->create([
+            'user_id'       => $this->user->id,
+        ]);
+
+        $response = $this->getJson('/api/v1/cotizaciones-por-usuario');
+
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            'data' => [
+                '*' => [
+                    'id',
+                    'user_id',
+                    'cotizacion_id',
+                    'user',
+                    'cotizacion',
+                ],
+            ],
+        ]);
+    }
+
+    public function test_show_incluye_relaciones(): void
+    {
+        $registro = CotizacionesPorUsuario::factory()->create([
+            'user_id' => $this->user->id,
+        ]);
+
+        $response = $this->getJson("/api/v1/cotizaciones-por-usuario/{$registro->id}");
+
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            'data' => [
+                'id',
+                'user_id',
+                'cotizacion_id',
+                'user',
+                'cotizacion',
+            ],
+        ]);
+    }
+
+    public function test_show_not_found(): void
+    {
+        $response = $this->getJson('/api/v1/cotizaciones-por-usuario/99999');
+
+        $response->assertStatus(404);
+    }
 }

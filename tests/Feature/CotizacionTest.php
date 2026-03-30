@@ -590,4 +590,78 @@ class CotizacionTest extends TestCase
             'cotizacion_id' => $cotizacion->id,
         ]);
     }
+
+    // ─── Filtrado por rol vendedor ───────────────────────────────────────────
+
+    public function test_vendedor_solo_ve_cotizaciones_asignadas(): void
+    {
+        $vendedor = \App\Models\User::factory()->create(['rol' => 'vendedor']);
+        \Laravel\Sanctum\Sanctum::actingAs($vendedor);
+
+        $asignada1  = \App\Models\Cotizacion::factory()->create();
+        $asignada2  = \App\Models\Cotizacion::factory()->create();
+        $noAsignada = \App\Models\Cotizacion::factory()->create();
+
+        \App\Models\CotizacionesPorUsuario::factory()->create([
+            'user_id'       => $vendedor->id,
+            'cotizacion_id' => $asignada1->id,
+        ]);
+        \App\Models\CotizacionesPorUsuario::factory()->create([
+            'user_id'       => $vendedor->id,
+            'cotizacion_id' => $asignada2->id,
+        ]);
+
+        $response = $this->getJson('/api/v1/cotizaciones');
+
+        $response->assertStatus(200);
+
+        $ids = collect($response->json('data'))->pluck('id')->toArray();
+        $this->assertContains($asignada1->id, $ids);
+        $this->assertContains($asignada2->id, $ids);
+        $this->assertNotContains($noAsignada->id, $ids);
+    }
+
+    public function test_vendedor_sin_asignaciones_no_ve_cotizaciones(): void
+    {
+        $vendedor = \App\Models\User::factory()->create(['rol' => 'vendedor']);
+        \Laravel\Sanctum\Sanctum::actingAs($vendedor);
+
+        \App\Models\Cotizacion::factory()->count(3)->create();
+
+        $response = $this->getJson('/api/v1/cotizaciones');
+
+        $response->assertStatus(200);
+        $response->assertJsonCount(0, 'data');
+    }
+
+    public function test_admin_ve_todas_las_cotizaciones(): void
+    {
+        // TestCase::setUp ya autentica como admin; sólo verificamos que ve todo
+        \App\Models\Cotizacion::factory()->count(5)->create();
+
+        $response = $this->getJson('/api/v1/cotizaciones');
+
+        $response->assertStatus(200);
+        $this->assertGreaterThanOrEqual(5, count($response->json('data')));
+    }
+
+    public function test_vendedor_no_ve_cotizacion_de_otro_vendedor(): void
+    {
+        $vendedor1 = \App\Models\User::factory()->create(['rol' => 'vendedor']);
+        $vendedor2 = \App\Models\User::factory()->create(['rol' => 'vendedor']);
+
+        $cotizacionV2 = \App\Models\Cotizacion::factory()->create();
+        \App\Models\CotizacionesPorUsuario::factory()->create([
+            'user_id'       => $vendedor2->id,
+            'cotizacion_id' => $cotizacionV2->id,
+        ]);
+
+        \Laravel\Sanctum\Sanctum::actingAs($vendedor1);
+
+        $response = $this->getJson('/api/v1/cotizaciones');
+
+        $response->assertStatus(200);
+        $ids = collect($response->json('data'))->pluck('id')->toArray();
+        $this->assertNotContains($cotizacionV2->id, $ids);
+    }
 }
