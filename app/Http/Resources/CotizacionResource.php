@@ -14,13 +14,15 @@ class CotizacionResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $esVendedor = $request->user()?->rol === 'vendedor';
+
         return [
-            'id' => $this->id,
+            'id'         => $this->id,
             'cliente_id' => $this->cliente_id,
-            'cliente' => new ClienteResource($this->whenLoaded('cliente')),
-            'fecha' => $this->fecha,
-            'total' => $this->total,
-            'estado' => $this->estado,
+            'cliente'    => new ClienteResource($this->whenLoaded('cliente')),
+            'fecha'      => $this->fecha,
+            'total'      => $this->when(! $esVendedor, $this->total),
+            'estado'     => $this->estado,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

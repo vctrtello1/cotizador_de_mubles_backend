@@ -670,6 +670,47 @@ class CotizacionTest extends TestCase
         $this->assertLessThanOrEqual(200, $response->json('meta.per_page'));
     }
 
+    // ─── Total oculto para vendedor ──────────────────────────────────────────
+
+    public function test_vendedor_no_recibe_campo_total(): void
+    {
+        $vendedor   = User::factory()->create(['rol' => 'vendedor']);
+        $cotizacion = Cotizacion::factory()->create(['created_by_user_id' => $vendedor->id]);
+        CotizacionesPorUsuario::create(['user_id' => $vendedor->id, 'cotizacion_id' => $cotizacion->id]);
+
+        Sanctum::actingAs($vendedor);
+
+        $response = $this->getJson('/api/v1/cotizaciones');
+
+        $response->assertStatus(200);
+        $this->assertArrayNotHasKey('total', $response->json('data.0'));
+    }
+
+    public function test_vendedor_no_recibe_total_en_show(): void
+    {
+        $vendedor   = User::factory()->create(['rol' => 'vendedor']);
+        $cotizacion = Cotizacion::factory()->create(['created_by_user_id' => $vendedor->id]);
+        CotizacionesPorUsuario::create(['user_id' => $vendedor->id, 'cotizacion_id' => $cotizacion->id]);
+
+        Sanctum::actingAs($vendedor);
+
+        $response = $this->getJson("/api/v1/cotizaciones/{$cotizacion->id}");
+
+        $response->assertStatus(200);
+        $this->assertArrayNotHasKey('total', $response->json('data'));
+    }
+
+    public function test_admin_recibe_campo_total(): void
+    {
+        $cotizacion = Cotizacion::factory()->create(['total' => 1500.00]);
+
+        $response = $this->getJson('/api/v1/cotizaciones');
+
+        $response->assertStatus(200);
+        $this->assertArrayHasKey('total', $response->json('data.0'));
+        $this->assertEquals(1500.00, $response->json('data.0.total'));
+    }
+
     public function test_vendedor_no_ve_cotizacion_de_otro_vendedor(): void
     {
         $vendedor1 = \App\Models\User::factory()->create(['rol' => 'vendedor']);
