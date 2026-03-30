@@ -664,4 +664,108 @@ class CotizacionTest extends TestCase
         $ids = collect($response->json('data'))->pluck('id')->toArray();
         $this->assertNotContains($cotizacionV2->id, $ids);
     }
+
+    public function test_vendedor_ve_cotizacion_que_el_mismo_creo(): void
+    {
+        $vendedor = \App\Models\User::factory()->create(['rol' => 'vendedor']);
+        \Laravel\Sanctum\Sanctum::actingAs($vendedor);
+
+        $cliente = \App\Models\Cliente::factory()->create();
+
+        $response = $this->postJson('/api/v1/cotizaciones', [
+            'cliente_id' => $cliente->id,
+            'fecha'      => '2026-03-30',
+            'total'      => 0,
+        ]);
+
+        $response->assertStatus(201);
+        $cotizacionId = $response->json('data.id');
+
+        $this->assertDatabaseHas('cotizaciones_por_usuario', [
+            'user_id'       => $vendedor->id,
+            'cotizacion_id' => $cotizacionId,
+        ]);
+
+        $index = $this->getJson('/api/v1/cotizaciones');
+        $index->assertStatus(200);
+        $ids = collect($index->json('data'))->pluck('id')->toArray();
+        $this->assertContains($cotizacionId, $ids);
+    }
+
+    public function test_admin_store_no_crea_asignacion(): void
+    {
+        // El TestCase base autentica como admin; la cotización no debe generar
+        // registro en cotizaciones_por_usuario
+        $cliente = \App\Models\Cliente::factory()->create();
+
+        $response = $this->postJson('/api/v1/cotizaciones', [
+            'cliente_id' => $cliente->id,
+            'fecha'      => '2026-03-30',
+            'total'      => 0,
+        ]);
+
+        $response->assertStatus(201);
+        $this->assertDatabaseCount('cotizaciones_por_usuario', 0);
+    }
+
+    public function test_vendedor_ve_cotizacion_por_created_by_sin_asignacion_explicita(): void
+    {
+        // Simula el escenario de cotizaciones históricas (backfill):
+        // created_by_user_id apunta al vendedor pero no existe registro en cotizaciones_por_usuario.
+        $vendedor = \App\Models\User::factory()->create(['rol' => 'vendedor']);
+
+        $cotizacion = \App\Models\Cotizacion::factory()->create([
+            'created_by_user_id' => $vendedor->id,
+        ]);
+
+        // No se crea ningún CotizacionesPorUsuario para este vendedor
+        $this->assertDatabaseCount('cotizaciones_por_usuario', 0);
+
+        \Laravel\Sanctum\Sanctum::actingAs($vendedor);
+
+        $response = $this->getJson('/api/v1/cotizaciones');
+
+        $response->assertStatus(200);
+        $ids = collect($response->json('data'))->pluck('id')->toArray();
+        $this->assertContains($cotizacion->id, $ids);
+    }
+
+    public function test_vendedor_no_ve_cotizacion_creada_por_otro_usuario(): void
+    {
+        $vendedor  = \App\Models\User::factory()->create(['rol' => 'vendedor']);
+        $otroAdmin = \App\Models\User::factory()->create(['rol' => 'admin']);
+
+        // Cotizacion creada por admin, sin asignar a nadie
+        $cotizacion = \App\Models\Cotizacion::factory()->create([
+            'created_by_user_id' => $otroAdmin->id,
+        ]);
+
+        \Laravel\Sanctum\Sanctum::actingAs($vendedor);
+
+        $response = $this->getJson('/api/v1/cotizaciones');
+
+        $response->assertStatus(200);
+        $ids = collect($response->json('data'))->pluck('id')->toArray();
+        $this->assertNotContains($cotizacion->id, $ids);
+    }
+
+    public function test_store_guarda_created_by_user_id(): void
+    {
+        $vendedor = \App\Models\User::factory()->create(['rol' => 'vendedor']);
+        \Laravel\Sanctum\Sanctum::actingAs($vendedor);
+
+        $cliente = \App\Models\Cliente::factory()->create();
+
+        $response = $this->postJson('/api/v1/cotizaciones', [
+            'cliente_id' => $cliente->id,
+            'fecha'      => '2026-03-30',
+            'total'      => 0,
+        ]);
+
+        $response->assertStatus(201);
+        $this->assertDatabaseHas('cotizaciones', [
+            'id'                  => $response->json('data.id'),
+            'created_by_user_id'  => $vendedor->id,
+        ]);
+    }
 }

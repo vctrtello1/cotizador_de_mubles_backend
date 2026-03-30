@@ -17,6 +17,7 @@ class Cotizacion extends Model
         'fecha',
         'total',
         'estado',
+        'created_by_user_id',
     ];
 
     protected $attributes = [

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cotizacion;
+use App\Models\CotizacionesPorUsuario;
 use App\Http\Resources\CotizacionResource;
 use App\Http\Requests\StoreCotizacionRequest;
 use App\Http\Requests\UpdateCotizacionRequest;
@@ -18,8 +19,11 @@ class CotizacionController extends Controller
         $query = Cotizacion::with(['cliente']);
 
         if ($user->rol === 'vendedor') {
-            $query->whereHas('usuariosAsignados', function ($q) use ($user) {
-                $q->where('user_id', $user->id);
+            $query->where(function ($q) use ($user) {
+                $q->where('created_by_user_id', $user->id)
+                  ->orWhereHas('usuariosAsignados', function ($q2) use ($user) {
+                      $q2->where('user_id', $user->id);
+                  });
             });
         }
 
@@ -28,9 +32,11 @@ class CotizacionController extends Controller
 
     public function store(StoreCotizacionRequest $request)
     {
-        $data = $request->validated();
-        
-        $cotizacion = DB::transaction(function () use ($data) {
+        $data    = $request->validated();
+        $user    = $request->user();
+        $data['created_by_user_id'] = $user->id;
+
+        $cotizacion = DB::transaction(function () use ($data, $user) {
             $cotizacion = Cotizacion::create($data);
 
             if (isset($data['detalles'])) {
@@ -41,6 +47,13 @@ class CotizacionController extends Controller
                     return $detalle;
                 });
                 $cotizacion->detalles()->createMany($detalles);
+            }
+
+            if ($user->rol === 'vendedor') {
+                CotizacionesPorUsuario::create([
+                    'user_id'       => $user->id,
+                    'cotizacion_id' => $cotizacion->id,
+                ]);
             }
 
             return $cotizacion;
