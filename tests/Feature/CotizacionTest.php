@@ -2,7 +2,11 @@
 
 namespace Tests\Feature;
 
+use App\Models\CotizacionesPorUsuario;
+use App\Models\Cotizacion;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class CotizacionTest extends TestCase
@@ -692,7 +696,7 @@ class CotizacionTest extends TestCase
         $this->assertContains($cotizacionId, $ids);
     }
 
-    public function test_admin_store_no_crea_asignacion(): void
+    public function test_store_no_crea_asignacion(): void
     {
         // El TestCase base autentica como admin; la cotización no debe generar
         // registro en cotizaciones_por_usuario
@@ -708,51 +712,12 @@ class CotizacionTest extends TestCase
         $this->assertDatabaseCount('cotizaciones_por_usuario', 0);
     }
 
-    public function test_vendedor_ve_cotizacion_por_created_by_sin_asignacion_explicita(): void
+    // ─── Nuevos: created_by_user_id y asignación manual por admin ─────────────
+
+    public function test_store_guarda_created_by_user_id_para_admin(): void
     {
-        // Simula el escenario de cotizaciones históricas (backfill):
-        // created_by_user_id apunta al vendedor pero no existe registro en cotizaciones_por_usuario.
-        $vendedor = \App\Models\User::factory()->create(['rol' => 'vendedor']);
-
-        $cotizacion = \App\Models\Cotizacion::factory()->create([
-            'created_by_user_id' => $vendedor->id,
-        ]);
-
-        // No se crea ningún CotizacionesPorUsuario para este vendedor
-        $this->assertDatabaseCount('cotizaciones_por_usuario', 0);
-
-        \Laravel\Sanctum\Sanctum::actingAs($vendedor);
-
-        $response = $this->getJson('/api/v1/cotizaciones');
-
-        $response->assertStatus(200);
-        $ids = collect($response->json('data'))->pluck('id')->toArray();
-        $this->assertContains($cotizacion->id, $ids);
-    }
-
-    public function test_vendedor_no_ve_cotizacion_creada_por_otro_usuario(): void
-    {
-        $vendedor  = \App\Models\User::factory()->create(['rol' => 'vendedor']);
-        $otroAdmin = \App\Models\User::factory()->create(['rol' => 'admin']);
-
-        // Cotizacion creada por admin, sin asignar a nadie
-        $cotizacion = \App\Models\Cotizacion::factory()->create([
-            'created_by_user_id' => $otroAdmin->id,
-        ]);
-
-        \Laravel\Sanctum\Sanctum::actingAs($vendedor);
-
-        $response = $this->getJson('/api/v1/cotizaciones');
-
-        $response->assertStatus(200);
-        $ids = collect($response->json('data'))->pluck('id')->toArray();
-        $this->assertNotContains($cotizacion->id, $ids);
-    }
-
-    public function test_store_guarda_created_by_user_id(): void
-    {
-        $vendedor = \App\Models\User::factory()->create(['rol' => 'vendedor']);
-        \Laravel\Sanctum\Sanctum::actingAs($vendedor);
+        $admin = User::factory()->create(['rol' => 'admin']);
+        Sanctum::actingAs($admin);
 
         $cliente = \App\Models\Cliente::factory()->create();
 
@@ -764,8 +729,82 @@ class CotizacionTest extends TestCase
 
         $response->assertStatus(201);
         $this->assertDatabaseHas('cotizaciones', [
-            'id'                  => $response->json('data.id'),
-            'created_by_user_id'  => $vendedor->id,
+            'id'                 => $response->json('data.id'),
+            'created_by_user_id' => $admin->id,
         ]);
+        // Admin no genera entrada en cotizaciones_por_usuario
+        $this->assertDatabaseCount('cotizaciones_por_usuario', 0);
+    }
+
+    public function test_vendedor_ve_cotizacion_de_admin_asignada_manualmente(): void
+    {
+        // Simula el escenario de cotizacion 31: creada por admin, asignada al vendedor
+        $admin    = User::factory()->create(['rol' => 'admin']);
+        $vendedor = User::factory()->create(['rol' => 'vendedor']);
+
+        $cotizacion = Cotizacion::factory()->create([
+            'created_by_user_id' => $admin->id,
+        ]);
+
+        // Solo hay asignación manual, no created_by
+        CotizacionesPorUsuario::create([
+            'user_id'       => $vendedor->id,
+            'cotizacion_id' => $cotizacion->id,
+        ]);
+
+        Sanctum::actingAs($vendedor);
+
+        $response = $this->getJson('/api/v1/cotizaciones');
+
+        $response->assertStatus(200);
+        $ids = collect($response->json('data'))->pluck('id')->toArray();
+        $this->assertContains($cotizacion->id, $ids);
+    }
+
+    public function test_vendedor_sin_asignacion_no_ve_cotizacion_de_admin(): void
+    {
+        $admin    = User::factory()->create(['rol' => 'admin']);
+        $vendedor = User::factory()->create(['rol' => 'vendedor']);
+
+        Cotizacion::factory()->create(['created_by_user_id' => $admin->id]);
+
+        Sanctum::actingAs($vendedor);
+
+        $response = $this->getJson('/api/v1/cotizaciones');
+
+        $response->assertStatus(200);
+        $response->assertJsonCount(0, 'data');
+    }
+
+    public function test_vendedor_ve_cotizacion_por_ambas_vias(): void
+    {
+        // Cotizacion propia (created_by) + cotizacion asignada por admin
+        $admin    = User::factory()->create(['rol' => 'admin']);
+        $vendedor = User::factory()->create(['rol' => 'vendedor']);
+
+        Sanctum::actingAs($vendedor);
+        $cliente  = \App\Models\Cliente::factory()->create();
+
+        // Crea una propia (genera created_by + cotizaciones_por_usuario)
+        $res = $this->postJson('/api/v1/cotizaciones', [
+            'cliente_id' => $cliente->id,
+            'fecha'      => '2026-03-30',
+            'total'      => 0,
+        ]);
+        $propiaId = $res->json('data.id');
+
+        // Asignada manualmente por admin
+        $asignada = Cotizacion::factory()->create(['created_by_user_id' => $admin->id]);
+        CotizacionesPorUsuario::create(['user_id' => $vendedor->id, 'cotizacion_id' => $asignada->id]);
+
+        Sanctum::actingAs($vendedor);
+
+        $index = $this->getJson('/api/v1/cotizaciones');
+        $index->assertStatus(200);
+
+        $ids = collect($index->json('data'))->pluck('id')->toArray();
+        $this->assertContains($propiaId, $ids);
+        $this->assertContains($asignada->id, $ids);
+        $this->assertCount(2, $ids);
     }
 }
