@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CotizacionesPorUsuarioController;
 use App\Http\Controllers\AcabadoCubreCantoController;
 use App\Http\Controllers\AcabadoCubreCantoPorComponenteController;
 use App\Http\Controllers\AcabadoTableroController;
@@ -125,3 +126,6 @@ Route::apiResource('puertas-por-componente', PuertasPorComponenteController::cla
 
 Route::apiResource('gola-por-componente', GolaPorComponenteController::class)
     ->parameters(['gola-por-componente' => 'golaPorComponente']);
+
+Route::apiResource('cotizaciones-por-usuario', CotizacionesPorUsuarioController::class)
+    ->parameters(['cotizaciones-por-usuario' => 'cotizacionesPorUsuario']);
