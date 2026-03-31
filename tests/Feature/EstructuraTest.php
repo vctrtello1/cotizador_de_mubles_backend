@@ -26,7 +26,6 @@ class EstructuraTest extends TestCase
                 '*' => [
                     'id',
                     'nombre',
-                    'costo_unitario',
                 ],
             ],
         ]);
@@ -41,7 +40,6 @@ class EstructuraTest extends TestCase
     {
         $estructura = Estructura::factory()->create([
             'nombre' => 'BCO FROSTY',
-            'costo_unitario' => 800.00,
         ]);
 
         $response = $this->getJson("/api/v1/estructuras/{$estructura->id}");
@@ -51,12 +49,10 @@ class EstructuraTest extends TestCase
             'data' => [
                 'id',
                 'nombre',
-                'costo_unitario',
             ],
         ]);
         $response->assertJsonFragment([
             'nombre' => 'BCO FROSTY',
-            'costo_unitario' => '800.00',
         ]);
     }
 
@@ -67,7 +63,6 @@ class EstructuraTest extends TestCase
     {
         $estructuraData = [
             'nombre' => 'MAPLE NATURAL',
-            'costo_unitario' => 950.00,
         ];
 
         $response = $this->postJson('/api/v1/estructuras', $estructuraData);
@@ -79,7 +74,6 @@ class EstructuraTest extends TestCase
 
         $this->assertDatabaseHas('estructura', [
             'nombre' => 'MAPLE NATURAL',
-            'costo_unitario' => 950.00,
         ]);
     }
 
@@ -90,12 +84,10 @@ class EstructuraTest extends TestCase
     {
         $estructura = Estructura::factory()->create([
             'nombre' => 'ROBLE CLARO',
-            'costo_unitario' => 700.00,
         ]);
 
         $updatedData = [
             'nombre' => 'ROBLE OSCURO',
-            'costo_unitario' => 850.00,
         ];
 
         $response = $this->putJson("/api/v1/estructuras/{$estructura->id}", $updatedData);
@@ -103,13 +95,11 @@ class EstructuraTest extends TestCase
         $response->assertStatus(200);
         $response->assertJsonFragment([
             'nombre' => 'ROBLE OSCURO',
-            'costo_unitario' => '850.00',
         ]);
 
         $this->assertDatabaseHas('estructura', [
             'id' => $estructura->id,
             'nombre' => 'ROBLE OSCURO',
-            'costo_unitario' => 850.00,
         ]);
     }
 
@@ -134,9 +124,7 @@ class EstructuraTest extends TestCase
      */
     public function test_estructura_validation_nombre_required(): void
     {
-        $invalidData = [
-            'costo_unitario' => 500.00,
-        ];
+        $invalidData = [];
 
         $response = $this->postJson('/api/v1/estructuras', $invalidData);
 
@@ -145,34 +133,31 @@ class EstructuraTest extends TestCase
     }
 
     /**
-     * Test validation on estructura store - costo_unitario is required.
+     * Test validation on estructura store - costo_unitario is no longer required.
      */
     public function test_estructura_validation_costo_unitario_required(): void
     {
-        $invalidData = [
+        $data = [
             'nombre' => 'PINO NATURAL',
         ];
 
-        $response = $this->postJson('/api/v1/estructuras', $invalidData);
+        $response = $this->postJson('/api/v1/estructuras', $data);
 
-        $response->assertStatus(422);
-        $response->assertJsonValidationErrors(['costo_unitario']);
+        $response->assertStatus(201);
     }
 
     /**
-     * Test validation on estructura store - costo_unitario must be numeric.
+     * Test validation on estructura store - costo_unitario field is ignored.
      */
     public function test_estructura_validation_costo_unitario_numeric(): void
     {
-        $invalidData = [
-            'nombre' => 'PINO NATURAL',
-            'costo_unitario' => 'not-a-number',
+        $data = [
+            'nombre' => 'PINO NATURAL 2',
         ];
 
-        $response = $this->postJson('/api/v1/estructuras', $invalidData);
+        $response = $this->postJson('/api/v1/estructuras', $data);
 
-        $response->assertStatus(422);
-        $response->assertJsonValidationErrors(['costo_unitario']);
+        $response->assertStatus(201);
     }
 
     /**
@@ -208,7 +193,6 @@ class EstructuraTest extends TestCase
         
         $updatedData = [
             'nombre' => 'ESTRUCTURA INEXISTENTE',
-            'costo_unitario' => 999.00,
         ];
 
         $response = $this->putJson("/api/v1/estructuras/{$nonExistentId}", $updatedData);
@@ -224,13 +208,11 @@ class EstructuraTest extends TestCase
         // Create first estructura
         Estructura::factory()->create([
             'nombre' => 'NOGAL AMERICANO',
-            'costo_unitario' => 1100.00,
         ]);
 
         // Try to create another with same nombre
         $duplicateData = [
             'nombre' => 'NOGAL AMERICANO',
-            'costo_unitario' => 1200.00,
         ];
 
         $response = $this->postJson('/api/v1/estructuras', $duplicateData);

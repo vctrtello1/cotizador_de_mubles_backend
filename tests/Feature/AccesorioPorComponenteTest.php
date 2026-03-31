@@ -75,10 +75,7 @@ class AccesorioPorComponenteTest extends TestCase
     public function test_accesorio_por_componente_creation_with_accesorio_id(): void
     {
         $componente = Componente::factory()->create();
-        $accesorio = Accesorio::factory()->create([
-            'nombre' => 'PATAS NIVELADORAS',
-            'precio' => 20.00,
-        ]);
+        $accesorio = Accesorio::where('nombre', 'PATAS NIVELADORAS')->first();
 
         $response = $this->postJson('/api/v1/accesorios-por-componente', [
             'componente_id' => $componente->id,
@@ -149,10 +146,7 @@ class AccesorioPorComponenteTest extends TestCase
     public function test_accesorio_por_componente_shows_costo_when_catalog_match_exists(): void
     {
         $componente = Componente::factory()->create();
-        Accesorio::factory()->create([
-            'nombre' => 'CLIPS ZOCLO',
-            'precio' => 2.00,
-        ]);
+        $accesorio = Accesorio::where('nombre', 'CLIPS ZOCLO')->first();
 
         $accesorioPorComponente = \App\Models\AccesoriosPorComponente::factory()->create([
             'componente_id' => $componente->id,

@@ -22,9 +22,9 @@ class ViewerPriceVisibilityTest extends TestCase
     {
         Sanctum::actingAs(User::factory()->create(['rol' => 'vendedor']));
 
-        $estructura = Estructura::factory()->create(['costo_unitario' => 123.45]);
-        $acabadoCubreCanto = AcabadoCubreCanto::factory()->create(['costo_unitario' => 67.89]);
-        $acabadoTablero = AcabadoTablero::factory()->create(['costo_unitario' => 89.01]);
+        $estructura = Estructura::factory()->create();
+        $acabadoCubreCanto = AcabadoCubreCanto::factory()->create();
+        $acabadoTablero = AcabadoTablero::factory()->create();
         $puerta = Puerta::factory()->create();
         $accesorio = Accesorio::factory()->create(['nombre' => 'Bisagra Viewer', 'precio' => 45.50]);
         $componente = Componente::factory()->create(['precio_unitario' => 250.75]);
@@ -71,7 +71,7 @@ class ViewerPriceVisibilityTest extends TestCase
     {
         Sanctum::actingAs(User::factory()->create(['rol' => 'desarrollador']));
 
-        $estructura = Estructura::factory()->create(['costo_unitario' => 123.45]);
+        $estructura = Estructura::factory()->create();
         $puerta = Puerta::factory()->create();
         $accesorio = Accesorio::factory()->create(['nombre' => 'Bisagra Dev', 'precio' => 45.50]);
         $componente = Componente::factory()->create(['precio_unitario' => 250.75]);
@@ -83,7 +83,7 @@ class ViewerPriceVisibilityTest extends TestCase
 
         $estructuraResponse = $this->getJson("/api/v1/estructuras/{$estructura->id}");
         $estructuraResponse->assertOk();
-        $this->assertArrayHasKey('costo_unitario', $estructuraResponse->json('data'));
+        $this->assertArrayNotHasKey('costo_unitario', $estructuraResponse->json('data'));
 
         $puertaResponse = $this->getJson("/api/v1/puertas/{$puerta->id}");
         $puertaResponse->assertOk();

@@ -14,5 +14,6 @@ class AcabadoTablero extends Model
 
     protected $fillable = [
         'nombre',
+        'costo_unitario',
     ];
 }

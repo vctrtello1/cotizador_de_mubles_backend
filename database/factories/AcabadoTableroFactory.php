@@ -17,7 +17,8 @@ class AcabadoTableroFactory extends Factory
     public function definition(): array
     {
         return [
-            'nombre' => fake()->words(3, true),
+            'nombre' => fake()->unique()->words(3, true),
+            'costo_unitario' => fake()->randomFloat(2, 100, 10000),
         ];
     }
 }
