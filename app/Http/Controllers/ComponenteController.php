@@ -56,6 +56,13 @@ class ComponenteController extends Controller
     public function destroy(Componente $componente)
     {
         $componente->accesorios_por_componente()->delete();
+        $componente->estructuras_por_componente()->delete();
+        $componente->acabado_tablero_por_componente()->delete();
+        $componente->acabado_cubre_canto_por_componente()->delete();
+        $componente->puertas_por_componente()->delete();
+        $componente->gola_por_componente()->delete();
+        $componente->correderas_por_componente()->delete();
+        $componente->compases_abatibles_por_componente()->delete();
         $componente->delete();
         
         return response()->noContent();
