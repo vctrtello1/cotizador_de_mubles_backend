@@ -52,6 +52,16 @@ class Componente extends Model
         return $this->hasMany(GolaPorComponente::class);
     }
 
+    public function correderas_por_componente()
+    {
+        return $this->hasMany(CorrederaPorComponente::class);
+    }
+
+    public function compases_abatibles_por_componente()
+    {
+        return $this->hasMany(CompasAbatiblePorComponente::class);
+    }
+
     public function getCostoTotalAttribute()
     {
         return (float) ($this->precio_unitario ?? 0);

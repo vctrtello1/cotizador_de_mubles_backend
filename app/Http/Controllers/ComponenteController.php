@@ -74,6 +74,8 @@ class ComponenteController extends Controller
                 'acabado_cubre_canto_por_componente',
                 'puertas_por_componente',
                 'gola_por_componente',
+                'correderas_por_componente',
+                'compases_abatibles_por_componente',
             ]);
 
             $nuevo = $componente->replicate();
@@ -117,6 +119,18 @@ class ComponenteController extends Controller
                 );
             }
 
+            foreach ($componente->correderas_por_componente as $rel) {
+                $nuevo->correderas_por_componente()->create(
+                    collect($rel->toArray())->except(['id', 'componente_id', 'created_at', 'updated_at'])->toArray()
+                );
+            }
+
+            foreach ($componente->compases_abatibles_por_componente as $rel) {
+                $nuevo->compases_abatibles_por_componente()->create(
+                    collect($rel->toArray())->except(['id', 'componente_id', 'created_at', 'updated_at'])->toArray()
+                );
+            }
+
             return $nuevo;
         });
 
@@ -127,6 +141,8 @@ class ComponenteController extends Controller
             'acabado_cubre_canto_por_componente',
             'puertas_por_componente',
             'gola_por_componente',
+            'correderas_por_componente',
+            'compases_abatibles_por_componente',
         ])->toResource();
     }
 
