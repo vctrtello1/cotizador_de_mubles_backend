@@ -14,7 +14,7 @@ class CorrederaController extends Controller
      */
     public function index()
     {
-        return CorrederaResource::collection(Corredera::all());
+        return CorrederaResource::collection(Corredera::with('capacidades')->get());
     }
 
     /**
@@ -23,7 +23,7 @@ class CorrederaController extends Controller
     public function store(StoreCorrederaRequest $request)
     {
         $corredera = Corredera::create($request->validated());
-        return new CorrederaResource($corredera);
+        return new CorrederaResource($corredera->load('capacidades'));
     }
 
     /**
@@ -31,7 +31,7 @@ class CorrederaController extends Controller
      */
     public function show(Corredera $corredera)
     {
-        return new CorrederaResource($corredera);
+        return new CorrederaResource($corredera->load('capacidades'));
     }
 
     /**
@@ -40,7 +40,7 @@ class CorrederaController extends Controller
     public function update(UpdateCorrederaRequest $request, Corredera $corredera)
     {
         $corredera->update($request->validated());
-        return new CorrederaResource($corredera);
+        return new CorrederaResource($corredera->load('capacidades'));
     }
 
     /**

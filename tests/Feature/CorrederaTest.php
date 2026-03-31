@@ -380,4 +380,97 @@ class CorrederaTest extends TestCase
             'incluye_varilla' => true,
         ]);
     }
+
+    /**
+     * Test index endpoint includes capacidades for each corredera.
+     */
+    public function test_corredera_index_incluye_capacidades(): void
+    {
+        $corredera = \App\Models\Corredera::factory()->create();
+        \App\Models\CapacidadCorredera::factory()->create([
+            'corredera_id' => $corredera->id,
+            'capacidad' => 30,
+        ]);
+        \App\Models\CapacidadCorredera::factory()->create([
+            'corredera_id' => $corredera->id,
+            'capacidad' => 40,
+        ]);
+
+        $response = $this->getJson('/api/v1/correderas');
+
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            'data' => [
+                '*' => [
+                    'id',
+                    'nombre',
+                    'capacidades' => [
+                        '*' => ['id', 'capacidad', 'corredera_id'],
+                    ],
+                ],
+            ],
+        ]);
+
+        $data = collect($response->json('data'))->firstWhere('id', $corredera->id);
+        $this->assertCount(2, $data['capacidades']);
+        $capacidades = collect($data['capacidades'])->pluck('capacidad')->sort()->values()->toArray();
+        $this->assertEquals([30, 40], $capacidades);
+    }
+
+    /**
+     * Test show endpoint includes capacidades.
+     */
+    public function test_corredera_show_incluye_capacidades(): void
+    {
+        $corredera = \App\Models\Corredera::factory()->create();
+        \App\Models\CapacidadCorredera::factory()->create([
+            'corredera_id' => $corredera->id,
+            'capacidad' => 70,
+        ]);
+
+        $response = $this->getJson("/api/v1/correderas/{$corredera->id}");
+
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            'data' => [
+                'capacidades' => [
+                    '*' => ['id', 'capacidad', 'corredera_id'],
+                ],
+            ],
+        ]);
+        $this->assertCount(1, $response->json('data.capacidades'));
+        $this->assertEquals(70, $response->json('data.capacidades.0.capacidad'));
+    }
+
+    /**
+     * Test corredera sin capacidades devuelve array vacío.
+     */
+    public function test_corredera_sin_capacidades_devuelve_array_vacio(): void
+    {
+        $corredera = \App\Models\Corredera::factory()->create();
+
+        $response = $this->getJson("/api/v1/correderas/{$corredera->id}");
+
+        $response->assertStatus(200);
+        $this->assertIsArray($response->json('data.capacidades'));
+        $this->assertCount(0, $response->json('data.capacidades'));
+    }
+
+    /**
+     * Test destroy corredera elimina capacidades en cascada.
+     */
+    public function test_corredera_destroy_elimina_capacidades_en_cascada(): void
+    {
+        $corredera = \App\Models\Corredera::factory()->create();
+        \App\Models\CapacidadCorredera::factory()->create(['corredera_id' => $corredera->id, 'capacidad' => 30]);
+        \App\Models\CapacidadCorredera::factory()->create(['corredera_id' => $corredera->id, 'capacidad' => 40]);
+        \App\Models\CapacidadCorredera::factory()->create(['corredera_id' => $corredera->id, 'capacidad' => 70]);
+
+        $this->assertDatabaseCount('capacidad_correderas', 3);
+
+        $response = $this->deleteJson("/api/v1/correderas/{$corredera->id}");
+
+        $response->assertStatus(204);
+        $this->assertDatabaseCount('capacidad_correderas', 0);
+    }
 }

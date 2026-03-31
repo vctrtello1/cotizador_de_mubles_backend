@@ -21,4 +21,9 @@ class Corredera extends Model
     protected $casts = [
         'incluye_varilla' => 'boolean',
     ];
+
+    public function capacidades()
+    {
+        return $this->hasMany(CapacidadCorredera::class);
+    }
 }

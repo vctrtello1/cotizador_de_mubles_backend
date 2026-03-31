@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Http\Resources\CapacidadCorrederaResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -22,6 +23,7 @@ class CorrederaResource extends JsonResource
             'incluye_varilla' => $this->incluye_varilla,
             'precio_base' => $this->precio_base,
             'precio_con_acoplamiento' => $this->precio_con_acoplamiento,
+            'capacidades' => CapacidadCorrederaResource::collection($this->whenLoaded('capacidades')),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
