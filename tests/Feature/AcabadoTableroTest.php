@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\AcabadoTablero;
+use App\Models\AcabadoTableroPorComponente;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -232,5 +233,20 @@ class AcabadoTableroTest extends TestCase
 
         $response->assertStatus(422);
         $response->assertJsonValidationErrors(['nombre']);
+    }
+
+    /**
+     * Test that acabado_tablero delete returns 409 when in use by a componente.
+     */
+    public function test_acabado_tablero_delete_in_use_returns_conflict(): void
+    {
+        $relation = AcabadoTableroPorComponente::factory()->create();
+
+        $response = $this->deleteJson("/api/v1/acabado-tableros/{$relation->acabado_tablero_id}");
+
+        $response->assertStatus(409);
+        $response->assertJsonFragment([
+            'message' => 'No se puede eliminar el acabado tablero porque está siendo utilizado por uno o más componentes.',
+        ]);
     }
 }

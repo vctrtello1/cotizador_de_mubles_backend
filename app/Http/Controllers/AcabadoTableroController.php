@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AcabadoTableroRequest;
 use App\Http\Resources\AcabadoTableroResource;
 use App\Models\AcabadoTablero;
+use Illuminate\Database\QueryException;
 
 class AcabadoTableroController extends Controller
 {
@@ -47,7 +48,17 @@ class AcabadoTableroController extends Controller
      */
     public function destroy(AcabadoTablero $acabadoTablero)
     {
-        $acabadoTablero->delete();
+        try {
+            $acabadoTablero->delete();
+        } catch (QueryException $e) {
+            if ($e->getCode() === '23000') {
+                return response()->json([
+                    'message' => 'No se puede eliminar el acabado tablero porque está siendo utilizado por uno o más componentes.',
+                ], 409);
+            }
+            throw $e;
+        }
+
         return response()->noContent();
     }
 }
