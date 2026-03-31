@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Corredera;
+use Illuminate\Support\Facades\DB;
 
 class CorrederaSeeder extends Seeder
 {
@@ -265,7 +266,25 @@ class CorrederaSeeder extends Seeder
         ];
 
         foreach ($correderas as $corredera) {
-            Corredera::create($corredera);
+            Corredera::updateOrCreate(
+                ['nombre' => $corredera['nombre']],
+                $corredera
+            );
+        }
+
+        // Seed capacidades para cada corredera
+        $capacidades = [30, 40, 70];
+        $allCorrederas = DB::table('correderas')->get();
+
+        foreach ($allCorrederas as $corredera) {
+            foreach ($capacidades as $capacidad) {
+                DB::table('capacidad_correderas')->insertOrIgnore([
+                    'capacidad' => $capacidad,
+                    'corredera_id' => $corredera->id,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
         }
     }
 }

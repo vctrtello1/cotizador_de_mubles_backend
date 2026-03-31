@@ -9,12 +9,23 @@ use Illuminate\Support\Facades\DB;
 
 class ComponenteController extends Controller
 {
+    private const COST_RELATIONS = [
+        'accesorios_por_componente',
+        'estructuras_por_componente.estructura',
+        'acabado_tablero_por_componente.acabadoTablero',
+        'acabado_cubre_canto_por_componente.acabadoCubreCanto',
+        'puertas_por_componente.puerta',
+        'gola_por_componente.gola',
+        'correderas_por_componente.corredera',
+        'compases_abatibles_por_componente.compasAbatible',
+    ];
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return Componente::with(['accesorios_por_componente'])->get()->toResourceCollection();
+        return Componente::with(self::COST_RELATIONS)->get()->toResourceCollection();
     }
 
     /**
@@ -24,7 +35,7 @@ class ComponenteController extends Controller
     {
         $componente = Componente::create($request->validated());
         $this->syncRelations($componente, $request);
-        return $componente->load(['accesorios_por_componente'])->toResource();
+        return $componente->load(self::COST_RELATIONS)->toResource();
     }
 
     /**
@@ -32,7 +43,7 @@ class ComponenteController extends Controller
      */
     public function show(Componente $componente)
     {
-        return $componente->load(['accesorios_por_componente'])->toResource();
+        return $componente->load(self::COST_RELATIONS)->toResource();
     }
 
     /**
@@ -47,7 +58,7 @@ class ComponenteController extends Controller
         }
         
         $this->syncRelations($componente, $request);
-        return $componente->load(['accesorios_por_componente'])->toResource();
+        return $componente->load(self::COST_RELATIONS)->toResource();
     }
 
     /**
@@ -141,16 +152,7 @@ class ComponenteController extends Controller
             return $nuevo;
         });
 
-        return $nuevo->load([
-            'accesorios_por_componente',
-            'estructuras_por_componente',
-            'acabado_tablero_por_componente',
-            'acabado_cubre_canto_por_componente',
-            'puertas_por_componente',
-            'gola_por_componente',
-            'correderas_por_componente',
-            'compases_abatibles_por_componente',
-        ])->toResource();
+        return $nuevo->load(self::COST_RELATIONS)->toResource();
     }
 
     /**

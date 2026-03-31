@@ -168,14 +168,27 @@ class ComponenteTest extends TestCase
 
     public function test_componente_cost_calculation(): void
     {
-        $componente = Componente::factory()->create([
-            'precio_unitario' => 420.00,
+        $componente = Componente::factory()->create();
+
+        $estructura = \App\Models\Estructura::factory()->create(['costo_unitario' => 100]);
+        \App\Models\EstructuraPorComponente::factory()->create([
+            'componente_id' => $componente->id,
+            'estructura_id' => $estructura->id,
+            'cantidad' => 2,
         ]);
 
+        $acabadoTablero = \App\Models\AcabadoTablero::factory()->create(['costo_unitario' => 50]);
+        \App\Models\AcabadoTableroPorComponente::factory()->create([
+            'componente_id' => $componente->id,
+            'acabado_tablero_id' => $acabadoTablero->id,
+            'cantidad' => 3,
+        ]);
+
+        // estructura: 100*2 = 200, acabado_tablero: 50*3 = 150 → total = 350
         $response = $this->getJson("/api/v1/componentes/{$componente->id}");
 
         $response->assertStatus(200);
-        $response->assertJsonFragment(['costo_total' => 420.0]);
+        $response->assertJsonFragment(['costo_total' => 350.0]);
     }
 
     // ─── Duplicate ───────────────────────────────────────────────────────────
