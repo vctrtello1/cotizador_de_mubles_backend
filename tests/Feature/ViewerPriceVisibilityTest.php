@@ -83,7 +83,7 @@ class ViewerPriceVisibilityTest extends TestCase
 
         $estructuraResponse = $this->getJson("/api/v1/estructuras/{$estructura->id}");
         $estructuraResponse->assertOk();
-        $this->assertArrayNotHasKey('costo_unitario', $estructuraResponse->json('data'));
+        $this->assertArrayHasKey('costo_unitario', $estructuraResponse->json('data'));
 
         $puertaResponse = $this->getJson("/api/v1/puertas/{$puerta->id}");
         $puertaResponse->assertOk();

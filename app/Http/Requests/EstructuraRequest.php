@@ -31,6 +31,7 @@ class EstructuraRequest extends FormRequest
                 'max:255',
                 Rule::unique('estructura', 'nombre')->ignore($estructuraId),
             ],
+            'costo_unitario' => ['required', 'numeric', 'min:0'],
         ];
     }
 }

@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Estructura;
+use App\Models\EstructuraPorComponente;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -40,6 +41,7 @@ class EstructuraTest extends TestCase
     {
         $estructura = Estructura::factory()->create([
             'nombre' => 'BCO FROSTY',
+            'costo_unitario' => 800.00,
         ]);
 
         $response = $this->getJson("/api/v1/estructuras/{$estructura->id}");
@@ -49,10 +51,12 @@ class EstructuraTest extends TestCase
             'data' => [
                 'id',
                 'nombre',
+                'costo_unitario',
             ],
         ]);
         $response->assertJsonFragment([
             'nombre' => 'BCO FROSTY',
+            'costo_unitario' => '800.00',
         ]);
     }
 
@@ -63,6 +67,7 @@ class EstructuraTest extends TestCase
     {
         $estructuraData = [
             'nombre' => 'MAPLE NATURAL',
+            'costo_unitario' => 950.00,
         ];
 
         $response = $this->postJson('/api/v1/estructuras', $estructuraData);
@@ -70,10 +75,12 @@ class EstructuraTest extends TestCase
         $response->assertStatus(201);
         $response->assertJsonFragment([
             'nombre' => 'MAPLE NATURAL',
+            'costo_unitario' => '950.00',
         ]);
 
         $this->assertDatabaseHas('estructura', [
             'nombre' => 'MAPLE NATURAL',
+            'costo_unitario' => 950.00,
         ]);
     }
 
@@ -84,10 +91,12 @@ class EstructuraTest extends TestCase
     {
         $estructura = Estructura::factory()->create([
             'nombre' => 'ROBLE CLARO',
+            'costo_unitario' => 700.00,
         ]);
 
         $updatedData = [
             'nombre' => 'ROBLE OSCURO',
+            'costo_unitario' => 850.00,
         ];
 
         $response = $this->putJson("/api/v1/estructuras/{$estructura->id}", $updatedData);
@@ -95,11 +104,13 @@ class EstructuraTest extends TestCase
         $response->assertStatus(200);
         $response->assertJsonFragment([
             'nombre' => 'ROBLE OSCURO',
+            'costo_unitario' => '850.00',
         ]);
 
         $this->assertDatabaseHas('estructura', [
             'id' => $estructura->id,
             'nombre' => 'ROBLE OSCURO',
+            'costo_unitario' => 850.00,
         ]);
     }
 
@@ -133,7 +144,7 @@ class EstructuraTest extends TestCase
     }
 
     /**
-     * Test validation on estructura store - costo_unitario is no longer required.
+     * Test validation on estructura store - costo_unitario is required.
      */
     public function test_estructura_validation_costo_unitario_required(): void
     {
@@ -143,21 +154,24 @@ class EstructuraTest extends TestCase
 
         $response = $this->postJson('/api/v1/estructuras', $data);
 
-        $response->assertStatus(201);
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors(['costo_unitario']);
     }
 
     /**
-     * Test validation on estructura store - costo_unitario field is ignored.
+     * Test validation on estructura store - costo_unitario must be numeric.
      */
     public function test_estructura_validation_costo_unitario_numeric(): void
     {
         $data = [
             'nombre' => 'PINO NATURAL 2',
+            'costo_unitario' => 'not-a-number',
         ];
 
         $response = $this->postJson('/api/v1/estructuras', $data);
 
-        $response->assertStatus(201);
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors(['costo_unitario']);
     }
 
     /**
@@ -193,6 +207,7 @@ class EstructuraTest extends TestCase
         
         $updatedData = [
             'nombre' => 'ESTRUCTURA INEXISTENTE',
+            'costo_unitario' => 500.00,
         ];
 
         $response = $this->putJson("/api/v1/estructuras/{$nonExistentId}", $updatedData);
@@ -205,19 +220,34 @@ class EstructuraTest extends TestCase
      */
     public function test_estructura_nombre_unique(): void
     {
-        // Create first estructura
         Estructura::factory()->create([
             'nombre' => 'NOGAL AMERICANO',
+            'costo_unitario' => 1100.00,
         ]);
 
-        // Try to create another with same nombre
         $duplicateData = [
             'nombre' => 'NOGAL AMERICANO',
+            'costo_unitario' => 1200.00,
         ];
 
         $response = $this->postJson('/api/v1/estructuras', $duplicateData);
 
         $response->assertStatus(422);
         $response->assertJsonValidationErrors(['nombre']);
+    }
+
+    /**
+     * Test that estructura delete returns 409 when in use by a componente.
+     */
+    public function test_estructura_delete_in_use_returns_conflict(): void
+    {
+        $relation = EstructuraPorComponente::factory()->create();
+
+        $response = $this->deleteJson("/api/v1/estructuras/{$relation->estructura_id}");
+
+        $response->assertStatus(409);
+        $response->assertJsonFragment([
+            'message' => 'No se puede eliminar la estructura porque está siendo utilizada por uno o más componentes.',
+        ]);
     }
 }

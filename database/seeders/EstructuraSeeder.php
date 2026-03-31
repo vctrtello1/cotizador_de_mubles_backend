@@ -10,12 +10,15 @@ class EstructuraSeeder extends Seeder
     public function run(): void
     {
         $estructuras = [
-            ['nombre' => 'BCO FROSTY'],
-            ['nombre' => 'ARAURCO LINO CAIRO'],
+            ['nombre' => 'BCO FROSTY', 'costo_unitario' => 800.00],
+            ['nombre' => 'ARAUCO LINO CAIRO', 'costo_unitario' => 1200.00],
         ];
 
         foreach ($estructuras as $estructura) {
-            DB::table('estructura')->updateOrInsert(['nombre' => $estructura['nombre']], $estructura);
+            DB::table('estructura')->updateOrInsert(
+                ['nombre' => $estructura['nombre']],
+                $estructura
+            );
         }
     }
 }

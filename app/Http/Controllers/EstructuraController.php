@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\EstructuraRequest;
 use App\Http\Resources\EstructuraResource;
 use App\Models\Estructura;
+use Illuminate\Database\QueryException;
 
 class EstructuraController extends Controller
 {
@@ -47,7 +48,17 @@ class EstructuraController extends Controller
      */
     public function destroy(Estructura $estructura)
     {
-        $estructura->delete();
+        try {
+            $estructura->delete();
+        } catch (QueryException $e) {
+            if ($e->getCode() === '23000') {
+                return response()->json([
+                    'message' => 'No se puede eliminar la estructura porque está siendo utilizada por uno o más componentes.',
+                ], 409);
+            }
+            throw $e;
+        }
+
         return response()->noContent();
     }
 }

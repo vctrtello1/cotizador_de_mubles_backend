@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AcabadoCubreCantoRequest;
 use App\Http\Resources\AcabadoCubreCantoResource;
 use App\Models\AcabadoCubreCanto;
+use Illuminate\Database\QueryException;
 
 class AcabadoCubreCantoController extends Controller
 {
@@ -47,7 +48,17 @@ class AcabadoCubreCantoController extends Controller
      */
     public function destroy(AcabadoCubreCanto $acabadoCubreCanto)
     {
-        $acabadoCubreCanto->delete();
+        try {
+            $acabadoCubreCanto->delete();
+        } catch (QueryException $e) {
+            if ($e->getCode() === '23000') {
+                return response()->json([
+                    'message' => 'No se puede eliminar el acabado cubre canto porque está siendo utilizado por uno o más componentes.',
+                ], 409);
+            }
+            throw $e;
+        }
+
         return response()->noContent();
     }
 }

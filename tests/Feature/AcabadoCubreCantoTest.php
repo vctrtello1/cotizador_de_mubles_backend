@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\AcabadoCubreCanto;
+use App\Models\AcabadoCubreCantoPorComponente;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -230,5 +231,20 @@ class AcabadoCubreCantoTest extends TestCase
 
         $response->assertStatus(422);
         $response->assertJsonValidationErrors(['nombre']);
+    }
+
+    /**
+     * Test that acabado_cubre_canto delete returns 409 when in use by a componente.
+     */
+    public function test_acabado_cubre_canto_delete_in_use_returns_conflict(): void
+    {
+        $relation = AcabadoCubreCantoPorComponente::factory()->create();
+
+        $response = $this->deleteJson("/api/v1/acabado-cubre-cantos/{$relation->acabado_cubre_canto_id}");
+
+        $response->assertStatus(409);
+        $response->assertJsonFragment([
+            'message' => 'No se puede eliminar el acabado cubre canto porque está siendo utilizado por uno o más componentes.',
+        ]);
     }
 }
