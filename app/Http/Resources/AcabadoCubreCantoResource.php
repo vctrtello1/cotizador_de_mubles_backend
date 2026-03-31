@@ -14,9 +14,12 @@ class AcabadoCubreCantoResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $canViewDetailedPrices = ! $request->user() || $request->user()->hasPermission('catalogs.write');
+
         return [
             'id' => $this->id,
             'nombre' => $this->nombre,
+            'costo_unitario' => $this->when($canViewDetailedPrices, number_format((float) $this->costo_unitario, 2, '.', '')),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

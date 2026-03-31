@@ -37,6 +37,7 @@ class AcabadoCubreCantoTest extends TestCase
     {
         $acabadoCubreCanto = AcabadoCubreCanto::factory()->create([
             'nombre' => 'Canto PVC Blanco',
+            'costo_unitario' => 25.00,
         ]);
 
         $response = $this->getJson("/api/v1/acabado-cubre-cantos/{$acabadoCubreCanto->id}");
@@ -46,10 +47,12 @@ class AcabadoCubreCantoTest extends TestCase
             'data' => [
                 'id',
                 'nombre',
+                'costo_unitario',
             ],
         ]);
         $response->assertJsonFragment([
             'nombre' => 'Canto PVC Blanco',
+            'costo_unitario' => '25.00',
         ]);
     }
 
@@ -60,6 +63,7 @@ class AcabadoCubreCantoTest extends TestCase
     {
         $acabadoCubreCantoData = [
             'nombre' => 'Canto ABS Negro',
+            'costo_unitario' => 30.00,
         ];
 
         $response = $this->postJson('/api/v1/acabado-cubre-cantos', $acabadoCubreCantoData);
@@ -67,10 +71,12 @@ class AcabadoCubreCantoTest extends TestCase
         $response->assertStatus(201);
         $response->assertJsonFragment([
             'nombre' => 'Canto ABS Negro',
+            'costo_unitario' => '30.00',
         ]);
 
         $this->assertDatabaseHas('acabado_cubre_cantos', [
             'nombre' => 'Canto ABS Negro',
+            'costo_unitario' => 30.00,
         ]);
     }
 
@@ -81,10 +87,12 @@ class AcabadoCubreCantoTest extends TestCase
     {
         $acabadoCubreCanto = AcabadoCubreCanto::factory()->create([
             'nombre' => 'Canto Melamina',
+            'costo_unitario' => 20.00,
         ]);
 
         $updatedData = [
             'nombre' => 'Canto Melamina Premium',
+            'costo_unitario' => 35.00,
         ];
 
         $response = $this->putJson("/api/v1/acabado-cubre-cantos/{$acabadoCubreCanto->id}", $updatedData);
@@ -92,11 +100,13 @@ class AcabadoCubreCantoTest extends TestCase
         $response->assertStatus(200);
         $response->assertJsonFragment([
             'nombre' => 'Canto Melamina Premium',
+            'costo_unitario' => '35.00',
         ]);
 
         $this->assertDatabaseHas('acabado_cubre_cantos', [
             'id' => $acabadoCubreCanto->id,
             'nombre' => 'Canto Melamina Premium',
+            'costo_unitario' => 35.00,
         ]);
     }
 
@@ -140,7 +150,8 @@ class AcabadoCubreCantoTest extends TestCase
 
         $response = $this->postJson('/api/v1/acabado-cubre-cantos', $data);
 
-        $response->assertStatus(201);
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors(['costo_unitario']);
     }
 
     /**
@@ -150,11 +161,13 @@ class AcabadoCubreCantoTest extends TestCase
     {
         $data = [
             'nombre' => 'Canto Aluminio 2',
+            'costo_unitario' => 'not-a-number',
         ];
 
         $response = $this->postJson('/api/v1/acabado-cubre-cantos', $data);
 
-        $response->assertStatus(201);
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors(['costo_unitario']);
     }
 
     /**
@@ -190,6 +203,7 @@ class AcabadoCubreCantoTest extends TestCase
         
         $updatedData = [
             'nombre' => 'Canto Inexistente',
+            'costo_unitario' => 50.00,
         ];
 
         $response = $this->putJson("/api/v1/acabado-cubre-cantos/{$nonExistentId}", $updatedData);
@@ -204,10 +218,12 @@ class AcabadoCubreCantoTest extends TestCase
     {
         AcabadoCubreCanto::factory()->create([
             'nombre' => 'Canto Roble',
+            'costo_unitario' => 25.00,
         ]);
 
         $duplicateData = [
             'nombre' => 'Canto Roble',
+            'costo_unitario' => 30.00,
         ];
 
         $response = $this->postJson('/api/v1/acabado-cubre-cantos', $duplicateData);

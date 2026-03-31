@@ -14,5 +14,6 @@ class AcabadoCubreCanto extends Model
 
     protected $fillable = [
         'nombre',
+        'costo_unitario',
     ];
 }

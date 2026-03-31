@@ -31,6 +31,7 @@ class AcabadoCubreCantoRequest extends FormRequest
                 'max:255',
                 Rule::unique('acabado_cubre_cantos', 'nombre')->ignore($acabadoCubreCantoId),
             ],
+            'costo_unitario' => ['required', 'numeric', 'min:0'],
         ];
     }
 }
