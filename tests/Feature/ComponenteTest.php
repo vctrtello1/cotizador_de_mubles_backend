@@ -138,6 +138,34 @@ class ComponenteTest extends TestCase
         ]);
     }
 
+    public function test_componente_destroy_elimina_todas_las_relaciones(): void
+    {
+        $componente = Componente::factory()->create();
+
+        EstructuraPorComponente::factory()->create(['componente_id' => $componente->id]);
+        AcabadoTableroPorComponente::factory()->create(['componente_id' => $componente->id]);
+        AcabadoCubreCantoPorComponente::factory()->create(['componente_id' => $componente->id]);
+        PuertasPorComponente::factory()->create(['componente_id' => $componente->id]);
+        GolaPorComponente::factory()->create(['componente_id' => $componente->id]);
+        CorrederaPorComponente::factory()->create(['componente_id' => $componente->id]);
+        CompasAbatiblePorComponente::factory()->create(['componente_id' => $componente->id]);
+        AccesoriosPorComponente::factory()->create(['componente_id' => $componente->id]);
+
+        $response = $this->deleteJson("/api/v1/componentes/{$componente->id}");
+
+        $response->assertStatus(204);
+
+        $this->assertDatabaseMissing('componentes', ['id' => $componente->id]);
+        $this->assertDatabaseMissing('estructura_por_componente', ['componente_id' => $componente->id]);
+        $this->assertDatabaseMissing('acabado_tablero_por_componente', ['componente_id' => $componente->id]);
+        $this->assertDatabaseMissing('acabado_cubre_canto_por_componente', ['componente_id' => $componente->id]);
+        $this->assertDatabaseMissing('puertas_por_componente', ['componente_id' => $componente->id]);
+        $this->assertDatabaseMissing('gola_por_componente', ['componente_id' => $componente->id]);
+        $this->assertDatabaseMissing('correderas_por_componente', ['componente_id' => $componente->id]);
+        $this->assertDatabaseMissing('compases_abatibles_por_componente', ['componente_id' => $componente->id]);
+        $this->assertDatabaseMissing('accesorios_por_componente', ['componente_id' => $componente->id]);
+    }
+
     public function test_componente_cost_calculation(): void
     {
         $componente = Componente::factory()->create([
