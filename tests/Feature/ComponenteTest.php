@@ -7,7 +7,11 @@ use App\Models\AcabadoCubreCantoPorComponente;
 use App\Models\AcabadoTablero;
 use App\Models\AcabadoTableroPorComponente;
 use App\Models\AccesoriosPorComponente;
+use App\Models\CompasAbatible;
+use App\Models\CompasAbatiblePorComponente;
 use App\Models\Componente;
+use App\Models\Corredera;
+use App\Models\CorrederaPorComponente;
 use App\Models\Estructura;
 use App\Models\EstructuraPorComponente;
 use App\Models\GolaPorComponente;
@@ -279,6 +283,48 @@ class ComponenteTest extends TestCase
         $this->assertDatabaseHas('accesorios_por_componente', [
             'componente_id' => $nuevoId,
             'accesorio'     => 'Bisagra',
+        ]);
+    }
+
+    public function test_duplicate_copia_correderas(): void
+    {
+        $componente = Componente::factory()->create();
+        $corredera  = Corredera::factory()->create();
+        CorrederaPorComponente::factory()->create([
+            'componente_id' => $componente->id,
+            'corredera_id'  => $corredera->id,
+            'cantidad'      => 3,
+        ]);
+
+        $response = $this->postJson("/api/v1/componentes/{$componente->id}/duplicate");
+
+        $response->assertStatus(201);
+        $nuevoId = $response->json('data.id');
+        $this->assertDatabaseHas('correderas_por_componente', [
+            'componente_id' => $nuevoId,
+            'corredera_id'  => $corredera->id,
+            'cantidad'      => 3,
+        ]);
+    }
+
+    public function test_duplicate_copia_compases_abatibles(): void
+    {
+        $componente     = Componente::factory()->create();
+        $compasAbatible = CompasAbatible::factory()->create();
+        CompasAbatiblePorComponente::factory()->create([
+            'componente_id'     => $componente->id,
+            'compas_abatible_id' => $compasAbatible->id,
+            'cantidad'          => 2,
+        ]);
+
+        $response = $this->postJson("/api/v1/componentes/{$componente->id}/duplicate");
+
+        $response->assertStatus(201);
+        $nuevoId = $response->json('data.id');
+        $this->assertDatabaseHas('compases_abatibles_por_componente', [
+            'componente_id'     => $nuevoId,
+            'compas_abatible_id' => $compasAbatible->id,
+            'cantidad'          => 2,
         ]);
     }
 
