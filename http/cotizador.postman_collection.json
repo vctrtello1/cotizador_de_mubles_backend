@@ -1,0 +1,1648 @@
+{
+    "info": {
+        "name": "Cotizador de Muebles API",
+        "description": "Colección completa de endpoints para la API del Cotizador de Muebles.\n\nUso:\n1. Ejecuta 'Registrar usuario' o 'Login' para obtener el token automáticamente.\n2. Todos los demás endpoints heredan la autenticación Bearer de la colección.",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "auth": {
+        "type": "bearer",
+        "bearer": [
+            {
+                "key": "token",
+                "value": "{{token}}",
+                "type": "string"
+            }
+        ]
+    },
+    "variable": [
+        {
+            "key": "baseUrl",
+            "value": "http://localhost:8000/api/v1",
+            "description": "URL base de la API"
+        },
+        {
+            "key": "token",
+            "value": "",
+            "description": "Token Bearer (se setea automáticamente al hacer Login o Registrar)"
+        }
+    ],
+    "item": [
+        {
+            "name": "Auth",
+            "item": [
+                {
+                    "name": "Registrar usuario",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "var jsonData = pm.response.json();",
+                                    "if (jsonData.token) {",
+                                    "    pm.collectionVariables.set('token', jsonData.token);",
+                                    "    console.log('Token guardado automáticamente');",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/auth/register",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"Admin\",\n    \"email\": \"admin@example.com\",\n    \"password\": \"password\",\n    \"password_confirmation\": \"password\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Login",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "var jsonData = pm.response.json();",
+                                    "if (jsonData.token) {",
+                                    "    pm.collectionVariables.set('token', jsonData.token);",
+                                    "    console.log('Token guardado automáticamente');",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/auth/login",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"email\": \"admin@example.com\",\n    \"password\": \"password\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Mi perfil",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/auth/me"
+                    }
+                },
+                {
+                    "name": "Mis permisos",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/auth/permissions"
+                    }
+                },
+                {
+                    "name": "Listar usuarios",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/auth/users"
+                    }
+                },
+                {
+                    "name": "Ver usuario",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/auth/users/1"
+                    }
+                },
+                {
+                    "name": "Actualizar usuario (PUT)",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/auth/users/1",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"role\": \"admin\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Ver permisos de usuario",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/auth/users/1/permissions"
+                    }
+                },
+                {
+                    "name": "Actualizar permisos de usuario",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/auth/users/1/permissions",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"permissions\": [\"catalogs.write\", \"users.read\"]\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Eliminar usuario",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "{{baseUrl}}/auth/users/1"
+                    }
+                },
+                {
+                    "name": "Actualizar rol (PATCH)",
+                    "request": {
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/auth/users/1/rol",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"role\": \"admin\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Logout",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/auth/logout"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Catálogos / Acabados Tablero",
+            "item": [
+                {
+                    "name": "Listar",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/acabado-tableros"
+                    }
+                },
+                {
+                    "name": "Ver",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/acabado-tableros/1"
+                    }
+                },
+                {
+                    "name": "Crear",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/acabado-tableros",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"nombre\": \"Melamina blanca\",\n    \"costo_unitario\": 85.00\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Actualizar",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/acabado-tableros/1",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"nombre\": \"Melamina blanca mate\",\n    \"costo_unitario\": 90.00\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Eliminar",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "{{baseUrl}}/acabado-tableros/1"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Catálogos / Acabados Cubre Canto",
+            "item": [
+                {
+                    "name": "Listar",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/acabado-cubre-cantos"
+                    }
+                },
+                {
+                    "name": "Ver",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/acabado-cubre-cantos/1"
+                    }
+                },
+                {
+                    "name": "Crear",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/acabado-cubre-cantos",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"nombre\": \"Cubre canto PVC\",\n    \"costo_unitario\": 12.50\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Actualizar",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/acabado-cubre-cantos/1",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"nombre\": \"Cubre canto ABS\",\n    \"costo_unitario\": 15.00\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Eliminar",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "{{baseUrl}}/acabado-cubre-cantos/1"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Catálogos / Accesorios",
+            "item": [
+                {
+                    "name": "Listar",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/accesorios"
+                    }
+                },
+                {
+                    "name": "Ver",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/accesorios/1"
+                    }
+                },
+                {
+                    "name": "Crear",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/accesorios",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"nombre\": \"Bisagra oculta\",\n    \"precio\": 8.75\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Actualizar",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/accesorios/1",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"nombre\": \"Bisagra oculta 110°\",\n    \"precio\": 9.50\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Eliminar",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "{{baseUrl}}/accesorios/1"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Catálogos / Estructuras",
+            "item": [
+                {
+                    "name": "Listar",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/estructuras"
+                    }
+                },
+                {
+                    "name": "Ver",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/estructuras/1"
+                    }
+                },
+                {
+                    "name": "Crear",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/estructuras",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"nombre\": \"Estructura melamínica\",\n    \"costo_unitario\": 200.00\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Actualizar",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/estructuras/1",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"nombre\": \"Estructura MDF\",\n    \"costo_unitario\": 220.00\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Eliminar",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "{{baseUrl}}/estructuras/1"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Catálogos / Golas",
+            "item": [
+                {
+                    "name": "Listar",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/golas"
+                    }
+                },
+                {
+                    "name": "Ver",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/golas/1"
+                    }
+                },
+                {
+                    "name": "Crear",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/golas",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"nombre\": \"Gola aluminio\",\n    \"descripcion\": \"Perfil de aluminio para cocina\",\n    \"precio\": 45.00\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Actualizar",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/golas/1",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"nombre\": \"Gola aluminio mate\",\n    \"descripcion\": \"Perfil de aluminio mate para cocina\",\n    \"precio\": 50.00\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Eliminar",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "{{baseUrl}}/golas/1"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Catálogos / Tira LEDs",
+            "item": [
+                {
+                    "name": "Listar",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/tira-leds"
+                    }
+                },
+                {
+                    "name": "Ver",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/tira-leds/1"
+                    }
+                },
+                {
+                    "name": "Crear",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/tira-leds",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"nombre\": \"Tira LED RGB\",\n    \"codigo\": \"TIRA_LED_001\",\n    \"descripcion\": \"Tira LED RGB de 5 metros\",\n    \"precio_unitario\": 25.50,\n    \"unidades_por_metro\": 5,\n    \"porcentaje_utilizacion\": 3.052,\n    \"cantidad_compra\": 4\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Actualizar",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/tira-leds/1",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"nombre\": \"Tira LED RGBW\",\n    \"precio_unitario\": 30.00,\n    \"unidades_por_metro\": 6,\n    \"cantidad_compra\": 5\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Eliminar",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "{{baseUrl}}/tira-leds/1"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Catálogos / Correderas",
+            "item": [
+                {
+                    "name": "Listar",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/correderas"
+                    }
+                },
+                {
+                    "name": "Ver",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/correderas/1"
+                    }
+                },
+                {
+                    "name": "Crear",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/correderas",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"nombre\": \"Corredera Blum 45kg\",\n    \"capacidad_carga\": 45,\n    \"tipo\": \"telescopica\",\n    \"incluye_varilla\": false,\n    \"precio_base\": 350.00,\n    \"precio_con_acoplamiento\": 420.00\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Actualizar",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/correderas/1",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"nombre\": \"Corredera Blum 50kg\",\n    \"capacidad_carga\": 50,\n    \"precio_base\": 380.00,\n    \"precio_con_acoplamiento\": 450.00\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Eliminar",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "{{baseUrl}}/correderas/1"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Catálogos / Capacidad Correderas",
+            "item": [
+                {
+                    "name": "Listar",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/capacidad-correderas"
+                    }
+                },
+                {
+                    "name": "Ver",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/capacidad-correderas/1"
+                    }
+                },
+                {
+                    "name": "Crear",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/capacidad-correderas",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"capacidad\": 400,\n    \"corredera_id\": 1\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Actualizar",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/capacidad-correderas/1",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"capacidad\": 450,\n    \"corredera_id\": 1\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Eliminar",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "{{baseUrl}}/capacidad-correderas/1"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Catálogos / Compases Abatibles",
+            "item": [
+                {
+                    "name": "Listar",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/compases-abatibles"
+                    }
+                },
+                {
+                    "name": "Ver",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/compases-abatibles/1"
+                    }
+                },
+                {
+                    "name": "Crear",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/compases-abatibles",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"nombre\": \"Compás abatible 80N\",\n    \"precio\": 120.00\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Actualizar",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/compases-abatibles/1",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"nombre\": \"Compás abatible 100N\",\n    \"precio\": 140.00\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Eliminar",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "{{baseUrl}}/compases-abatibles/1"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Catálogos / Puertas",
+            "item": [
+                {
+                    "name": "Listar",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/puertas"
+                    }
+                },
+                {
+                    "name": "Ver",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/puertas/1"
+                    }
+                },
+                {
+                    "name": "Crear",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/puertas",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"nombre\": \"Puerta cristal templado\",\n    \"precio_perfil_aluminio\": 150.00,\n    \"precio_escuadras\": 80.00,\n    \"precio_silicon\": 20.00,\n    \"precio_cristal_m2\": 250.00,\n    \"alto_maximo\": 2400,\n    \"ancho_maximo\": 600\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Actualizar",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/puertas/1",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"nombre\": \"Puerta cristal templado 6mm\",\n    \"precio_cristal_m2\": 280.00,\n    \"alto_maximo\": 2500,\n    \"ancho_maximo\": 700\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Eliminar",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "{{baseUrl}}/puertas/1"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Componentes",
+            "item": [
+                {
+                    "name": "Listar",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/componentes"
+                    }
+                },
+                {
+                    "name": "Ver",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/componentes/1"
+                    }
+                },
+                {
+                    "name": "Crear",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/componentes",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"nombre\": \"Cajón 40cm\",\n    \"descripcion\": \"Cajón de madera de 40cm\",\n    \"codigo\": \"CAJ_40\",\n    \"precio_unitario\": 450.00\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Actualizar",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/componentes/1",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"nombre\": \"Cajón 40cm actualizado\",\n    \"precio_unitario\": 480.00\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Eliminar",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "{{baseUrl}}/componentes/1"
+                    }
+                },
+                {
+                    "name": "Duplicar",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/componentes/1/duplicate"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Módulos",
+            "item": [
+                {
+                    "name": "Listar",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/modulos"
+                    }
+                },
+                {
+                    "name": "Ver",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/modulos/1"
+                    }
+                },
+                {
+                    "name": "Crear",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/modulos",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"nombre\": \"Módulo base 60cm\",\n    \"descripcion\": \"Módulo de cocina base de 60cm\",\n    \"codigo\": \"MOD_BASE_60\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Actualizar",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/modulos/1",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"nombre\": \"Módulo base 60cm v2\",\n    \"descripcion\": \"Versión actualizada\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Eliminar",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "{{baseUrl}}/modulos/1"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Clientes",
+            "item": [
+                {
+                    "name": "Listar",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/clientes"
+                    }
+                },
+                {
+                    "name": "Ver",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/clientes/1"
+                    }
+                },
+                {
+                    "name": "Crear",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/clientes",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"nombre\": \"Juan Pérez\",\n    \"email\": \"juan@example.com\",\n    \"telefono\": \"555-1234\",\n    \"direccion\": \"Calle 123\",\n    \"empresa\": \"Empresa SA\",\n    \"notas\": \"Cliente frecuente\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Actualizar",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/clientes/1",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"nombre\": \"Juan Pérez Actualizado\",\n    \"telefono\": \"555-5678\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Eliminar",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "{{baseUrl}}/clientes/1"
+                    }
+                },
+                {
+                    "name": "Cotizaciones del cliente",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/clientes/1/cotizaciones"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Cotizaciones",
+            "item": [
+                {
+                    "name": "Listar",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/cotizaciones"
+                    }
+                },
+                {
+                    "name": "Ver",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/cotizaciones/1"
+                    }
+                },
+                {
+                    "name": "Crear",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/cotizaciones",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"cliente_id\": 1,\n    \"fecha\": \"2026-04-07\",\n    \"estado\": \"activa\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Actualizar",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/cotizaciones/1",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"cliente_id\": 1,\n    \"fecha\": \"2026-04-07\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Eliminar",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "{{baseUrl}}/cotizaciones/1"
+                    }
+                },
+                {
+                    "name": "Actualizar estado",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/cotizaciones/1/estado",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"estado\": \"cerrada\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Componentes de cotización",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/cotizaciones/1/componentes"
+                    }
+                },
+                {
+                    "name": "Sync componentes",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/cotizaciones/1/sync-componentes",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"componentes\": [1, 2, 3]\n}"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Componentes por Cotización",
+            "item": [
+                {
+                    "name": "Listar",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/componentes-por-cotizacion"
+                    }
+                },
+                {
+                    "name": "Ver por cotización",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/componentes-por-cotizacion/1"
+                    }
+                },
+                {
+                    "name": "Ver por cotización (alternativa)",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/componentes-por-cotizacion/cotizacion/1"
+                    }
+                },
+                {
+                    "name": "Crear",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/componentes-por-cotizacion",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"cotizacion_id\": 1,\n    \"componente_id\": 1\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Actualizar",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/componentes-por-cotizacion/1",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"cotizacion_id\": 1,\n    \"componente_id\": 2\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Eliminar",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "{{baseUrl}}/componentes-por-cotizacion/1"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Cotizaciones por Usuario",
+            "item": [
+                {
+                    "name": "Listar",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/cotizaciones-por-usuario"
+                    }
+                },
+                {
+                    "name": "Ver",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/cotizaciones-por-usuario/1"
+                    }
+                },
+                {
+                    "name": "Crear",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/cotizaciones-por-usuario",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"cotizacion_id\": 1,\n    \"user_id\": 1\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Actualizar",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/cotizaciones-por-usuario/1",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"cotizacion_id\": 1,\n    \"user_id\": 2\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Eliminar",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "{{baseUrl}}/cotizaciones-por-usuario/1"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Relaciones / Cantidad por Componente",
+            "item": [
+                {
+                    "name": "Listar",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/cantidad-por-componentes"
+                    }
+                },
+                {
+                    "name": "Ver",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/cantidad-por-componentes/1"
+                    }
+                },
+                {
+                    "name": "Crear",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/cantidad-por-componentes",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"modulo_id\": 1,\n    \"componente_id\": 1,\n    \"cantidad\": 2\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Actualizar",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/cantidad-por-componentes/1",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"cantidad\": 3\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Eliminar",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "{{baseUrl}}/cantidad-por-componentes/1"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Relaciones / Accesorios por Componente",
+            "item": [
+                {
+                    "name": "Listar",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/accesorios-por-componente"
+                    }
+                },
+                {
+                    "name": "Ver",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/accesorios-por-componente/1"
+                    }
+                },
+                {
+                    "name": "Crear",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/accesorios-por-componente",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"componente_id\": 1,\n    \"accesorio_id\": 1,\n    \"cantidad\": 2\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Actualizar",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/accesorios-por-componente/1",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"cantidad\": 4\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Eliminar",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "{{baseUrl}}/accesorios-por-componente/1"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Relaciones / Estructura por Componente",
+            "item": [
+                {
+                    "name": "Listar",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/estructura-por-componente"
+                    }
+                },
+                {
+                    "name": "Ver",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/estructura-por-componente/1"
+                    }
+                },
+                {
+                    "name": "Crear",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/estructura-por-componente",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"componente_id\": 1,\n    \"estructura_id\": 1\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Actualizar",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/estructura-por-componente/1",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"estructura_id\": 2\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Eliminar",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "{{baseUrl}}/estructura-por-componente/1"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Relaciones / Acabado Cubre Canto por Componente",
+            "item": [
+                {
+                    "name": "Listar",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/acabado-cubre-canto-por-componente"
+                    }
+                },
+                {
+                    "name": "Ver",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/acabado-cubre-canto-por-componente/1"
+                    }
+                },
+                {
+                    "name": "Crear",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/acabado-cubre-canto-por-componente",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"componente_id\": 1,\n    \"acabado_cubre_canto_id\": 1\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Actualizar",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/acabado-cubre-canto-por-componente/1",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"acabado_cubre_canto_id\": 2\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Eliminar",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "{{baseUrl}}/acabado-cubre-canto-por-componente/1"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Relaciones / Acabado Tablero por Componente",
+            "item": [
+                {
+                    "name": "Listar",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/acabado-tablero-por-componente"
+                    }
+                },
+                {
+                    "name": "Ver",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/acabado-tablero-por-componente/1"
+                    }
+                },
+                {
+                    "name": "Crear",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/acabado-tablero-por-componente",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"componente_id\": 1,\n    \"acabado_tablero_id\": 1\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Actualizar",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/acabado-tablero-por-componente/1",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"acabado_tablero_id\": 2\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Eliminar",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "{{baseUrl}}/acabado-tablero-por-componente/1"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Relaciones / Puertas por Componente",
+            "item": [
+                {
+                    "name": "Listar",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/puertas-por-componente"
+                    }
+                },
+                {
+                    "name": "Ver",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/puertas-por-componente/1"
+                    }
+                },
+                {
+                    "name": "Crear",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/puertas-por-componente",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"componente_id\": 1,\n    \"puerta_id\": 1\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Actualizar",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/puertas-por-componente/1",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"puerta_id\": 2\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Eliminar",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "{{baseUrl}}/puertas-por-componente/1"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Relaciones / Gola por Componente",
+            "item": [
+                {
+                    "name": "Listar",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/gola-por-componente"
+                    }
+                },
+                {
+                    "name": "Ver",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/gola-por-componente/1"
+                    }
+                },
+                {
+                    "name": "Crear",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/gola-por-componente",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"componente_id\": 1,\n    \"gola_id\": 1\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Actualizar",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/gola-por-componente/1",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"gola_id\": 2\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Eliminar",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "{{baseUrl}}/gola-por-componente/1"
+                    }
+                }
+            ]
+        }
+    ]
+}
