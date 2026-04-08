@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTiraLedRequest;
 use App\Http\Requests\UpdateTiraLedRequest;
+use App\Http\Resources\TiraLedResource;
 use App\Models\TiraLed;
 use Illuminate\Http\JsonResponse;
 
@@ -15,7 +16,7 @@ class TiraLedController extends Controller
     public function index(): JsonResponse
     {
         return response()->json([
-            'data' => TiraLed::all(),
+            'data' => TiraLedResource::collection(TiraLed::all()),
         ]);
     }
 
@@ -27,7 +28,7 @@ class TiraLedController extends Controller
         $tiraLed = TiraLed::create($request->validated());
         
         return response()->json([
-            'data' => $tiraLed,
+            'data' => new TiraLedResource($tiraLed),
         ], 201);
     }
 
@@ -37,7 +38,7 @@ class TiraLedController extends Controller
     public function show(TiraLed $tiraLed): JsonResponse
     {
         return response()->json([
-            'data' => $tiraLed,
+            'data' => new TiraLedResource($tiraLed),
         ]);
     }
 
@@ -49,7 +50,7 @@ class TiraLedController extends Controller
         $tiraLed->update($request->validated());
         
         return response()->json([
-            'data' => $tiraLed,
+            'data' => new TiraLedResource($tiraLed),
         ]);
     }
 
