@@ -383,6 +383,66 @@
             ]
         },
         {
+            "name": "Catálogos / Apagadores",
+            "item": [
+                {
+                    "name": "Listar",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/apagadores"
+                    }
+                },
+                {
+                    "name": "Ver",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/apagadores/1"
+                    }
+                },
+                {
+                    "name": "Crear",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/apagadores",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"nombre\": \"APAGADOR\",\n    \"precio\": 210.00,\n    \"unidades_por_metro\": 2,\n    \"porcentaje_utilizacion\": 7.63\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Actualizar",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/apagadores/1",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"precio\": 230.00,\n    \"porcentaje_utilizacion\": 8.00\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Eliminar",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "{{baseUrl}}/apagadores/1"
+                    }
+                }
+            ]
+        },
+        {
             "name": "Catálogos / Conectores",
             "item": [
                 {

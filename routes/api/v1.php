@@ -7,6 +7,7 @@ use App\Http\Controllers\AcabadoTableroController;
 use App\Http\Controllers\AcabadoTableroPorComponenteController;
 use App\Http\Controllers\AccesorioController;
 use App\Http\Controllers\AccesoriosPorComponenteController;
+use App\Http\Controllers\ApagadoresController;
 use App\Http\Controllers\CantidadPorComponenteController;
 use App\Http\Controllers\CapacidadCorrederaController;
 use App\Http\Controllers\ClienteController;
@@ -43,6 +44,14 @@ Route::apiResource('acabado-cubre-cantos', AcabadoCubreCantoController::class)
 Route::apiResource('accesorios', AccesorioController::class)->only(['index', 'show']);
 Route::apiResource('accesorios', AccesorioController::class)
     ->except(['index', 'show'])
+    ->middleware('permission:catalogs.write');
+
+Route::apiResource('apagadores', ApagadoresController::class)
+    ->only(['index', 'show'])
+    ->parameters(['apagadores' => 'apagadore']);
+Route::apiResource('apagadores', ApagadoresController::class)
+    ->except(['index', 'show'])
+    ->parameters(['apagadores' => 'apagadore'])
     ->middleware('permission:catalogs.write');
 
 Route::apiResource('conectores', ConectoresController::class)->only(['index', 'show']);
