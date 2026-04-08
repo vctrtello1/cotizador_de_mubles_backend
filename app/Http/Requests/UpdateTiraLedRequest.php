@@ -26,6 +26,9 @@ class UpdateTiraLedRequest extends FormRequest
             'codigo' => ['sometimes', 'string', 'unique:tira_leds,codigo,' . $this->route('tira_led')],
             'descripcion' => ['nullable', 'string'],
             'precio_unitario' => ['sometimes', 'numeric', 'min:0.01'],
+            'unidades_por_metro' => ['nullable', 'integer', 'min:1'],
+            'porcentaje_utilizacion' => ['nullable', 'numeric', 'min:0.001'],
+            'cantidad_compra' => ['nullable', 'integer', 'min:1'],
         ];
     }
 

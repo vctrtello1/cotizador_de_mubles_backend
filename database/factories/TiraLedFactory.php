@@ -24,6 +24,9 @@ class TiraLedFactory extends Factory
             'codigo' => 'TIRA_LED_' . fake()->unique()->numerify('###'),
             'descripcion' => fake()->sentence(),
             'precio_unitario' => fake()->randomFloat(2, 10, 100),
+            'unidades_por_metro' => fake()->randomElement([3, 4, 5, 6]),
+            'porcentaje_utilizacion' => fake()->randomFloat(3, 2, 5),
+            'cantidad_compra' => fake()->randomElement([1, 2, 3, 4, 5]),
         ];
     }
 }

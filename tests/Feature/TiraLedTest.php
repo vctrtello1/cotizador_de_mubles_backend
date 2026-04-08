@@ -23,6 +23,9 @@ class TiraLedTest extends TestCase
                     'codigo',
                     'descripcion',
                     'precio_unitario',
+                    'unidades_por_metro',
+                    'porcentaje_utilizacion',
+                    'cantidad_compra',
                 ],
             ],
         ]);
@@ -42,6 +45,9 @@ class TiraLedTest extends TestCase
                 'codigo',
                 'descripcion',
                 'precio_unitario',
+                'unidades_por_metro',
+                'porcentaje_utilizacion',
+                'cantidad_compra',
             ],
         ]);
     }
@@ -50,9 +56,12 @@ class TiraLedTest extends TestCase
     {
         $data = [
             'nombre' => 'Tira LED RGB',
-            'codigo' => 'TIRA_LED_001',
+            'codigo' => 'TIRA_LED_TEST_001',
             'descripcion' => 'Tira LED RGB de 5 metros',
             'precio_unitario' => 25.50,
+            'unidades_por_metro' => 5,
+            'porcentaje_utilizacion' => 3.052,
+            'cantidad_compra' => 4,
         ];
 
         $response = $this->postJson('/api/v1/tira-leds', $data);
@@ -68,6 +77,8 @@ class TiraLedTest extends TestCase
         $updateData = [
             'nombre' => 'Tira LED RGBW',
             'precio_unitario' => 30.00,
+            'unidades_por_metro' => 6,
+            'cantidad_compra' => 5,
         ];
 
         $response = $this->putJson("/api/v1/tira-leds/{$tiraLed->id}", $updateData);
@@ -77,6 +88,8 @@ class TiraLedTest extends TestCase
             'id' => $tiraLed->id,
             'nombre' => 'Tira LED RGBW',
             'precio_unitario' => 30.00,
+            'unidades_por_metro' => 6,
+            'cantidad_compra' => 5,
         ]);
     }
 
@@ -94,7 +107,7 @@ class TiraLedTest extends TestCase
     {
         $data = [
             // 'nombre' is missing
-            'codigo' => 'TIRA_LED_001',
+            'codigo' => 'TIRA_LED_VALID_001',
             'descripcion' => 'Tira LED RGB',
             'precio_unitario' => 25.50,
         ];
@@ -142,5 +155,73 @@ class TiraLedTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertJsonCount(5, 'data');
+    }
+
+    public function test_tira_led_store_with_all_fields(): void
+    {
+        $data = [
+            'nombre' => 'Tira LED Completa',
+            'codigo' => 'TIRA_LED_COMPLETE',
+            'descripcion' => 'Tira LED con todos los campos',
+            'precio_unitario' => 600.00,
+            'unidades_por_metro' => 5,
+            'porcentaje_utilizacion' => 3.052,
+            'cantidad_compra' => 4,
+        ];
+
+        $response = $this->postJson('/api/v1/tira-leds', $data);
+
+        $response->assertStatus(201);
+        $response->assertJsonPath('data.nombre', 'Tira LED Completa');
+        $response->assertJsonPath('data.precio_unitario', '600.00');
+        $response->assertJsonPath('data.unidades_por_metro', 5);
+        $response->assertJsonPath('data.porcentaje_utilizacion', '3.052');
+        $response->assertJsonPath('data.cantidad_compra', 4);
+    }
+
+    public function test_tira_led_validation_unidades_por_metro(): void
+    {
+        $data = [
+            'nombre' => 'Tira LED Test',
+            'codigo' => 'TIRA_LED_UPM',
+            'precio_unitario' => 25.50,
+            'unidades_por_metro' => -1,
+        ];
+
+        $response = $this->postJson('/api/v1/tira-leds', $data);
+
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors(['unidades_por_metro']);
+    }
+
+    public function test_tira_led_validation_cantidad_compra(): void
+    {
+        $data = [
+            'nombre' => 'Tira LED Test',
+            'codigo' => 'TIRA_LED_CC',
+            'precio_unitario' => 25.50,
+            'cantidad_compra' => 0,
+        ];
+
+        $response = $this->postJson('/api/v1/tira-leds', $data);
+
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors(['cantidad_compra']);
+    }
+
+    public function test_tira_led_codigo_unique(): void
+    {
+        $tiraLed = TiraLed::factory()->create(['codigo' => 'TIRA_LED_UNIQUE']);
+
+        $data = [
+            'nombre' => 'Another Tira LED',
+            'codigo' => 'TIRA_LED_UNIQUE',
+            'precio_unitario' => 25.50,
+        ];
+
+        $response = $this->postJson('/api/v1/tira-leds', $data);
+
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors(['codigo']);
     }
 }

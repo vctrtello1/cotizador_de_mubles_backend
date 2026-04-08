@@ -17,6 +17,9 @@ return new class extends Migration
             $table->string('codigo')->unique();
             $table->text('descripcion')->nullable();
             $table->decimal('precio_unitario', 10, 2);
+            $table->integer('unidades_por_metro')->nullable();
+            $table->decimal('porcentaje_utilizacion', 5, 3)->nullable();
+            $table->integer('cantidad_compra')->nullable();
             $table->timestamps();
         });
     }
