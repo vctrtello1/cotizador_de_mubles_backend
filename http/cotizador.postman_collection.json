@@ -743,6 +743,66 @@
             ]
         },
         {
+            "name": "Catálogos / Watts por Metro",
+            "item": [
+                {
+                    "name": "Listar",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/whats-por-metro"
+                    }
+                },
+                {
+                    "name": "Ver",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/whats-por-metro/1"
+                    }
+                },
+                {
+                    "name": "Crear",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/whats-por-metro",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"nombre\": \"WATTS LED 15W\",\n    \"precio\": 107.00,\n    \"unidades_por_metro\": 7,\n    \"porcentaje_utilizacion\": 5.00\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Actualizar",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/whats-por-metro/1",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"precio\": 120.00,\n    \"unidades_por_metro\": 8,\n    \"porcentaje_utilizacion\": 6.00\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Eliminar",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "{{baseUrl}}/whats-por-metro/1"
+                    }
+                }
+            ]
+        },
+        {
             "name": "Catálogos / Tira LEDs",
             "item": [
                 {

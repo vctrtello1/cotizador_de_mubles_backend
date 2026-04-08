@@ -27,6 +27,7 @@ use App\Http\Controllers\PerfilAluminioController;
 use App\Http\Controllers\PuertaController;
 use App\Http\Controllers\PuertasPorComponenteController;
 use App\Http\Controllers\TiraLedController;
+use App\Http\Controllers\WhatsPorMetroController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('clientes/{cliente}/cotizaciones', [ClienteController::class, 'cotizaciones']);
@@ -80,6 +81,14 @@ Route::apiResource('perfiles-aluminio', PerfilAluminioController::class)
 Route::apiResource('perfiles-aluminio', PerfilAluminioController::class)
     ->except(['index', 'show'])
     ->parameters(['perfiles-aluminio' => 'perfilAluminio'])
+    ->middleware('permission:catalogs.write');
+
+Route::apiResource('whats-por-metro', WhatsPorMetroController::class)
+    ->only(['index', 'show'])
+    ->parameters(['whats-por-metro' => 'whatsPorMetro']);
+Route::apiResource('whats-por-metro', WhatsPorMetroController::class)
+    ->except(['index', 'show'])
+    ->parameters(['whats-por-metro' => 'whatsPorMetro'])
     ->middleware('permission:catalogs.write');
 
 Route::apiResource('componentes', ComponenteController::class)->only(['index', 'show']);
