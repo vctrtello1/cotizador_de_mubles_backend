@@ -13,6 +13,7 @@ use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\CompasAbatibleController;
 use App\Http\Controllers\ComponenteController;
 use App\Http\Controllers\ComponentesPorCotizacionController;
+use App\Http\Controllers\ConectoresController;
 use App\Http\Controllers\CorrederaController;
 use App\Http\Controllers\CotizacionController;
 use App\Http\Controllers\EstructuraController;
@@ -39,6 +40,11 @@ Route::apiResource('acabado-cubre-cantos', AcabadoCubreCantoController::class)
 
 Route::apiResource('accesorios', AccesorioController::class)->only(['index', 'show']);
 Route::apiResource('accesorios', AccesorioController::class)
+    ->except(['index', 'show'])
+    ->middleware('permission:catalogs.write');
+
+Route::apiResource('conectores', ConectoresController::class)->only(['index', 'show']);
+Route::apiResource('conectores', ConectoresController::class)
     ->except(['index', 'show'])
     ->middleware('permission:catalogs.write');
 
