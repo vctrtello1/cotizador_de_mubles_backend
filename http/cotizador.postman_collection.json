@@ -383,6 +383,66 @@
             ]
         },
         {
+            "name": "Catálogos / Conectores",
+            "item": [
+                {
+                    "name": "Listar",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/conectores"
+                    }
+                },
+                {
+                    "name": "Ver",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/conectores/1"
+                    }
+                },
+                {
+                    "name": "Crear",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/conectores",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"nombre\": \"CONECTORES RAFIX\",\n    \"precio\": 55.00,\n    \"unidades_por_metro\": 2,\n    \"porcentaje_utilizacion\": 6.50\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Actualizar",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/conectores/1",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"nombre\": \"CONECTORES RAFIX PREMIUM\",\n    \"precio\": 65.00,\n    \"unidades_por_metro\": 3,\n    \"porcentaje_utilizacion\": 8.00\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Eliminar",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "{{baseUrl}}/conectores/1"
+                    }
+                }
+            ]
+        },
+        {
             "name": "Catálogos / Estructuras",
             "item": [
                 {
@@ -438,6 +498,66 @@
                     "request": {
                         "method": "DELETE",
                         "url": "{{baseUrl}}/estructuras/1"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Catálogos / Fuentes de Alimentación",
+            "item": [
+                {
+                    "name": "Listar",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/fuentes-de-alimentacion"
+                    }
+                },
+                {
+                    "name": "Ver",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/fuentes-de-alimentacion/1"
+                    }
+                },
+                {
+                    "name": "Crear",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/fuentes-de-alimentacion",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"nombre\": \"F. ALIMENTACION\",\n    \"precio\": 800.00,\n    \"unidades_por_metro\": 50,\n    \"porcentaje_utilizacion\": 2.14\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Actualizar",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/fuentes-de-alimentacion/1",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"precio\": 850.00,\n    \"porcentaje_utilizacion\": 3.00\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Eliminar",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "{{baseUrl}}/fuentes-de-alimentacion/1"
                     }
                 }
             ]

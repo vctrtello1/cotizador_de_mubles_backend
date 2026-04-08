@@ -18,6 +18,7 @@ use App\Http\Controllers\CorrederaController;
 use App\Http\Controllers\CotizacionController;
 use App\Http\Controllers\EstructuraController;
 use App\Http\Controllers\EstructuraPorComponenteController;
+use App\Http\Controllers\FuentesDeAlimentacionController;
 use App\Http\Controllers\GolaController;
 use App\Http\Controllers\GolaPorComponenteController;
 use App\Http\Controllers\ModulosController;
@@ -50,6 +51,11 @@ Route::apiResource('conectores', ConectoresController::class)
 
 Route::apiResource('estructuras', EstructuraController::class)->only(['index', 'show']);
 Route::apiResource('estructuras', EstructuraController::class)
+    ->except(['index', 'show'])
+    ->middleware('permission:catalogs.write');
+
+Route::apiResource('fuentes-de-alimentacion', FuentesDeAlimentacionController::class)->only(['index', 'show']);
+Route::apiResource('fuentes-de-alimentacion', FuentesDeAlimentacionController::class)
     ->except(['index', 'show'])
     ->middleware('permission:catalogs.write');
 
