@@ -36,6 +36,7 @@ class DatabaseSeeder extends Seeder
             CorrederaSeeder::class,
             CompasAbatibleSeeder::class,
             PuertaSeeder::class,
+            TiraLedSeeder::class,
             CantidadPorComponenteSeeder::class,
             AccesorioPorComponenteSeeder::class,
             EstructuraPorComponenteSeeder::class,

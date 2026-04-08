@@ -22,6 +22,7 @@ use App\Http\Controllers\GolaPorComponenteController;
 use App\Http\Controllers\ModulosController;
 use App\Http\Controllers\PuertaController;
 use App\Http\Controllers\PuertasPorComponenteController;
+use App\Http\Controllers\TiraLedController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('clientes/{cliente}/cotizaciones', [ClienteController::class, 'cotizaciones']);
@@ -86,6 +87,11 @@ Route::apiResource('compases-abatibles', CompasAbatibleController::class)
 
 Route::apiResource('puertas', PuertaController::class)->only(['index', 'show']);
 Route::apiResource('puertas', PuertaController::class)
+    ->except(['index', 'show'])
+    ->middleware('permission:catalogs.write');
+
+Route::apiResource('tira-leds', TiraLedController::class)->only(['index', 'show']);
+Route::apiResource('tira-leds', TiraLedController::class)
     ->except(['index', 'show'])
     ->middleware('permission:catalogs.write');
 
