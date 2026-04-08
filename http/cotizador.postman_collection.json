@@ -623,6 +623,66 @@
             ]
         },
         {
+            "name": "Catálogos / Perfiles Aluminio",
+            "item": [
+                {
+                    "name": "Listar",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/perfiles-aluminio"
+                    }
+                },
+                {
+                    "name": "Ver",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/perfiles-aluminio/1"
+                    }
+                },
+                {
+                    "name": "Crear",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/perfiles-aluminio",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"nombre\": \"PERFIL ALUMINIO EMPOTRADO\",\n    \"precio\": 150.00,\n    \"porcentaje_utilizacion\": 5.00\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Actualizar",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{baseUrl}}/perfiles-aluminio/1",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"precio\": 160.00,\n    \"porcentaje_utilizacion\": 6.00\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Eliminar",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "{{baseUrl}}/perfiles-aluminio/1"
+                    }
+                }
+            ]
+        },
+        {
             "name": "Catálogos / Tira LEDs",
             "item": [
                 {

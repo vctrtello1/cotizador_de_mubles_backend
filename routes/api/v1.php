@@ -22,6 +22,7 @@ use App\Http\Controllers\FuentesDeAlimentacionController;
 use App\Http\Controllers\GolaController;
 use App\Http\Controllers\GolaPorComponenteController;
 use App\Http\Controllers\ModulosController;
+use App\Http\Controllers\PerfilAluminioController;
 use App\Http\Controllers\PuertaController;
 use App\Http\Controllers\PuertasPorComponenteController;
 use App\Http\Controllers\TiraLedController;
@@ -62,6 +63,14 @@ Route::apiResource('fuentes-de-alimentacion', FuentesDeAlimentacionController::c
 Route::apiResource('golas', GolaController::class)->only(['index', 'show']);
 Route::apiResource('golas', GolaController::class)
     ->except(['index', 'show'])
+    ->middleware('permission:catalogs.write');
+
+Route::apiResource('perfiles-aluminio', PerfilAluminioController::class)
+    ->only(['index', 'show'])
+    ->parameters(['perfiles-aluminio' => 'perfilAluminio']);
+Route::apiResource('perfiles-aluminio', PerfilAluminioController::class)
+    ->except(['index', 'show'])
+    ->parameters(['perfiles-aluminio' => 'perfilAluminio'])
     ->middleware('permission:catalogs.write');
 
 Route::apiResource('componentes', ComponenteController::class)->only(['index', 'show']);
