@@ -1,28 +1,44 @@
-# ---- Composer stage (no apt-get here) ----
-FROM composer:2 AS vendor
+# ---- Composer stage ----
+FROM php:8.3-fpm-alpine3.21 AS vendor
+
+RUN apk add --no-cache unzip curl \
+    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
 WORKDIR /app
 COPY composer.json composer.lock ./
 RUN composer install --no-interaction --prefer-dist --no-dev --optimize-autoloader --no-scripts
 
 # ---- Runtime stage ----
-FROM php:8.3-apache
-RUN apt-get update && apt-get install -y \
-    libpng-dev libjpeg62-turbo-dev libfreetype6-dev \
-    libzip-dev libxml2-dev libcurl4-openssl-dev \
-    unzip git \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install pdo_mysql mbstring zip gd bcmath opcache dom xml curl \
-    && a2enmod rewrite \
-    && rm -rf /var/lib/apt/lists/*
+FROM php:8.3-fpm-alpine3.21
 
-ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
-RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf \
-    && sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
+RUN apk add --no-cache \
+    libpng-dev libxml2-dev oniguruma-dev postgresql-dev libzip-dev \
+    nginx supervisor curl unzip bash \
+    freetype-dev libjpeg-turbo-dev
 
-WORKDIR /var/www/html
-COPY . .
-COPY --from=vendor /app/vendor ./vendor
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install \
+       pdo pdo_pgsql pdo_mysql \
+       mbstring zip gd bcmath opcache dom xml curl exif pcntl
 
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
-EXPOSE 80
-CMD ["apache2-foreground"]
+RUN echo "opcache.enable=1" >> /usr/local/etc/php/conf.d/opcache.ini \
+    && echo "opcache.memory_consumption=256" >> /usr/local/etc/php/conf.d/opcache.ini \
+    && echo "opcache.max_accelerated_files=20000" >> /usr/local/etc/php/conf.d/opcache.ini
+
+WORKDIR /var/www
+
+COPY --chown=www-data:www-data . .
+COPY --from=vendor --chown=www-data:www-data /app/vendor ./vendor
+COPY --from=vendor /usr/local/bin/composer /usr/local/bin/composer
+
+COPY docker/nginx.conf /etc/nginx/http.d/default.conf
+COPY docker/supervisord.conf /etc/supervisord.conf
+COPY docker/entrypoint.sh /entrypoint.sh
+
+RUN chmod +x /entrypoint.sh \
+    && chmod -R 755 /var/www/storage \
+    && chmod -R 755 /var/www/bootstrap/cache
+
+EXPOSE 8080
+
+ENTRYPOINT ["/entrypoint.sh"]
