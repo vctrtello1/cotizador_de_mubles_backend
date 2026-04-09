@@ -1,15 +1,16 @@
 #!/bin/sh
 set -e
 
-# Run composer scripts now that .env is available
+echo "▶ Discovering packages..."
 php artisan package:discover --ansi
 
-# Run migrations
+echo "▶ Running migrations..."
 php artisan migrate --force
 
-# Cache config for performance
+echo "▶ Caching configuration..."
 php artisan config:cache
 php artisan route:cache
+php artisan view:cache
 
-# Start supervisor (nginx + php-fpm)
+echo "▶ Starting services..."
 exec /usr/bin/supervisord -c /etc/supervisord.conf
