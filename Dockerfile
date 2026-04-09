@@ -25,7 +25,8 @@ RUN apk add --no-cache \
     nginx \
     supervisor \
     curl \
-    unzip
+    unzip \
+    bash
 
 # Install PHP extensions
 RUN docker-php-ext-install \
