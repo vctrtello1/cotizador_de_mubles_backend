@@ -15,7 +15,7 @@ RUN apk add --no-cache \
     supervisor
 
 # Install PHP extensions
-RUN docker-php-ext-install pdo pdo_mysql pdo_pgsql mbstring exif pcntl bcmath gd xml dom dom
+RUN docker-php-ext-install pdo pdo_mysql pdo_pgsql mbstring exif pcntl bcmath gd xml dom
 
 # Get latest Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -26,8 +26,8 @@ WORKDIR /var/www
 # Copy existing application directory
 COPY . .
 
-# Install dependencies
-RUN composer install --optimize-autoloader --no-dev --ignore-platform-reqs
+# Install dependencies (skip scripts - no .env available at build time)
+RUN composer install --optimize-autoloader --no-dev --no-scripts --ignore-platform-reqs
 
 # Set permissions
 RUN chown -R www-data:www-data /var/www \
@@ -41,5 +41,8 @@ COPY docker/supervisord.conf /etc/supervisord.conf
 # Expose port
 EXPOSE 8080
 
-# Start supervisor
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
+# Copy entrypoint
+COPY docker/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
