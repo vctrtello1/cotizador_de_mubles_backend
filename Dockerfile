@@ -1,5 +1,5 @@
 # ---- Composer stage ----
-FROM php:8.4-fpm-alpine3.21 AS vendor
+FROM php:8.4-fpm-alpine AS vendor
 
 RUN apk add --no-cache unzip curl \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
@@ -9,11 +9,11 @@ COPY composer.json composer.lock ./
 RUN composer install --no-interaction --prefer-dist --no-dev --optimize-autoloader --no-scripts
 
 # ---- Runtime stage ----
-FROM php:8.4-fpm-alpine3.21
+FROM php:8.4-fpm-alpine
 
 RUN apk add --no-cache \
     libpng-dev libxml2-dev oniguruma-dev postgresql-dev libzip-dev \
-    nginx supervisor curl curl-dev unzip bash \
+    nginx supervisor curl unzip bash \
     freetype-dev libjpeg-turbo-dev
 
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
