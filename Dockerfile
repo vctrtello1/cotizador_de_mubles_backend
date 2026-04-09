@@ -1,64 +1,32 @@
-# ─── Stage 1: Install Composer dependencies ───────────────────────────────────
-FROM php:8.3-fpm-alpine3.21 AS vendor
-
-RUN apk add --no-cache unzip curl \
-    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+# ---- Build stage ----
+FROM composer:2 AS vendor
 
 WORKDIR /app
 COPY composer.json composer.lock ./
-RUN composer install \
-    --optimize-autoloader \
-    --no-dev \
-    --no-scripts \
-    --no-interaction \
-    --ignore-platform-reqs
+RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 
-# ─── Stage 2: Final image ──────────────────────────────────────────────────────
-FROM php:8.3-fpm-alpine3.21
+# ---- Runtime stage ----
+FROM php:8.3-apache
 
-# Install system dependencies
-RUN apk add --no-cache \
-    libpng-dev \
-    libxml2-dev \
-    oniguruma-dev \
-    postgresql-dev \
-    nginx \
-    supervisor \
-    curl \
-    unzip \
-    bash
+RUN apt-get update && apt-get install -y \
+    libpng-dev libjpeg62-turbo-dev libfreetype6-dev \
+    libzip-dev unzip git \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install pdo_mysql mbstring zip gd bcmath opcache \
+    && a2enmod rewrite
 
-# Install PHP extensions
-RUN docker-php-ext-install \
-    pdo pdo_pgsql pdo_mysql \
-    mbstring exif pcntl bcmath \
-    gd xml dom opcache
+# DocumentRoot para Laravel
+ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf \
+    && sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
-# Optimize PHP for production
-RUN echo "opcache.enable=1" >> /usr/local/etc/php/conf.d/opcache.ini \
-    && echo "opcache.memory_consumption=256" >> /usr/local/etc/php/conf.d/opcache.ini \
-    && echo "opcache.max_accelerated_files=20000" >> /usr/local/etc/php/conf.d/opcache.ini
+WORKDIR /var/www/html
 
-WORKDIR /var/www
+COPY . .
+COPY --from=vendor /app/vendor ./vendor
 
-# Copy application code
-COPY --chown=www-data:www-data . .
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Copy vendor from stage 1
-COPY --from=vendor --chown=www-data:www-data /app/vendor ./vendor
+EXPOSE 80
 
-# Copy composer binary for fallback install in entrypoint
-COPY --from=vendor /usr/local/bin/composer /usr/local/bin/composer
-
-# Copy config files
-COPY docker/nginx.conf /etc/nginx/http.d/default.conf
-COPY docker/supervisord.conf /etc/supervisord.conf
-COPY docker/entrypoint.sh /entrypoint.sh
-
-RUN chmod +x /entrypoint.sh \
-    && chmod -R 755 /var/www/storage \
-    && chmod -R 755 /var/www/bootstrap/cache
-
-EXPOSE 8080
-
-ENTRYPOINT ["/entrypoint.sh"]
+CMD ["apache2-foreground"]
