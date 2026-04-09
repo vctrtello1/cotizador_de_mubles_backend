@@ -47,6 +47,9 @@ COPY --chown=www-data:www-data . .
 # Copy vendor from stage 1
 COPY --from=vendor --chown=www-data:www-data /app/vendor ./vendor
 
+# Copy composer binary for fallback install in entrypoint
+COPY --from=vendor /usr/local/bin/composer /usr/local/bin/composer
+
 # Copy config files
 COPY docker/nginx.conf /etc/nginx/http.d/default.conf
 COPY docker/supervisord.conf /etc/supervisord.conf

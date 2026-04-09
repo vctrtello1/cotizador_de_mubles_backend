@@ -1,5 +1,11 @@
-#!/bin/sh
+#!/bin/bash
 set -e
+
+# Install dependencies if vendor is missing (e.g. first deploy without cached build)
+if [ ! -f "vendor/autoload.php" ]; then
+    echo "▶ vendor/ not found, running composer install..."
+    composer install --optimize-autoloader --no-dev --no-scripts --no-interaction
+fi
 
 echo "▶ Discovering packages..."
 php artisan package:discover --ansi
