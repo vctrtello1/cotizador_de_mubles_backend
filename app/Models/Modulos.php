@@ -21,7 +21,7 @@ class Modulos extends Model
 
     public function componentes()
     {
-        return $this->belongsToMany(componente::class, 'cantidad_por_componente', 'modulo_id', 'componente_id')
+        return $this->belongsToMany(Componente::class, 'cantidad_por_componente', 'modulo_id', 'componente_id')
                     ->withPivot('cantidad')
                     ->withTimestamps();
     }
