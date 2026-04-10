@@ -4,7 +4,7 @@
 
 REMOTE="root@72.61.71.185"
 REMOTE_PASS="Purru#43"
-SSH_OPTS="-o StrictHostKeyChecking=no"
+SSH_OPTS="-o StrictHostKeyChecking=no -o ServerAliveInterval=30 -o ServerAliveCountMax=10"
 
 echo "Verificando contenedor socat en el servidor remoto..."
 CONTAINER_RUNNING=$(sshpass -p "$REMOTE_PASS" ssh $SSH_OPTS $REMOTE \
