@@ -26,7 +26,14 @@ class ComponenteResource extends JsonResource
             'cantidad' => $this->whenPivotLoaded('cantidad_por_componente', function () {
                 return $this->pivot->cantidad;
             }),
-            'costo_total' => $this->when($canViewDetailedPrices, $this->costo_total),
+            'costo_total' => $this->when(
+                $canViewDetailedPrices,
+                $this->whenPivotLoaded(
+                    'cantidad_por_componente',
+                    fn () => $this->costo_total * $this->pivot->cantidad,
+                    $this->costo_total
+                )
+            ),
         ];
     }
 }

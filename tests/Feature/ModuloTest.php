@@ -40,7 +40,7 @@ class ModuloTest extends TestCase
     public function test_modulo_show(): void
     {
         // First, create a modulo to show
-        $modulo = \App\Models\modulos::factory()->create();
+        $modulo = \App\Models\Modulos::factory()->create();
 
         $response = $this->getJson("/api/v1/modulos/{$modulo->id}");
 
@@ -58,8 +58,8 @@ class ModuloTest extends TestCase
 
     public function test_modulo_with_componentes_and_quantities(): void
     {
-        $modulo = \App\Models\modulos::factory()->create();
-        $componente = \App\Models\componente::factory()->create();
+        $modulo = \App\Models\Modulos::factory()->create();
+        $componente = \App\Models\Componente::factory()->create();
         
         $modulo->componentes()->attach($componente->id, ['cantidad' => 5]);
 
@@ -92,8 +92,8 @@ class ModuloTest extends TestCase
 
     public function test_modulo_store_with_componentes(): void
     {
-        $componente1 = \App\Models\componente::factory()->create();
-        $componente2 = \App\Models\componente::factory()->create();
+        $componente1 = \App\Models\Componente::factory()->create();
+        $componente2 = \App\Models\Componente::factory()->create();
 
         $moduloData = [
             'nombre' => 'Modulo Con Componentes',
@@ -114,7 +114,7 @@ class ModuloTest extends TestCase
     public function test_modulo_update(): void
     {
         // First, create a modulo to update
-        $modulo = \App\Models\modulos::factory()->create();
+        $modulo = \App\Models\Modulos::factory()->create();
 
         $updatedData = [
             'nombre' => 'Modulo Updated',
@@ -130,9 +130,9 @@ class ModuloTest extends TestCase
 
     public function test_modulo_update_with_componentes(): void
     {
-        $modulo = \App\Models\modulos::factory()->create();
-        $componente1 = \App\Models\componente::factory()->create();
-        $componente2 = \App\Models\componente::factory()->create();
+        $modulo = \App\Models\Modulos::factory()->create();
+        $componente1 = \App\Models\Componente::factory()->create();
+        $componente2 = \App\Models\Componente::factory()->create();
 
         $updatedData = [
             'nombre' => 'Modulo Updated',
@@ -153,7 +153,7 @@ class ModuloTest extends TestCase
     public function test_modulo_destroy(): void
     {
         // First, create a modulo to delete
-        $modulo = \App\Models\modulos::factory()->create();
+        $modulo = \App\Models\Modulos::factory()->create();
 
         $response = $this->deleteJson("/api/v1/modulos/{$modulo->id}");
 
@@ -178,7 +178,7 @@ class ModuloTest extends TestCase
     public function test_modulo_validation_on_update(): void
     {
         // First, create a modulo to update
-        $modulo = \App\Models\modulos::factory()->create();
+        $modulo = \App\Models\Modulos::factory()->create();
 
         $updatedData = [
             'nombre' => '', // Empty nombre to trigger validation error
@@ -209,10 +209,51 @@ class ModuloTest extends TestCase
         $response->assertJsonValidationErrors(['componentes.0.id']);
     }
 
+    public function test_modulo_costo_total_es_suma_de_componentes_por_cantidad(): void
+    {
+        // Componente con costo_total = 100 (estructura 50 × 2)
+        $componente1 = \App\Models\Componente::factory()->create();
+        $estructura1 = \App\Models\Estructura::factory()->create(['costo_unitario' => 50]);
+        \App\Models\EstructuraPorComponente::factory()->create([
+            'componente_id' => $componente1->id,
+            'estructura_id' => $estructura1->id,
+            'cantidad'      => 2,
+        ]);
+
+        // Componente con costo_total = 300 (estructura 100 × 3)
+        $componente2 = \App\Models\Componente::factory()->create();
+        $estructura2 = \App\Models\Estructura::factory()->create(['costo_unitario' => 100]);
+        \App\Models\EstructuraPorComponente::factory()->create([
+            'componente_id' => $componente2->id,
+            'estructura_id' => $estructura2->id,
+            'cantidad'      => 3,
+        ]);
+
+        $modulo = \App\Models\Modulos::factory()->create();
+        // comp1: cantidad 4  → subtotal 100 × 4 = 400
+        // comp2: cantidad 2  → subtotal 300 × 2 = 600
+        // módulo total = 1000
+        $modulo->componentes()->attach($componente1->id, ['cantidad' => 4]);
+        $modulo->componentes()->attach($componente2->id, ['cantidad' => 2]);
+
+        $response = $this->getJson("/api/v1/modulos/{$modulo->id}");
+
+        $response->assertStatus(200);
+        // El costo_total del módulo debe ser la suma de (costo_unitario × cantidad) de cada componente
+        $response->assertJsonPath('data.costo_total', 1000);
+
+        // El costo_total de cada componente en la respuesta debe ser su subtotal (costo × cantidad)
+        $componentesResp = $response->json('data.componentes');
+        $componenteResp1 = collect($componentesResp)->firstWhere('id', $componente1->id);
+        $componenteResp2 = collect($componentesResp)->firstWhere('id', $componente2->id);
+        $this->assertEquals(400, $componenteResp1['costo_total']); // 100 × 4
+        $this->assertEquals(600, $componenteResp2['costo_total']); // 300 × 2
+    }
+
     public function test_modulo_update_removes_componentes(): void
     {
-        $modulo = \App\Models\modulos::factory()->create();
-        $componente = \App\Models\componente::factory()->create();
+        $modulo = \App\Models\Modulos::factory()->create();
+        $componente = \App\Models\Componente::factory()->create();
         
         // Agregar componente
         $modulo->componentes()->attach($componente->id, ['cantidad' => 5]);

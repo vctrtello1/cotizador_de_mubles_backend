@@ -552,7 +552,7 @@ class CotizacionTest extends TestCase
         // Create a cotización with related componentes_por_cotizacion
         $cotizacion = \App\Models\Cotizacion::factory()->create();
         $componente = \App\Models\Componente::factory()->create();
-        $modulo = \App\Models\modulos::factory()->create();
+        $modulo = \App\Models\Modulos::factory()->create();
         
         // Create related componentes_por_cotizacion
         \DB::table('componentes_por_cotizacion')->insert([
