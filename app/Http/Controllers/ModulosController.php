@@ -34,7 +34,7 @@ class ModulosController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(modulos $modulo)
+    public function show(Modulos $modulo)
     {
         return $modulo->load('componentes')->toResource();
     }
@@ -42,7 +42,7 @@ class ModulosController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateModulosRequest $request, modulos $modulo)
+    public function update(UpdateModulosRequest $request, Modulos $modulo)
     {
         $validated = $request->validated();
         $componentes = $validated['componentes'] ?? [];
@@ -57,7 +57,7 @@ class ModulosController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(modulos $modulo)
+    public function destroy(Modulos $modulo)
     {
         $modulo->delete();
         return response()->noContent();
