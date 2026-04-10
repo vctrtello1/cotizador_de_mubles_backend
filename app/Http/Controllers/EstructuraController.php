@@ -51,7 +51,7 @@ class EstructuraController extends Controller
         try {
             $estructura->delete();
         } catch (QueryException $e) {
-            if ($e->getCode() === '23000') {
+            if (str_starts_with($e->getCode(), '23')) {
                 return response()->json([
                     'message' => 'No se puede eliminar la estructura porque está siendo utilizada por uno o más componentes.',
                 ], 409);

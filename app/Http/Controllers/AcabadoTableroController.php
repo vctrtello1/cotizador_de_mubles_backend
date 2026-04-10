@@ -51,7 +51,7 @@ class AcabadoTableroController extends Controller
         try {
             $acabadoTablero->delete();
         } catch (QueryException $e) {
-            if ($e->getCode() === '23000') {
+            if (str_starts_with($e->getCode(), '23')) {
                 return response()->json([
                     'message' => 'No se puede eliminar el acabado tablero porque está siendo utilizado por uno o más componentes.',
                 ], 409);
